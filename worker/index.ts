@@ -71,7 +71,7 @@ function logPageView(request: Request, url: URL): void {
     (request as Request & { cf?: VisitorCfProperties }).cf ?? {};
 
   const visitor = {
-    event: "page_view",
+    analyticsEvent: "page_view",
     timestamp: new Date().toISOString(),
     host: url.hostname,
     path: url.pathname,
