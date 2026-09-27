@@ -100,9 +100,9 @@ function logPageView(request: Request, url: URL): void {
     isLikelyBot: /bot|crawler|spider|slurp|bingpreview|facebookexternalhit/i.test(userAgent),
   };
 
-  // Structured JSON makes the fields easy to search/filter in
-  // Cloudflare Workers Observability.
-  console.log(JSON.stringify(visitor));
+  // Log the object directly so Cloudflare indexes each visitor field
+  // separately for filtering, grouping, and per-visit inspection.
+  console.log(visitor);
 }
 
 // Image security config. SVG sources with .svg extension auto-skip the
