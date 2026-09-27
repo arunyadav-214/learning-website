@@ -1,176 +1,313 @@
 import {
   ArrowRight,
+  ArrowUpRight,
   BadgeCheck,
   BookOpen,
+  Boxes,
   Code2,
+  Cpu,
+  Database,
   GitBranch,
-  Globe2,
+  GraduationCap,
   Rocket,
+  Sparkles,
+  Terminal,
   Users,
 } from "lucide-react";
 
-import { Card } from "@/components/ui/card";
-
-const values = [
-  {
-    icon: BookOpen,
-    title: "Learn",
-    description:
-      "Clear explanations make new technology feel approachable, one useful idea at a time.",
-  },
+const learningTracks = [
   {
     icon: Code2,
-    title: "Build",
+    label: "Software",
+    title: "Build real software",
     description:
-      "Every topic should lead to hands-on practice and projects learners can be proud to share.",
+      "Turn ideas into working projects while learning the tools and habits used by developers.",
+    tag: "Code + Projects",
+  },
+  {
+    icon: Cpu,
+    label: "Systems",
+    title: "Understand what is underneath",
+    description:
+      "Explore computer architecture, operating systems, logic, and the foundations behind modern computing.",
+    tag: "Hardware + OS",
+  },
+  {
+    icon: Database,
+    label: "Data",
+    title: "Work with useful data",
+    description:
+      "Practice databases, SQL, APIs, and structured information through practical examples.",
+    tag: "SQL + Data",
+  },
+  {
+    icon: Boxes,
+    label: "Engineering",
+    title: "Connect software and engineering",
+    description:
+      "Bring technical problem-solving into hands-on engineering, design, and manufacturing topics.",
+    tag: "Applied Learning",
+  },
+];
+
+const principles = [
+  {
+    icon: BookOpen,
+    title: "Make it clear",
+    description:
+      "Break difficult ideas into explanations that are easier to understand and remember.",
   },
   {
     icon: Rocket,
-    title: "Grow",
+    title: "Make it practical",
     description:
-      "Progress comes from curiosity, consistent effort, and the confidence to try again.",
+      "Move from reading to building so each topic becomes something you can actually use.",
   },
   {
     icon: Users,
-    title: "Community",
+    title: "Make it shareable",
     description:
-      "Learning is stronger when people exchange ideas, ask questions, and help one another.",
-  },
-  {
-    icon: Globe2,
-    title: "Access",
-    description:
-      "Useful learning resources should be easy to reach from wherever a student begins.",
-  },
-  {
-    icon: BadgeCheck,
-    title: "Quality",
-    description:
-      "Thoughtful examples and practical outcomes matter more than unnecessary complexity.",
+      "Create projects, notes, and resources that can help other learners move forward too.",
   },
 ];
 
 const stats = [
-  { value: "2026", label: "Project started" },
-  { value: "4", label: "Learning areas" },
-  { value: "1", label: "Student builder" },
-  { value: "100%", label: "Project-led" },
+  { value: "2026", label: "Started" },
+  { value: "4", label: "Learning tracks" },
+  { value: "100%", label: "Project-driven" },
 ];
 
 export default function Home() {
   return (
-    <main className="min-h-screen overflow-hidden bg-background text-foreground">
-      <section className="hero-grid relative isolate bg-primary text-primary-foreground">
-        <div className="hero-glow hero-glow-one" aria-hidden="true" />
-        <div className="hero-glow hero-glow-two" aria-hidden="true" />
+    <main id="top" className="min-h-screen overflow-hidden bg-background text-foreground">
+      <section className="hero-shell relative isolate">
+        <div className="aurora aurora-one" aria-hidden="true" />
+        <div className="aurora aurora-two" aria-hidden="true" />
+        <div className="aurora aurora-three" aria-hidden="true" />
 
-        <div className="relative mx-auto max-w-7xl px-5 pb-20 pt-6 sm:px-8 md:pb-28 md:pt-8">
-          <header className="flex items-center justify-between border-b border-white/12 pb-5">
+        <div className="mx-auto max-w-7xl px-5 pb-20 pt-5 sm:px-8 lg:pb-28">
+          <header className="glass-nav sticky top-4 z-50 flex items-center justify-between rounded-[1.4rem] px-4 py-3 sm:px-5">
             <a href="#top" className="flex items-center gap-3" aria-label="Arun Learning Hub home">
-              <span className="grid h-10 w-10 place-items-center rounded-2xl bg-secondary text-primary shadow-lg shadow-black/20">
+              <span className="brand-mark">
                 <BookOpen className="h-5 w-5" aria-hidden="true" />
               </span>
-              <span className="font-heading text-sm font-bold tracking-wide sm:text-base">
-                ARUN LEARNING HUB
+              <span className="font-heading text-sm font-black tracking-[-0.02em] sm:text-base">
+                ARUN<span className="text-gradient">/LEARN</span>
               </span>
             </a>
+
+            <nav className="hidden items-center gap-1 md:flex" aria-label="Primary navigation">
+              <a href="#learn" className="nav-link">Learn</a>
+              <a href="#about" className="nav-link">About</a>
+              <a href="#principles" className="nav-link">Approach</a>
+            </nav>
+
             <a
-              href="#values"
-              className="rounded-full border border-white/20 px-4 py-2 text-sm font-semibold transition hover:border-secondary hover:text-secondary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-secondary"
+              href="https://github.com/arunyadav-214"
+              className="nav-cta"
+              target="_blank"
+              rel="noreferrer"
             >
-              Our approach
+              GitHub
+              <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
             </a>
           </header>
 
-          <div id="top" className="relative max-w-4xl pt-20 md:pt-28">
-            <p className="eyebrow mb-5 text-secondary">ABOUT THE PROJECT</p>
-            <h1 className="font-heading text-5xl font-extrabold leading-[0.98] tracking-[-0.045em] sm:text-6xl md:text-8xl">
-              Learn new skills.
-              <span className="mt-2 block text-secondary">Build your future.</span>
-            </h1>
-            <p className="mt-8 max-w-2xl text-lg leading-8 text-slate-300 md:text-xl">
-              Arun Learning Hub is a student-built space for making technology
-              easier to understand through practical lessons, useful resources,
-              and project-based learning.
-            </p>
-            <a
-              href="#story"
-              className="mt-9 inline-flex items-center gap-2 rounded-full bg-secondary px-6 py-3.5 text-base font-bold text-secondary-foreground shadow-xl shadow-black/15 transition hover:-translate-y-0.5 hover:bg-amber-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
-            >
-              Read the story
-              <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </a>
+          <div className="grid min-h-[760px] items-center gap-14 pb-8 pt-20 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10 lg:pt-16">
+            <div className="relative z-10">
+              <div className="hero-pill mb-7">
+                <Sparkles className="h-4 w-4" aria-hidden="true" />
+                STUDENT-BUILT • PROJECT-DRIVEN • 2026
+              </div>
+
+              <h1 className="hero-title font-heading">
+                Learn the idea.
+                <span className="block text-gradient">Build the proof.</span>
+              </h1>
+
+              <p className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl">
+                Arun Learning Hub is a practical technology learning space for
+                turning confusing concepts into clear notes, useful projects,
+                and skills you can keep building on.
+              </p>
+
+              <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+                <a href="#learn" className="primary-button">
+                  Explore learning tracks
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </a>
+                <a href="#about" className="secondary-button">
+                  Meet the builder
+                </a>
+              </div>
+
+              <div className="mt-11 flex flex-wrap gap-3 text-sm text-muted-foreground">
+                <span className="mini-chip"><BadgeCheck className="h-4 w-4" /> Clear explanations</span>
+                <span className="mini-chip"><Terminal className="h-4 w-4" /> Hands-on practice</span>
+                <span className="mini-chip"><GraduationCap className="h-4 w-4" /> Student focused</span>
+              </div>
+            </div>
+
+            <div className="relative mx-auto w-full max-w-[620px] lg:ml-auto">
+              <div className="hero-orbit" aria-hidden="true" />
+              <div className="code-window glass-card">
+                <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
+                  <div className="flex gap-2" aria-hidden="true">
+                    <span className="window-dot bg-rose-400" />
+                    <span className="window-dot bg-amber-300" />
+                    <span className="window-dot bg-emerald-400" />
+                  </div>
+                  <span className="text-xs font-semibold tracking-wide text-white/50">learning.ts</span>
+                </div>
+                <div className="space-y-5 p-6 sm:p-8">
+                  <div>
+                    <p className="code-line"><span className="code-purple">const</span> learner = &#123;</p>
+                    <p className="code-line pl-5"><span className="code-blue">curiosity</span>: <span className="code-green">true</span>,</p>
+                    <p className="code-line pl-5"><span className="code-blue">practice</span>: <span className="code-green">&quot;daily&quot;</span>,</p>
+                    <p className="code-line pl-5"><span className="code-blue">goal</span>: <span className="code-amber">&quot;build something real&quot;</span></p>
+                    <p className="code-line">&#125;;</p>
+                  </div>
+                  <div className="terminal-result">
+                    <span className="text-emerald-300">✓</span>
+                    <span>concept → practice → project → growth</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="floating-card floating-card-one">
+                <span className="floating-icon"><Code2 className="h-5 w-5" /></span>
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">Current mode</p>
+                  <p className="mt-1 font-heading text-lg font-black">Build & learn</p>
+                </div>
+              </div>
+
+              <div className="floating-card floating-card-two">
+                <span className="pulse-dot" aria-hidden="true" />
+                <div>
+                  <p className="text-xs text-muted-foreground">Learning hub</p>
+                  <p className="font-heading font-black">Always evolving</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="stats-strip">
+            {stats.map((stat) => (
+              <div key={stat.label} className="stat-item">
+                <p className="font-heading text-2xl font-black tracking-[-0.04em] sm:text-3xl">{stat.value}</p>
+                <p className="mt-1 text-xs font-semibold uppercase tracking-[0.13em] text-muted-foreground">{stat.label}</p>
+              </div>
+            ))}
+            <div className="stat-item hidden md:block">
+              <p className="font-heading text-2xl font-black tracking-[-0.04em] sm:text-3xl">∞</p>
+              <p className="mt-1 text-xs font-semibold uppercase tracking-[0.13em] text-muted-foreground">Room to grow</p>
+            </div>
           </div>
         </div>
       </section>
 
-      <section id="story" className="mx-auto grid max-w-7xl gap-12 px-5 py-20 sm:px-8 lg:grid-cols-[1.08fr_0.92fr] lg:items-center lg:gap-20 lg:py-28">
-        <div>
-          <p className="eyebrow mb-4 text-accent">OUR STORY</p>
-          <h2 className="font-heading max-w-xl text-4xl font-extrabold leading-tight tracking-tight md:text-5xl">
-            Created for students who want to grow.
-          </h2>
-          <div className="mt-7 max-w-2xl space-y-5 text-base leading-8 text-muted-foreground md:text-lg">
-            <p>
-              This project began with one goal: make learning technology less
-              confusing and more practical for students.
-            </p>
-            <p>
-              Instead of stopping at theory, learners can explore concepts,
-              practice new skills, and build projects that show how technology
-              works in the real world.
-            </p>
-            <p>
-              The platform will continue to grow as new ideas, lessons, and
-              projects are developed.
+      <section id="learn" className="section-shell border-y border-border/70">
+        <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:py-28">
+          <div className="mb-12 grid gap-6 lg:grid-cols-[0.72fr_1.28fr] lg:items-end">
+            <div>
+              <p className="section-kicker">LEARNING TRACKS</p>
+              <h2 className="section-title font-heading">A hub built around doing.</h2>
+            </div>
+            <p className="max-w-2xl text-lg leading-8 text-muted-foreground lg:ml-auto">
+              Learn across software, systems, data, and engineering without losing
+              sight of the most important part: making something that proves what you know.
             </p>
           </div>
-        </div>
 
-        <div className="grid grid-cols-2 gap-4" aria-label="Project facts">
-          {stats.map((stat, index) => (
-            <Card
-              key={stat.label}
-              className={`stat-card border-0 p-6 shadow-none ${index === 1 || index === 2 ? "stat-card-accent" : ""}`}
-            >
-              <p className="font-heading text-4xl font-extrabold tracking-tight">
-                {stat.value}
-              </p>
-              <p className="mt-1 text-sm font-semibold text-muted-foreground">
-                {stat.label}
-              </p>
-            </Card>
-          ))}
-        </div>
-      </section>
-
-      <section id="values" className="bg-muted py-20 lg:py-28">
-        <div className="mx-auto max-w-7xl px-5 sm:px-8">
-          <div className="mb-12 max-w-2xl">
-            <p className="eyebrow mb-4 text-accent">OUR VALUES</p>
-            <h2 className="font-heading text-4xl font-extrabold tracking-tight md:text-5xl">
-              How we approach learning.
-            </h2>
-          </div>
-
-          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {values.map((value) => {
-              const Icon = value.icon;
+          <div className="bento-grid">
+            {learningTracks.map((track, index) => {
+              const Icon = track.icon;
               return (
-                <Card
-                  key={value.title}
-                  className="value-card group gap-0 overflow-hidden border-border/80 p-7 shadow-none"
-                >
-                  <span className="mb-6 grid h-12 w-12 place-items-center rounded-2xl bg-primary text-secondary transition-transform duration-300 group-hover:-rotate-3 group-hover:scale-105">
-                    <Icon className="h-6 w-6" aria-hidden="true" />
-                  </span>
-                  <h3 className="font-heading text-xl font-extrabold">
-                    {value.title}
-                  </h3>
-                  <p className="mt-3 leading-7 text-muted-foreground">
-                    {value.description}
-                  </p>
-                </Card>
+                <article key={track.title} className={`bento-card group ${index === 0 ? "bento-featured" : ""}`}>
+                  <div className="flex items-start justify-between gap-4">
+                    <span className="bento-icon"><Icon className="h-6 w-6" /></span>
+                    <span className="bento-tag">{track.tag}</span>
+                  </div>
+                  <div className="mt-12">
+                    <p className="text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">{track.label}</p>
+                    <h3 className="mt-3 font-heading text-2xl font-black tracking-[-0.03em]">{track.title}</h3>
+                    <p className="mt-3 max-w-xl leading-7 text-muted-foreground">{track.description}</p>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section id="about" className="mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:py-28">
+        <div className="about-card overflow-hidden rounded-[2rem]">
+          <div className="grid lg:grid-cols-[0.72fr_1.28fr]">
+            <div className="profile-pane relative grid min-h-[360px] place-items-center p-10">
+              <div className="profile-ring">
+                <div className="profile-avatar">AY</div>
+              </div>
+              <div className="profile-badge">
+                <span className="pulse-dot" />
+                Building in public
+              </div>
+            </div>
+
+            <div className="p-8 sm:p-12 lg:p-16">
+              <p className="section-kicker">THE BUILDER</p>
+              <h2 className="mt-3 font-heading text-4xl font-black tracking-[-0.04em] sm:text-5xl">
+                Arun Yadav
+              </h2>
+              <p className="mt-3 text-lg font-semibold text-gradient">Student developer & lifelong learner</p>
+              <p className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground">
+                I built Arun Learning Hub as a place to turn class concepts, technical
+                practice, and personal projects into useful learning resources. The goal
+                is simple: understand more deeply by building more often.
+              </p>
+
+              <div className="mt-8 flex flex-wrap gap-3">
+                <span className="skill-chip">Software development</span>
+                <span className="skill-chip">Computer systems</span>
+                <span className="skill-chip">Databases</span>
+                <span className="skill-chip">Applied engineering</span>
+              </div>
+
+              <a
+                href="https://github.com/arunyadav-214"
+                target="_blank"
+                rel="noreferrer"
+                className="mt-9 inline-flex items-center gap-2 font-bold text-foreground transition hover:text-accent"
+              >
+                <GitBranch className="h-5 w-5" />
+                View GitHub profile
+                <ArrowUpRight className="h-4 w-4" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="principles" className="section-shell border-y border-border/70">
+        <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:py-28">
+          <div className="mx-auto max-w-3xl text-center">
+            <p className="section-kicker">THE APPROACH</p>
+            <h2 className="section-title font-heading">Learn in a way that sticks.</h2>
+            <p className="mt-5 text-lg leading-8 text-muted-foreground">
+              Good learning feels clear, active, and connected to something real.
+            </p>
+          </div>
+
+          <div className="mt-12 grid gap-5 md:grid-cols-3">
+            {principles.map((item) => {
+              const Icon = item.icon;
+              return (
+                <article key={item.title} className="principle-card">
+                  <span className="principle-number">0{principles.indexOf(item) + 1}</span>
+                  <span className="principle-icon"><Icon className="h-6 w-6" /></span>
+                  <h3 className="mt-8 font-heading text-2xl font-black tracking-[-0.03em]">{item.title}</h3>
+                  <p className="mt-3 leading-7 text-muted-foreground">{item.description}</p>
+                </article>
               );
             })}
           </div>
@@ -178,52 +315,26 @@ export default function Home() {
       </section>
 
       <section className="mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:py-28">
-        <div className="grid overflow-hidden rounded-[2rem] bg-primary text-primary-foreground lg:grid-cols-[0.7fr_1.3fr]">
-          <div className="profile-pattern grid min-h-72 place-items-center p-10">
-            <div className="grid h-36 w-36 place-items-center rounded-full border-8 border-white/10 bg-secondary text-primary shadow-2xl">
-              <span className="font-heading text-5xl font-black">AY</span>
-            </div>
-          </div>
-          <div className="flex flex-col justify-center p-8 sm:p-12 lg:p-16">
-            <p className="eyebrow mb-4 text-secondary">THE BUILDER</p>
-            <h2 className="font-heading text-4xl font-extrabold tracking-tight">
-              Arun Yadav
-            </h2>
-            <p className="mt-2 text-lg font-semibold text-slate-300">
-              Founder &amp; Developer
-            </p>
-            <p className="mt-6 max-w-xl text-base leading-8 text-slate-300">
-              A student developer creating a practical learning platform while
-              growing skills in software development, design, and education.
-            </p>
-            <a
-              href="https://github.com/arunyadav-214"
-              className="mt-8 inline-flex w-fit items-center gap-2 rounded-full border border-white/20 px-5 py-3 font-bold transition hover:border-secondary hover:text-secondary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-secondary"
-            >
-              <GitBranch className="h-5 w-5" aria-hidden="true" />
-              View GitHub profile
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <section className="border-t border-border bg-secondary py-16 text-secondary-foreground">
-        <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 px-5 sm:px-8 md:flex-row md:items-center">
+        <div className="cta-panel">
           <div>
-            <p className="eyebrow mb-3 text-primary/70">KEEP LEARNING</p>
-            <h2 className="font-heading text-3xl font-extrabold tracking-tight md:text-4xl">
-              One project can start something bigger.
+            <p className="section-kicker text-white/60">KEEP BUILDING</p>
+            <h2 className="mt-3 max-w-3xl font-heading text-4xl font-black tracking-[-0.04em] text-white sm:text-5xl lg:text-6xl">
+              One useful project can change what you think you can do.
             </h2>
           </div>
-          <a
-            href="#top"
-            className="inline-flex shrink-0 items-center gap-2 rounded-full bg-primary px-6 py-3.5 font-bold text-primary-foreground transition hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
-          >
+          <a href="#top" className="cta-button">
             Back to the top
-            <ArrowRight className="h-4 w-4 -rotate-90" aria-hidden="true" />
+            <ArrowRight className="h-4 w-4 -rotate-90" />
           </a>
         </div>
       </section>
+
+      <footer className="border-t border-border/70">
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-8 text-sm text-muted-foreground sm:px-8 md:flex-row md:items-center md:justify-between">
+          <p>© 2026 Arun Learning Hub. Built by Arun Yadav.</p>
+          <p>Learn • Build • Share • Grow</p>
+        </div>
+      </footer>
     </main>
   );
 }
