@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "About | Arun Learning Hub",
+  title: "Arun Learning Hub | Learn. Build. Grow.",
   description:
-    "Meet Arun Learning Hub, a student-built platform for practical, project-based technology learning.",
+    "A student-built technology learning hub for practical projects, clear explanations, and hands-on growth.",
   icons: {
     icon: "/favicon.svg",
     shortcut: "/favicon.svg",
