@@ -7,7 +7,6 @@ import {
   Code2,
   Cpu,
   Database,
-  GitBranch,
   GraduationCap,
   Rocket,
   Sparkles,
@@ -77,6 +76,24 @@ const stats = [
   { value: "100%", label: "Project-driven" },
 ];
 
+const socials = [
+  {
+    name: "Instagram",
+    mark: "IG",
+    href: "https://www.instagram.com/ay.run_",
+  },
+  {
+    name: "X",
+    mark: "X",
+    href: "https://x.com/aruny71582",
+  },
+  {
+    name: "TikTok",
+    mark: "TT",
+    href: "https://www.tiktok.com/@arunyadav999",
+  },
+];
+
 export default function Home() {
   return (
     <main id="top" className="min-h-screen overflow-hidden bg-background text-foreground">
@@ -102,14 +119,9 @@ export default function Home() {
               <a href="#principles" className="nav-link">Approach</a>
             </nav>
 
-            <a
-              href="https://github.com/arunyadav-214"
-              className="nav-cta"
-              target="_blank"
-              rel="noreferrer"
-            >
-              GitHub
-              <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+            <a href="#socials" className="nav-cta">
+              Follow
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </a>
           </header>
 
@@ -273,16 +285,27 @@ export default function Home() {
                 <span className="skill-chip">Applied engineering</span>
               </div>
 
-              <a
-                href="https://github.com/arunyadav-214"
-                target="_blank"
-                rel="noreferrer"
-                className="mt-9 inline-flex items-center gap-2 font-bold text-foreground transition hover:text-accent"
-              >
-                <GitBranch className="h-5 w-5" />
-                View GitHub profile
-                <ArrowUpRight className="h-4 w-4" />
-              </a>
+              <div id="socials" className="mt-9">
+                <p className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">
+                  Find me online
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  {socials.map((social) => (
+                    <a
+                      key={social.name}
+                      href={social.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="social-link"
+                      aria-label={`Follow Arun on ${social.name}`}
+                    >
+                      <span className="social-mark">{social.mark}</span>
+                      <span>{social.name}</span>
+                      <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                    </a>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -330,9 +353,25 @@ export default function Home() {
       </section>
 
       <footer className="border-t border-border/70">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-8 text-sm text-muted-foreground sm:px-8 md:flex-row md:items-center md:justify-between">
-          <p>© 2026 Arun Learning Hub. Built by Arun Yadav.</p>
-          <p>Learn • Build • Share • Grow</p>
+        <div className="mx-auto max-w-7xl px-5 py-8 sm:px-8">
+          <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+            <p className="text-sm text-muted-foreground">© 2026 Arun Learning Hub. Built by Arun Yadav.</p>
+            <div className="flex flex-wrap gap-2" aria-label="Social media links">
+              {socials.map((social) => (
+                <a
+                  key={social.name}
+                  href={social.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="footer-social"
+                  aria-label={social.name}
+                >
+                  <span className="social-mark social-mark-small">{social.mark}</span>
+                  {social.name}
+                </a>
+              ))}
+            </div>
+          </div>
         </div>
       </footer>
     </main>
