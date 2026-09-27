@@ -252,21 +252,21 @@ body {
 .social-mark {
   display: grid;
   place-items: center;
-  width: 2rem;
-  height: 2rem;
+  width: 2.4rem;
+  height: 2.4rem;
   border-radius: .7rem;
   background: linear-gradient(135deg, rgba(139,92,246,.22), rgba(34,211,238,.16));
   border: 1px solid rgba(255,255,255,.08);
   color: #e8e5ff;
-  font-size: .7rem;
+  font-size: .78rem;
   font-weight: 950;
   letter-spacing: -.03em;
 }
 .social-mark-small {
-  width: 1.65rem;
-  height: 1.65rem;
+  width: 1.95rem;
+  height: 1.95rem;
   border-radius: .55rem;
-  font-size: .62rem;
+  font-size: .7rem;
 }
 .footer-social {
   display: inline-flex;
