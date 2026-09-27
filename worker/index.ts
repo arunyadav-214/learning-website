@@ -90,7 +90,7 @@ function logPageView(request: Request, url: URL): void {
     tlsVersion: cf.tlsVersion ?? null,
     deviceType: detectDeviceType(userAgent),
     browser: detectBrowser(userAgent),
-    os: detectOs(userAgent),
+    operatingSystem: detectOs(userAgent),
     userAgent,
     language: request.headers.get("accept-language"),
     referrer: request.headers.get("referer"),
