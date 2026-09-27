@@ -79,20 +79,56 @@ const stats = [
 const socials = [
   {
     name: "Instagram",
-    mark: "IG",
     href: "https://www.instagram.com/ay.run_",
   },
   {
     name: "X",
-    mark: "X",
     href: "https://x.com/aruny71582",
   },
   {
     name: "TikTok",
-    mark: "TT",
     href: "https://www.tiktok.com/@arunyadav999",
   },
 ];
+
+function SocialIcon({ name }: { name: string }) {
+  if (name === "Instagram") {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true" className="social-svg">
+        <rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" strokeWidth="2.2" />
+        <circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" strokeWidth="2.2" />
+        <circle cx="17.4" cy="6.8" r="1.2" fill="currentColor" />
+      </svg>
+    );
+  }
+
+  if (name === "TikTok") {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true" className="social-svg">
+        <path
+          d="M14.2 3.2v10.5a4.6 4.6 0 1 1-3.3-4.4v3.2a1.8 1.8 0 1 0 .5 1.2V3.2h2.8Zm0 0c.4 2.3 1.8 3.8 4.2 4.2v2.9c-1.7-.1-3.1-.7-4.2-1.6"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    );
+  }
+
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="social-svg">
+      <path
+        d="M4 4l16 16M20 4 4 20"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
 
 export default function Home() {
   return (
@@ -299,7 +335,7 @@ export default function Home() {
                       className="social-link"
                       aria-label={`Follow Arun on ${social.name}`}
                     >
-                      <span className="social-mark">{social.mark}</span>
+                      <span className="social-mark"><SocialIcon name={social.name} /></span>
                       <span>{social.name}</span>
                       <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
                     </a>
@@ -366,7 +402,7 @@ export default function Home() {
                   className="footer-social"
                   aria-label={social.name}
                 >
-                  <span className="social-mark social-mark-small">{social.mark}</span>
+                  <span className="social-mark social-mark-small"><SocialIcon name={social.name} /></span>
                   {social.name}
                 </a>
               ))}
