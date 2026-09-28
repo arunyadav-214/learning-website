@@ -314,8 +314,8 @@ body {
   object-fit: contain;
 }
 .profile-logo-card {
-  width: 10.6rem;
-  height: 10.6rem;
+  width: 12rem;
+  height: 12rem;
   display: grid;
   place-items: center;
   overflow: hidden;
@@ -338,8 +338,8 @@ body {
 }
 
 .brand-logo-full {
-  width: 8.75rem;
-  height: 4.4rem;
+  width: 6.2rem;
+  height: 5.6rem;
   display: block;
   object-fit: contain;
   object-position: center;
