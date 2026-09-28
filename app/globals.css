@@ -355,3 +355,21 @@ body {
     height: 4.4rem;
   }
 }
+
+
+.brand-name {
+  margin-left: 0.9rem;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.08rem;
+  font-weight: 850;
+  letter-spacing: -0.02em;
+  color: #f4f7ff;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .brand-name {
+    margin-left: 0.65rem;
+    font-size: 0.92rem;
+  }
+}
