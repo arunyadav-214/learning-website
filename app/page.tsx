@@ -142,7 +142,7 @@ export default function Home() {
           <header className="glass-nav sticky top-4 z-50 flex items-center justify-between rounded-[1.4rem] px-4 py-3 sm:px-5">
             <a href="#top" className="flex items-center gap-3" aria-label="Arun Learning Hub home">
               <span className="brand-logo-wrap">
-                <img src="/arun-logo.webp" alt="Arun logo" className="brand-logo-img" />
+                <img src="/arun-logo.jpg" alt="Arun logo" className="brand-logo-img" />
               </span>
               <span className="font-heading text-sm font-black tracking-[-0.02em] sm:text-base">
                 ARUN<span className="text-gradient">/LEARN</span>
@@ -295,7 +295,7 @@ export default function Home() {
             <div className="profile-pane relative grid min-h-[360px] place-items-center p-10">
               <div className="profile-ring">
                 <div className="profile-logo-card">
-                  <img src="/arun-logo.webp" alt="Arun mountain logo" className="profile-logo-img" />
+                  <img src="/arun-logo.jpg" alt="Arun mountain logo" className="profile-logo-img" />
                 </div>
               </div>
               <div className="profile-badge">
