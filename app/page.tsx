@@ -376,10 +376,16 @@ export default function Home() {
                 </div>
 
                 {item.title === "Games" ? (
-                  <a href="/games/curious-monkey" className="showcase-play-link">
-                    <span>Play Curious Monkey Adventure</span>
-                    <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-                  </a>
+                  <div className="showcase-game-links">
+                    <a href="/games/curious-monkey" className="showcase-play-link">
+                      <span>Play Curious Monkey Adventure</span>
+                      <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                    </a>
+                    <a href="/games/tic-tac-toe" className="showcase-play-link">
+                      <span>Play Tic-Tac-Toe Arena</span>
+                      <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                    </a>
+                  </div>
                 ) : (
                   <div className="showcase-placeholder">
                     <span>Ready for files, links, images, video, or live demos</span>
