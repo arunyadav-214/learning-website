@@ -207,19 +207,14 @@ export default function Home() {
               <span className="brand-name">Arun K. Yadav</span>
             </a>
 
-            <nav className="hidden items-center gap-1 xl:flex" aria-label="Primary navigation">
-              <a href="#projects" className="nav-link">Projects</a>
-              <a href="#assignments" className="nav-link">Assignments</a>
-              <a href="#research-papers" className="nav-link">Research Papers</a>
-              <a href="#certificates" className="nav-link">Certificates</a>
-              <a href="#games" className="nav-link">Games</a>
-              <a href="#videos" className="nav-link">Videos</a>
+            <nav className="header-showcase-links" aria-label="Showcase navigation">
+              <a href="#projects" className="header-showcase-link">Projects</a>
+              <a href="#assignments" className="header-showcase-link">Assignments</a>
+              <a href="#research-papers" className="header-showcase-link">Research Papers</a>
+              <a href="#certificates" className="header-showcase-link">Certificates</a>
+              <a href="#games" className="header-showcase-link">Games</a>
+              <a href="#videos" className="header-showcase-link">Videos</a>
             </nav>
-
-            <a href="#socials" className="nav-cta">
-              Follow
-              <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </a>
           </header>
 
           <div className="grid min-h-[760px] items-center gap-14 pb-8 pt-20 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10 lg:pt-16">
