@@ -142,6 +142,7 @@ export default function Home() {
           <header className="glass-nav sticky top-4 z-50 flex items-center justify-between rounded-[1.4rem] px-4 py-3 sm:px-5">
             <a href="#top" className="brand-home-link" aria-label="Arun Learning Hub home">
               <img src="/arun-logo.svg" alt="Arun logo" className="brand-logo-full" />
+              <span className="brand-name">Arun K. Yadav</span>
             </a>
 
             <nav className="hidden items-center gap-1 md:flex" aria-label="Primary navigation">
