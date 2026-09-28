@@ -89,6 +89,10 @@ const socials = [
     name: "TikTok",
     href: "https://www.tiktok.com/@arunyadav999",
   },
+  {
+    name: "LinkedIn",
+    href: "https://www.linkedin.com/in/arun-kumar-yadav-5a60373ab/",
+  },
 ];
 
 function SocialIcon({ name }: { name: string }) {
@@ -112,6 +116,19 @@ function SocialIcon({ name }: { name: string }) {
           strokeWidth="2.2"
           strokeLinecap="round"
           strokeLinejoin="round"
+        />
+      </svg>
+    );
+  }
+
+  if (name === "LinkedIn") {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true" className="social-svg">
+        <rect x="4" y="9" width="3" height="11" rx="1" fill="currentColor" />
+        <circle cx="5.5" cy="5.5" r="1.8" fill="currentColor" />
+        <path
+          d="M10 9h3v1.6c1-1.3 2.2-2 4-2 3 0 4.5 1.9 4.5 5.4V20h-3v-5.4c0-2-.7-3-2.3-3-1.8 0-3.2 1.2-3.2 3.8V20h-3V9Z"
+          fill="currentColor"
         />
       </svg>
     );
