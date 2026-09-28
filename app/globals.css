@@ -513,3 +513,42 @@ body {
     min-height: 20rem;
   }
 }
+
+
+/* Keep showcase categories visible in the header on wide screens */
+@media (min-width: 1280px) {
+  .glass-nav {
+    gap: .75rem;
+  }
+
+  .glass-nav nav {
+    flex: 1;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .glass-nav .nav-link {
+    padding: .58rem .66rem;
+    font-size: .78rem;
+    white-space: nowrap;
+  }
+
+  .brand-name {
+    font-size: 1.75rem;
+  }
+}
+
+@media (min-width: 1500px) {
+  .glass-nav .nav-link {
+    font-size: .86rem;
+    padding: .62rem .78rem;
+  }
+
+  .brand-name {
+    font-size: 2rem;
+  }
+}
+
+.showcase-card {
+  scroll-margin-top: 8rem;
+}
