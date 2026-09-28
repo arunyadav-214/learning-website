@@ -12,6 +12,12 @@ import {
   Sparkles,
   Terminal,
   Users,
+  FolderOpen,
+  FileText,
+  Award,
+  Gamepad2,
+  Video,
+  FlaskConical,
 } from "lucide-react";
 
 const learningTracks = [
@@ -46,6 +52,45 @@ const learningTracks = [
     description:
       "Bring technical problem-solving into hands-on engineering, design, and manufacturing topics.",
     tag: "Applied Learning",
+  },
+];
+
+const showcaseItems = [
+  {
+    icon: FolderOpen,
+    title: "Projects",
+    description: "Software, engineering, database, and personal projects with screenshots, demos, and links.",
+    type: "Projects",
+  },
+  {
+    icon: FileText,
+    title: "Assignments",
+    description: "Selected coursework, reports, diagrams, code, and completed academic assignments.",
+    type: "Coursework",
+  },
+  {
+    icon: FlaskConical,
+    title: "Research Papers",
+    description: "Research writing, technical reports, posters, abstracts, and academic papers.",
+    type: "Research",
+  },
+  {
+    icon: Award,
+    title: "Certificates",
+    description: "Certificates, achievements, training completions, awards, and professional milestones.",
+    type: "Achievements",
+  },
+  {
+    icon: Gamepad2,
+    title: "Games",
+    description: "Playable web games, game-development experiments, demos, and interactive projects.",
+    type: "Interactive",
+  },
+  {
+    icon: Video,
+    title: "Videos",
+    description: "Project demos, presentations, tutorials, walkthroughs, and embedded videos.",
+    type: "Media",
   },
 ];
 
@@ -164,6 +209,7 @@ export default function Home() {
 
             <nav className="hidden items-center gap-1 md:flex" aria-label="Primary navigation">
               <a href="#learn" className="nav-link">Learn</a>
+              <a href="#showcase" className="nav-link">Showcase</a>
               <a href="#about" className="nav-link">About</a>
               <a href="#principles" className="nav-link">Approach</a>
             </nav>
@@ -299,6 +345,53 @@ export default function Home() {
               );
             })}
           </div>
+        </div>
+      </section>
+
+
+      <section id="showcase" className="mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:py-28">
+        <div className="showcase-heading">
+          <div>
+            <p className="section-kicker">MY SHOWCASE</p>
+            <h2 className="section-title font-heading">Work worth showing.</h2>
+          </div>
+          <p className="max-w-2xl text-lg leading-8 text-muted-foreground">
+            This is where I’ll organize the work I create over time — from class assignments
+            and research papers to certificates, games, project demos, videos, and more.
+          </p>
+        </div>
+
+        <div className="showcase-grid">
+          {showcaseItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <article key={item.title} className="showcase-card">
+                <div className="showcase-card-top">
+                  <span className="showcase-icon"><Icon className="h-6 w-6" /></span>
+                  <span className="showcase-status">Coming soon</span>
+                </div>
+
+                <div>
+                  <p className="showcase-type">{item.type}</p>
+                  <h3 className="showcase-title font-heading">{item.title}</h3>
+                  <p className="showcase-description">{item.description}</p>
+                </div>
+
+                <div className="showcase-placeholder">
+                  <span>Ready for files, links, images, video, or live demos</span>
+                  <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                </div>
+              </article>
+            );
+          })}
+        </div>
+
+        <div className="showcase-note">
+          <Sparkles className="h-5 w-5" aria-hidden="true" />
+          <p>
+            Later, each card can open a dedicated page where I can add PDFs, screenshots,
+            YouTube videos, downloadable files, source links, certificates, or playable content.
+          </p>
         </div>
       </section>
 
