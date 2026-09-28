@@ -375,10 +375,17 @@ export default function Home() {
                   <p className="showcase-description">{item.description}</p>
                 </div>
 
-                <div className="showcase-placeholder">
-                  <span>Ready for files, links, images, video, or live demos</span>
-                  <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-                </div>
+                {item.title === "Games" ? (
+                  <a href="/games/curious-monkey" className="showcase-play-link">
+                    <span>Play Curious Monkey Adventure</span>
+                    <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                  </a>
+                ) : (
+                  <div className="showcase-placeholder">
+                    <span>Ready for files, links, images, video, or live demos</span>
+                    <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                  </div>
+                )}
               </article>
             );
           })}
