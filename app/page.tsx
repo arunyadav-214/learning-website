@@ -207,11 +207,13 @@ export default function Home() {
               <span className="brand-name">Arun K. Yadav</span>
             </a>
 
-            <nav className="hidden items-center gap-1 md:flex" aria-label="Primary navigation">
-              <a href="#learn" className="nav-link">Learn</a>
-              <a href="#showcase" className="nav-link">Showcase</a>
-              <a href="#about" className="nav-link">About</a>
-              <a href="#principles" className="nav-link">Approach</a>
+            <nav className="hidden items-center gap-1 xl:flex" aria-label="Primary navigation">
+              <a href="#projects" className="nav-link">Projects</a>
+              <a href="#assignments" className="nav-link">Assignments</a>
+              <a href="#research-papers" className="nav-link">Research Papers</a>
+              <a href="#certificates" className="nav-link">Certificates</a>
+              <a href="#games" className="nav-link">Games</a>
+              <a href="#videos" className="nav-link">Videos</a>
             </nav>
 
             <a href="#socials" className="nav-cta">
@@ -364,8 +366,9 @@ export default function Home() {
         <div className="showcase-grid">
           {showcaseItems.map((item) => {
             const Icon = item.icon;
+            const itemId = item.title.toLowerCase().replaceAll(" ", "-");
             return (
-              <article key={item.title} className="showcase-card">
+              <article id={itemId} key={item.title} className="showcase-card">
                 <div className="showcase-card-top">
                   <span className="showcase-icon"><Icon className="h-6 w-6" /></span>
                   <span className="showcase-status">Coming soon</span>
