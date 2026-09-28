@@ -320,7 +320,7 @@ export default function Home() {
             <div className="p-8 sm:p-12 lg:p-16">
               <p className="section-kicker">THE BUILDER</p>
               <h2 className="mt-3 font-heading text-4xl font-black tracking-[-0.04em] sm:text-5xl">
-                Arun Yadav
+                Arun K. Yadav
               </h2>
               <p className="mt-3 text-lg font-semibold text-gradient">Student developer & lifelong learner</p>
               <p className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground">
