@@ -140,13 +140,8 @@ export default function Home() {
 
         <div className="mx-auto max-w-7xl px-5 pb-20 pt-5 sm:px-8 lg:pb-28">
           <header className="glass-nav sticky top-4 z-50 flex items-center justify-between rounded-[1.4rem] px-4 py-3 sm:px-5">
-            <a href="#top" className="flex items-center gap-3" aria-label="Arun Learning Hub home">
-              <span className="brand-logo-wrap">
-                <img src="/arun-logo.jpg" alt="Arun logo" className="brand-logo-img" />
-              </span>
-              <span className="font-heading text-sm font-black tracking-[-0.02em] sm:text-base">
-                ARUN<span className="text-gradient">/LEARN</span>
-              </span>
+            <a href="#top" className="brand-home-link" aria-label="Arun Learning Hub home">
+              <img src="/arun-logo.jpg" alt="Arun logo" className="brand-logo-full" />
             </a>
 
             <nav className="hidden items-center gap-1 md:flex" aria-label="Primary navigation">
