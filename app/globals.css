@@ -968,3 +968,75 @@ body {
     font-size:1.6rem;
   }
 }
+
+
+.snake-speed-picker {
+  width:min(620px,100%);
+  margin:0 auto 1rem;
+  padding:.9rem;
+  border-radius:1rem;
+  border:1px solid rgba(255,255,255,.08);
+  background:#0d2415;
+}
+
+.snake-speed-label {
+  display:block;
+  margin-bottom:.6rem;
+  color:#dff7e7;
+  font-size:.78rem;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+}
+
+.snake-speed-options {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:.55rem;
+}
+
+.snake-speed-options button {
+  min-height:44px;
+  padding:.6rem .55rem;
+  border-radius:.75rem;
+  border:1px solid rgba(255,255,255,.11);
+  background:#122f1c;
+  color:#d8eadf;
+  font-size:.82rem;
+  font-weight:850;
+  transition:background .15s ease, border-color .15s ease, transform .15s ease;
+}
+
+.snake-speed-options button:hover {
+  border-color:rgba(134,239,172,.45);
+  background:#183d24;
+}
+
+.snake-speed-options button.active {
+  background:#86efac;
+  border-color:#86efac;
+  color:#08210f;
+  box-shadow:0 6px 18px rgba(134,239,172,.16);
+}
+
+.snake-speed-picker p {
+  margin:.65rem 0 0;
+  color:#8fa596;
+  font-size:.76rem;
+  line-height:1.5;
+}
+
+@media (max-width:640px) {
+  .snake-speed-picker {
+    padding:.8rem;
+  }
+
+  .snake-speed-options {
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .snake-speed-options button {
+    min-height:50px;
+    font-size:.88rem;
+  }
+}
