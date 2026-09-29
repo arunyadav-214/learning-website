@@ -390,6 +390,11 @@ export default function Home() {
                       <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
                     </a>
                   </div>
+                ) : item.title === "Certificates" ? (
+                  <a href="/certificates/blueprint-reading-131" className="showcase-play-link">
+                    <span>View Blueprint Reading 131</span>
+                    <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                  </a>
                 ) : (
                   <div className="showcase-placeholder">
                     <span>Ready for files, links, images, video, or live demos</span>
