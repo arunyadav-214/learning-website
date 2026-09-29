@@ -782,7 +782,15 @@ body {
 .ttt-topbar { display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; color:#9aa6c3; font-size:.85rem; }
 .ttt-topbar a { color:#d8ddff; font-weight:800; }
 .ttt-hero { margin:2rem 0 1.5rem; }
-.ttt-hero h1 { margin:.35rem 0 .6rem; font-size:clamp(2.5rem,7vw,5rem); line-height:.95; letter-spacing:-.055em; font-weight:950; }
+.ttt-hero h1 {
+  margin:.35rem 0 .6rem;
+  font-size:clamp(2.5rem,7vw,5rem);
+  line-height:.95;
+  letter-spacing:-.055em;
+  font-weight:950;
+  color:#67e8f9;
+  text-shadow:0 0 28px rgba(34,211,238,.35);
+}
 .ttt-hero p { max-width:760px; color:#9aa6c3; line-height:1.7; }
 .ttt-panel { border:1px solid rgba(255,255,255,.1); border-radius:1.5rem; padding:1.25rem; background:rgba(14,20,36,.9); box-shadow:0 28px 90px rgba(0,0,0,.32); }
 .ttt-settings { display:grid; gap:1rem; }
