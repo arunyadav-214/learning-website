@@ -385,6 +385,10 @@ export default function Home() {
                       <span>Play Tic-Tac-Toe Arena</span>
                       <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
                     </a>
+                    <a href="/games/snake" className="showcase-play-link">
+                      <span>Play Neon Snake</span>
+                      <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                    </a>
                   </div>
                 ) : (
                   <div className="showcase-placeholder">
