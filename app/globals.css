@@ -814,10 +814,16 @@ body {
 .ttt-status { display:flex; justify-content:center; align-items:center; gap:.55rem; margin:1rem 0; color:#dbe6ff; }
 .ttt-board { width:min(520px,100%); aspect-ratio:1; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); gap:.65rem; }
 .ttt-cell {
-  border:1px solid rgba(255,255,255,.1); border-radius:1rem; background:linear-gradient(145deg,#10182a,#0a1020);
-  color:white; font-size:clamp(2.6rem,12vw,5.5rem); font-weight:950; cursor:pointer; transition:.18s ease;
+  border:1px solid #d1d5db;
+  border-radius:1rem;
+  background:#ffffff;
+  color:#111827;
+  font-size:clamp(2.6rem,12vw,5.5rem);
+  font-weight:950;
+  cursor:pointer;
+  transition:.18s ease;
 }
-.ttt-cell:hover { transform:translateY(-2px); border-color:rgba(139,92,246,.55); background:#131d33; }
+.ttt-cell:hover { transform:translateY(-2px); border-color:#8b5cf6; background:#f8fafc; }
 .ttt-cell.is-x { color:#67e8f9; text-shadow:0 0 30px rgba(34,211,238,.25); }
 .ttt-cell.is-o { color:#c4b5fd; text-shadow:0 0 30px rgba(139,92,246,.3); }
 .ttt-cell.winner { border-color:#34d399; box-shadow:0 0 0 2px rgba(52,211,153,.18),0 0 34px rgba(52,211,153,.18); }
