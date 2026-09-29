@@ -5,6 +5,14 @@ import { Pause, Play, RotateCcw } from "lucide-react";
 
 type Point = { x: number; y: number };
 type Direction = "up" | "down" | "left" | "right";
+type SpeedLevel = "slow" | "normal" | "fast" | "expert";
+
+const SPEED_LEVELS: Record<SpeedLevel, { label: string; base: number; min: number; step: number }> = {
+  slow: { label: "Slow", base: 320, min: 210, step: 8 },
+  normal: { label: "Normal", base: 220, min: 130, step: 10 },
+  fast: { label: "Fast", base: 150, min: 85, step: 10 },
+  expert: { label: "Expert", base: 105, min: 60, step: 8 },
+};
 
 const GRID = 18;
 const START_SNAKE: Point[] = [
@@ -36,8 +44,13 @@ export default function SnakeGamePage() {
   const [best, setBest] = useState(0);
   const [running, setRunning] = useState(true);
   const [gameOver, setGameOver] = useState(false);
+  const [speedLevel, setSpeedLevel] = useState<SpeedLevel>("slow");
 
-  const speed = Math.max(70, 155 - Math.floor(score / 5) * 10);
+  const speedConfig = SPEED_LEVELS[speedLevel];
+  const speed = Math.max(
+    speedConfig.min,
+    speedConfig.base - Math.floor(score / 6) * speedConfig.step
+  );
 
   const restart = useCallback(() => {
     setSnake(START_SNAKE);
@@ -142,7 +155,28 @@ export default function SnakeGamePage() {
           <div className="snake-hud">
             <div><span>Score</span><strong>{score}</strong></div>
             <div><span>Best</span><strong>{best}</strong></div>
-            <div><span>Speed</span><strong>{Math.round((155 / speed) * 10) / 10}×</strong></div>
+            <div><span>Speed</span><strong>{speedConfig.label}</strong></div>
+          </div>
+
+          <div className="snake-speed-picker" aria-label="Choose snake speed">
+            <span className="snake-speed-label">Choose speed</span>
+            <div className="snake-speed-options">
+              {(Object.keys(SPEED_LEVELS) as SpeedLevel[]).map((level) => (
+                <button
+                  key={level}
+                  className={speedLevel === level ? "active" : ""}
+                  onClick={() => {
+                    setSpeedLevel(level);
+                    restart();
+                  }}
+                >
+                  {SPEED_LEVELS[level].label}
+                </button>
+              ))}
+            </div>
+            <p>
+              Slow is best for beginners. The snake still gets a little faster as your score grows.
+            </p>
           </div>
 
           <div className="snake-board" role="grid" aria-label="Snake game board">
