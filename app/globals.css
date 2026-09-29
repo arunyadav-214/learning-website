@@ -890,14 +890,81 @@ body {
   background:rgba(255,255,255,.06); color:#fff; font-weight:800;
 }
 .snake-actions button:disabled { opacity:.45; cursor:not-allowed; }
-.snake-dpad { width:min(240px,100%); margin:1rem auto 0; display:grid; grid-template-columns:repeat(3,1fr); gap:.45rem; }
+.snake-dpad {
+  width:min(300px,92%);
+  margin:1.1rem auto 0;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:.7rem;
+  justify-items:stretch;
+  touch-action:manipulation;
+}
 .snake-dpad button {
-  min-height:48px; border-radius:.75rem; border:1px solid rgba(255,255,255,.1); background:#102718; color:#fff; font-size:1.1rem; font-weight:900;
+  min-height:64px;
+  border-radius:1rem;
+  border:1px solid rgba(255,255,255,.14);
+  background:#163820;
+  color:#fff;
+  font-size:1.55rem;
+  font-weight:950;
+  box-shadow:0 8px 18px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.05);
+  transition:transform .08s ease, background .08s ease, box-shadow .08s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+.snake-dpad button:active {
+  transform:scale(.94);
+  background:#1f4d2c;
+  box-shadow:0 3px 8px rgba(0,0,0,.25);
 }
 .snake-note { margin:1rem auto 0; max-width:620px; text-align:center; color:#92a99a; line-height:1.6; font-size:.85rem; }
 
 @media (max-width:640px) {
+  .snake-page { padding:1rem .7rem 3rem; }
   .snake-panel { padding:.8rem; }
   .snake-board { gap:1px; padding:3px; }
   .snake-hud strong { font-size:1.25rem; }
+
+  .snake-actions {
+    width:min(300px,92%);
+    margin:1rem auto 0;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:.65rem;
+  }
+
+  .snake-actions button {
+    min-height:52px;
+    justify-content:center;
+    padding:.78rem .7rem;
+    font-size:.9rem;
+  }
+
+  .snake-dpad {
+    width:min(310px,96%);
+    gap:.78rem;
+    margin-top:1rem;
+  }
+
+  .snake-dpad button {
+    min-height:72px;
+    border-radius:1.1rem;
+    font-size:1.8rem;
+  }
+
+  .snake-note {
+    max-width:310px;
+    font-size:.8rem;
+  }
+}
+
+@media (max-width:390px) {
+  .snake-dpad {
+    width:100%;
+    gap:.6rem;
+  }
+
+  .snake-dpad button {
+    min-height:66px;
+    font-size:1.6rem;
+  }
 }
