@@ -385,6 +385,10 @@ export default function Home() {
                       <span>Play Lion & Goats</span>
                       <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
                     </a>
+                    <a href="/games/chess" className="showcase-play-link">
+                      <span>Play Chess</span>
+                      <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                    </a>
                     <a href="/games/curious-monkey" className="showcase-play-link">
                       <span>Play Curious Monkey Adventure</span>
                       <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
