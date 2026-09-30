@@ -6,6 +6,8 @@ import { Bot, RotateCcw, Users } from "lucide-react";
 type Side = "lion" | "goat";
 type Piece = Side | null;
 type Mode = "computer" | "friend";
+type Difficulty = "easy" | "medium" | "hard";
+type Move = { from: number; to: number; capture?: number };
 
 const nodes = [
   { x: 50, y: 7 }, { x: 27, y: 30 }, { x: 50, y: 30 }, { x: 73, y: 30 },
@@ -47,7 +49,7 @@ function lionHasMove(board: Piece[]) {
 }
 
 function legalMoves(board: Piece[], side: Side) {
-  const moves: { from: number; to: number; capture?: number }[] = [];
+  const moves: Move[] = [];
 
   if (side === "lion") {
     const from = board.findIndex(p => p === "lion");
@@ -73,6 +75,122 @@ function legalMoves(board: Piece[], side: Side) {
   return moves;
 }
 
+function applyMove(board: Piece[], move: Move, side: Side) {
+  const next = [...board];
+  next[move.from] = null;
+  if (move.capture !== undefined) next[move.capture] = null;
+  next[move.to] = side;
+  return next;
+}
+
+function mobility(board: Piece[], side: Side) {
+  return legalMoves(board, side).length;
+}
+
+function evaluateBoard(board: Piece[], computerSide: Side) {
+  const lionMoves = mobility(board, "lion");
+  const goatMoves = mobility(board, "goat");
+  const goatsLeft = board.filter(p => p === "goat").length;
+
+  if (lionMoves === 0) return computerSide === "goat" ? 1000 : -1000;
+  if (goatsLeft < 4) return computerSide === "lion" ? 1000 : -1000;
+
+  if (computerSide === "lion") {
+    return lionMoves * 12 - goatMoves * 2;
+  }
+
+  return goatMoves * 2 - lionMoves * 14;
+}
+
+function minimax(
+  board: Piece[],
+  sideToMove: Side,
+  computerSide: Side,
+  depth: number,
+  alpha: number,
+  beta: number
+): number {
+  const lionMoves = legalMoves(board, "lion");
+  const goatsLeft = board.filter(p => p === "goat").length;
+
+  if (lionMoves.length === 0 || goatsLeft < 4 || depth === 0) {
+    return evaluateBoard(board, computerSide);
+  }
+
+  const moves = legalMoves(board, sideToMove);
+  if (!moves.length) return evaluateBoard(board, computerSide);
+
+  const maximizing = sideToMove === computerSide;
+  let best = maximizing ? -Infinity : Infinity;
+
+  for (const move of moves) {
+    if (sideToMove === "lion" && move.capture !== undefined) {
+      const score = computerSide === "lion" ? 1000 : -1000;
+      best = maximizing ? Math.max(best, score) : Math.min(best, score);
+    } else {
+      const next = applyMove(board, move, sideToMove);
+      const nextSide: Side = sideToMove === "lion" ? "goat" : "lion";
+      const score = minimax(next, nextSide, computerSide, depth - 1, alpha, beta);
+      best = maximizing ? Math.max(best, score) : Math.min(best, score);
+    }
+
+    if (maximizing) {
+      alpha = Math.max(alpha, best);
+    } else {
+      beta = Math.min(beta, best);
+    }
+    if (beta <= alpha) break;
+  }
+
+  return best;
+}
+
+function chooseComputerMove(
+  board: Piece[],
+  computerSide: Side,
+  difficulty: Difficulty
+) {
+  const moves = legalMoves(board, computerSide);
+  if (!moves.length) return null;
+
+  if (difficulty === "easy") {
+    return moves[Math.floor(Math.random() * moves.length)];
+  }
+
+  if (computerSide === "lion") {
+    const captures = moves.filter(m => m.capture !== undefined);
+    if (captures.length) return captures[Math.floor(Math.random() * captures.length)];
+  } else {
+    const traps = moves.filter(move => {
+      const next = applyMove(board, move, "goat");
+      return !lionHasMove(next);
+    });
+    if (traps.length) return traps[Math.floor(Math.random() * traps.length)];
+  }
+
+  if (difficulty === "medium") {
+    return moves[Math.floor(Math.random() * moves.length)];
+  }
+
+  let bestScore = -Infinity;
+  let bestMoves: Move[] = [];
+
+  for (const move of moves) {
+    const next = applyMove(board, move, computerSide);
+    const nextSide: Side = computerSide === "lion" ? "goat" : "lion";
+    const score = minimax(next, nextSide, computerSide, 5, -Infinity, Infinity);
+
+    if (score > bestScore) {
+      bestScore = score;
+      bestMoves = [move];
+    } else if (score === bestScore) {
+      bestMoves.push(move);
+    }
+  }
+
+  return bestMoves[Math.floor(Math.random() * bestMoves.length)];
+}
+
 export default function LionGoatPage() {
   const [board, setBoard] = useState<Piece[]>(initialBoard);
   const [turn, setTurn] = useState<Side>("goat");
@@ -81,6 +199,7 @@ export default function LionGoatPage() {
   const [message, setMessage] = useState("Goats move first.");
   const [mode, setMode] = useState<Mode>("computer");
   const [humanSide, setHumanSide] = useState<Side>("goat");
+  const [difficulty, setDifficulty] = useState<Difficulty>("medium");
   const [thinking, setThinking] = useState(false);
 
   const computerSide: Side = humanSide === "goat" ? "lion" : "goat";
@@ -186,19 +305,10 @@ export default function LionGoatPage() {
         return;
       }
 
-      let move = moves[Math.floor(Math.random() * moves.length)];
-
-      if (computerSide === "lion") {
-        const captures = moves.filter(m => m.capture !== undefined);
-        if (captures.length) move = captures[Math.floor(Math.random() * captures.length)];
-      } else {
-        const trappingMoves = moves.filter(m => {
-          const test = [...board];
-          test[m.from] = null;
-          test[m.to] = "goat";
-          return !lionHasMove(test);
-        });
-        if (trappingMoves.length) move = trappingMoves[Math.floor(Math.random() * trappingMoves.length)];
+      const move = chooseComputerMove(board, computerSide, difficulty);
+      if (!move) {
+        setThinking(false);
+        return;
       }
 
       const next = [...board];
@@ -237,7 +347,7 @@ export default function LionGoatPage() {
     }, 650);
 
     return () => window.clearTimeout(timer);
-  }, [computerTurn, board, computerSide]);
+  }, [computerTurn, board, computerSide, difficulty]);
 
   return (
     <main className="lion-goat-page">
@@ -271,21 +381,39 @@ export default function LionGoatPage() {
             </div>
 
             {mode === "computer" && (
-              <div className="lion-goat-side-row">
-                <span>Play as</span>
-                <button
-                  className={humanSide === "goat" ? "active" : ""}
-                  onClick={() => { setHumanSide("goat"); resetGame("goat", "computer"); }}
-                >
-                  🐐 Goats
-                </button>
-                <button
-                  className={humanSide === "lion" ? "active" : ""}
-                  onClick={() => { setHumanSide("lion"); resetGame("lion", "computer"); }}
-                >
-                  🦁 Lion
-                </button>
-              </div>
+              <>
+                <div className="lion-goat-side-row">
+                  <span>Play as</span>
+                  <button
+                    className={humanSide === "goat" ? "active" : ""}
+                    onClick={() => { setHumanSide("goat"); resetGame("goat", "computer"); }}
+                  >
+                    🐐 Goats
+                  </button>
+                  <button
+                    className={humanSide === "lion" ? "active" : ""}
+                    onClick={() => { setHumanSide("lion"); resetGame("lion", "computer"); }}
+                  >
+                    🦁 Lion
+                  </button>
+                </div>
+
+                <div className="lion-goat-difficulty-row">
+                  <span>Difficulty</span>
+                  {(["easy", "medium", "hard"] as Difficulty[]).map(level => (
+                    <button
+                      key={level}
+                      className={difficulty === level ? "active" : ""}
+                      onClick={() => {
+                        setDifficulty(level);
+                        resetGame(humanSide, "computer");
+                      }}
+                    >
+                      {level.charAt(0).toUpperCase() + level.slice(1)}
+                    </button>
+                  ))}
+                </div>
+              </>
             )}
           </div>
 
