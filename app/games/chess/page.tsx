@@ -1,12 +1,15 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { RotateCcw } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Bot, RotateCcw, Users } from "lucide-react";
 
 type Color = "w" | "b";
 type Kind = "p" | "r" | "n" | "b" | "q" | "k";
 type Piece = { color: Color; kind: Kind } | null;
 type Board = Piece[];
+type Mode = "computer" | "friend";
+type Difficulty = "easy" | "medium" | "hard";
+type Rights = { wk:boolean; wq:boolean; bk:boolean; bq:boolean };
 type Move = {
   from: number;
   to: number;
@@ -19,6 +22,8 @@ const glyphs: Record<Color, Record<Kind, string>> = {
   w: { k:"♔", q:"♕", r:"♖", b:"♗", n:"♘", p:"♙" },
   b: { k:"♚", q:"♛", r:"♜", b:"♝", n:"♞", p:"♟" },
 };
+
+const values: Record<Kind, number> = { p:100, n:320, b:330, r:500, q:900, k:20000 };
 
 function startBoard(): Board {
   const back: Kind[] = ["r","n","b","q","k","b","n","r"];
@@ -88,12 +93,7 @@ function kingInCheck(board:Board,color:Color) {
   return king>=0 && attacked(board,king,other(color));
 }
 
-function pseudoMoves(
-  board:Board,
-  from:number,
-  enPassant:number|null,
-  castleRights:{wk:boolean,wq:boolean,bk:boolean,bq:boolean}
-):Move[] {
+function pseudoMoves(board:Board, from:number, enPassant:number|null, rights:Rights):Move[] {
   const piece=board[from];
   if (!piece) return [];
   const {r,c}=rc(from);
@@ -161,21 +161,22 @@ function pseudoMoves(
     }
 
     if (piece.color==="w" && from===60 && !kingInCheck(board,"w")) {
-      if (castleRights.wk && !board[61] && !board[62] && board[63]?.kind==="r" &&
+      if (rights.wk && !board[61] && !board[62] && board[63]?.kind==="r" &&
           !attacked(board,61,"b") && !attacked(board,62,"b")) {
         moves.push({from,to:62,castle:"k"});
       }
-      if (castleRights.wq && !board[59] && !board[58] && !board[57] && board[56]?.kind==="r" &&
+      if (rights.wq && !board[59] && !board[58] && !board[57] && board[56]?.kind==="r" &&
           !attacked(board,59,"b") && !attacked(board,58,"b")) {
         moves.push({from,to:58,castle:"q"});
       }
     }
+
     if (piece.color==="b" && from===4 && !kingInCheck(board,"b")) {
-      if (castleRights.bk && !board[5] && !board[6] && board[7]?.kind==="r" &&
+      if (rights.bk && !board[5] && !board[6] && board[7]?.kind==="r" &&
           !attacked(board,5,"w") && !attacked(board,6,"w")) {
         moves.push({from,to:6,castle:"k"});
       }
-      if (castleRights.bq && !board[3] && !board[2] && !board[1] && board[0]?.kind==="r" &&
+      if (rights.bq && !board[3] && !board[2] && !board[1] && board[0]?.kind==="r" &&
           !attacked(board,3,"w") && !attacked(board,2,"w")) {
         moves.push({from,to:2,castle:"q"});
       }
@@ -196,7 +197,7 @@ function applyMove(board:Board,move:Move):Board {
     next[idx(capturedR,c)]=null;
   }
 
-  next[move.to]={...piece, kind:move.promotion ?? piece.kind};
+  next[move.to]={...piece,kind:move.promotion ?? piece.kind};
 
   if (move.castle==="k") {
     if (piece.color==="w") {
@@ -205,6 +206,7 @@ function applyMove(board:Board,move:Move):Board {
       next[7]=null; next[5]={color:"b",kind:"r"};
     }
   }
+
   if (move.castle==="q") {
     if (piece.color==="w") {
       next[56]=null; next[59]={color:"w",kind:"r"};
@@ -212,24 +214,142 @@ function applyMove(board:Board,move:Move):Board {
       next[0]=null; next[3]={color:"b",kind:"r"};
     }
   }
+
   return next;
 }
 
-function legalMoves(
-  board:Board,
-  color:Color,
-  enPassant:number|null,
-  rights:{wk:boolean,wq:boolean,bk:boolean,bq:boolean}
-) {
+function nextRights(board:Board,move:Move,rights:Rights):Rights {
+  const moving=board[move.from]!;
+  const captured=board[move.to];
+  const result={...rights};
+
+  if (moving.kind==="k") {
+    if (moving.color==="w") { result.wk=false; result.wq=false; }
+    else { result.bk=false; result.bq=false; }
+  }
+
+  if (moving.kind==="r") {
+    if (move.from===63) result.wk=false;
+    if (move.from===56) result.wq=false;
+    if (move.from===7) result.bk=false;
+    if (move.from===0) result.bq=false;
+  }
+
+  if (captured?.kind==="r") {
+    if (move.to===63) result.wk=false;
+    if (move.to===56) result.wq=false;
+    if (move.to===7) result.bk=false;
+    if (move.to===0) result.bq=false;
+  }
+
+  return result;
+}
+
+function nextEnPassant(board:Board,move:Move) {
+  const moving=board[move.from]!;
+  if (moving.kind==="p" && Math.abs(move.to-move.from)===16) {
+    return (move.to+move.from)/2;
+  }
+  return null;
+}
+
+function legalMoves(board:Board,color:Color,enPassant:number|null,rights:Rights) {
   const all:Move[]=[];
   board.forEach((p,from)=>{
     if (p?.color!==color) return;
-    for (const m of pseudoMoves(board,from,enPassant,rights)) {
-      const next=applyMove(board,m);
-      if (!kingInCheck(next,color)) all.push(m);
+    for (const move of pseudoMoves(board,from,enPassant,rights)) {
+      const next=applyMove(board,move);
+      if (!kingInCheck(next,color)) all.push(move);
     }
   });
   return all;
+}
+
+function evaluate(board:Board,computer:Color) {
+  let score=0;
+  for (const piece of board) {
+    if (!piece) continue;
+    const value=values[piece.kind];
+    score += piece.color===computer ? value : -value;
+  }
+  return score;
+}
+
+function minimax(
+  board:Board,
+  turn:Color,
+  computer:Color,
+  depth:number,
+  enPassant:number|null,
+  rights:Rights,
+  alpha:number,
+  beta:number
+):number {
+  const moves=legalMoves(board,turn,enPassant,rights);
+
+  if (!moves.length) {
+    if (kingInCheck(board,turn)) return turn===computer ? -100000 : 100000;
+    return 0;
+  }
+
+  if (depth===0) return evaluate(board,computer);
+
+  const maximizing=turn===computer;
+  let best=maximizing ? -Infinity : Infinity;
+
+  for (const move of moves) {
+    const board2=applyMove(board,move);
+    const rights2=nextRights(board,move,rights);
+    const ep2=nextEnPassant(board,move);
+    const score=minimax(board2,other(turn),computer,depth-1,ep2,rights2,alpha,beta);
+
+    if (maximizing) {
+      best=Math.max(best,score);
+      alpha=Math.max(alpha,best);
+    } else {
+      best=Math.min(best,score);
+      beta=Math.min(beta,best);
+    }
+
+    if (beta<=alpha) break;
+  }
+
+  return best;
+}
+
+function chooseComputerMove(
+  board:Board,
+  computer:Color,
+  difficulty:Difficulty,
+  enPassant:number|null,
+  rights:Rights
+) {
+  const moves=legalMoves(board,computer,enPassant,rights);
+  if (!moves.length) return null;
+
+  if (difficulty==="easy") {
+    return moves[Math.floor(Math.random()*moves.length)];
+  }
+
+  const depth=difficulty==="medium" ? 1 : 2;
+  let bestScore=-Infinity;
+  let bestMoves:Move[]=[];
+
+  for (const move of moves) {
+    const board2=applyMove(board,move);
+    const rights2=nextRights(board,move,rights);
+    const ep2=nextEnPassant(board,move);
+    const score=minimax(board2,other(computer),computer,depth,ep2,rights2,-Infinity,Infinity);
+
+    if (score>bestScore) {
+      bestScore=score;
+      bestMoves=[move];
+    } else if (score===bestScore) {
+      bestMoves.push(move);
+    }
+  }
+
+  return bestMoves[Math.floor(Math.random()*bestMoves.length)];
 }
 
 export default function ChessPage() {
@@ -237,99 +357,169 @@ export default function ChessPage() {
   const [turn,setTurn]=useState<Color>("w");
   const [selected,setSelected]=useState<number|null>(null);
   const [enPassant,setEnPassant]=useState<number|null>(null);
-  const [rights,setRights]=useState({wk:true,wq:true,bk:true,bq:true});
+  const [rights,setRights]=useState<Rights>({wk:true,wq:true,bk:true,bq:true});
   const [lastMove,setLastMove]=useState<Move|null>(null);
+  const [mode,setMode]=useState<Mode>("computer");
+  const [humanColor,setHumanColor]=useState<Color>("w");
+  const [difficulty,setDifficulty]=useState<Difficulty>("medium");
+  const [thinking,setThinking]=useState(false);
 
+  const computerColor:Color=humanColor==="w" ? "b" : "w";
   const moves=useMemo(()=>legalMoves(board,turn,enPassant,rights),[board,turn,enPassant,rights]);
   const selectedMoves=selected===null ? [] : moves.filter(m=>m.from===selected);
   const inCheck=kingInCheck(board,turn);
   const gameOver=moves.length===0;
+  const computerTurn=mode==="computer" && turn===computerColor && !gameOver;
+
   const status=gameOver
     ? inCheck
       ? `${turn==="w" ? "Black" : "White"} wins by checkmate`
       : "Draw by stalemate"
-    : inCheck
-      ? `${turn==="w" ? "White" : "Black"} is in check`
-      : `${turn==="w" ? "White" : "Black"} to move`;
+    : thinking
+      ? `Computer (${computerColor==="w" ? "White" : "Black"}) is thinking…`
+      : inCheck
+        ? `${turn==="w" ? "White" : "Black"} is in check`
+        : `${turn==="w" ? "White" : "Black"} to move`;
 
-  function reset() {
+  function reset(nextHuman=humanColor,nextMode=mode) {
     setBoard(startBoard());
     setTurn("w");
     setSelected(null);
     setEnPassant(null);
     setRights({wk:true,wq:true,bk:true,bq:true});
     setLastMove(null);
+    setThinking(false);
+    setHumanColor(nextHuman);
+    setMode(nextMode);
+  }
+
+  function commitMove(move:Move) {
+    const board2=applyMove(board,move);
+    const rights2=nextRights(board,move,rights);
+    const ep2=nextEnPassant(board,move);
+
+    setBoard(board2);
+    setRights(rights2);
+    setEnPassant(ep2);
+    setLastMove(move);
+    setSelected(null);
+    setTurn(other(turn));
   }
 
   function choose(square:number) {
-    if (gameOver) return;
-    const p=board[square];
+    if (gameOver || thinking || computerTurn) return;
+    const piece=board[square];
 
-    if (p?.color===turn) {
+    if (piece?.color===turn) {
+      if (mode==="computer" && piece.color!==humanColor) return;
       setSelected(square);
       return;
     }
 
     if (selected===null) return;
     const move=selectedMoves.find(m=>m.to===square);
-    if (!move) return;
-
-    const moving=board[move.from]!;
-    const captured=board[move.to];
-    const next=applyMove(board,move);
-
-    const nextRights={...rights};
-    if (moving.kind==="k") {
-      if (moving.color==="w") { nextRights.wk=false; nextRights.wq=false; }
-      else { nextRights.bk=false; nextRights.bq=false; }
-    }
-    if (moving.kind==="r") {
-      if (move.from===63) nextRights.wk=false;
-      if (move.from===56) nextRights.wq=false;
-      if (move.from===7) nextRights.bk=false;
-      if (move.from===0) nextRights.bq=false;
-    }
-    if (captured?.kind==="r") {
-      if (move.to===63) nextRights.wk=false;
-      if (move.to===56) nextRights.wq=false;
-      if (move.to===7) nextRights.bk=false;
-      if (move.to===0) nextRights.bq=false;
-    }
-
-    let nextEP:number|null=null;
-    if (moving.kind==="p" && Math.abs(move.to-move.from)===16) {
-      nextEP=(move.to+move.from)/2;
-    }
-
-    setBoard(next);
-    setRights(nextRights);
-    setEnPassant(nextEP);
-    setLastMove(move);
-    setSelected(null);
-    setTurn(other(turn));
+    if (move) commitMove(move);
   }
+
+  useEffect(()=>{
+    if (!computerTurn) return;
+
+    setThinking(true);
+    const timer=window.setTimeout(()=>{
+      const move=chooseComputerMove(board,computerColor,difficulty,enPassant,rights);
+      if (!move) {
+        setThinking(false);
+        return;
+      }
+
+      const board2=applyMove(board,move);
+      const rights2=nextRights(board,move,rights);
+      const ep2=nextEnPassant(board,move);
+
+      setBoard(board2);
+      setRights(rights2);
+      setEnPassant(ep2);
+      setLastMove(move);
+      setSelected(null);
+      setTurn(other(computerColor));
+      setThinking(false);
+    },550);
+
+    return ()=>window.clearTimeout(timer);
+  },[computerTurn,board,computerColor,difficulty,enPassant,rights]);
 
   return (
     <main className="chess-page">
       <div className="chess-wrap">
         <div className="chess-topbar">
           <a href="/#games">← Back to Games</a>
-          <span>Classic two-player chess</span>
+          <span>Playable chess</span>
         </div>
 
         <header className="chess-hero">
           <p className="section-kicker">PLAYABLE BOARD GAME</p>
           <h1>Chess</h1>
-          <p>Play a complete local game of chess with legal move highlighting and mobile tap controls.</p>
+          <p>Play against the computer or a friend with legal move highlighting and mobile tap controls.</p>
         </header>
 
         <section className="chess-shell">
+          <div className="chess-options">
+            <div className="chess-option-row">
+              <span>Mode</span>
+              <button
+                className={mode==="computer" ? "active" : ""}
+                onClick={()=>reset(humanColor,"computer")}
+              >
+                <Bot className="h-4 w-4" /> Play vs Computer
+              </button>
+              <button
+                className={mode==="friend" ? "active" : ""}
+                onClick={()=>reset(humanColor,"friend")}
+              >
+                <Users className="h-4 w-4" /> 2 Players
+              </button>
+            </div>
+
+            {mode==="computer" && (
+              <>
+                <div className="chess-option-row">
+                  <span>Play as</span>
+                  <button
+                    className={humanColor==="w" ? "active" : ""}
+                    onClick={()=>reset("w","computer")}
+                  >
+                    ♙ White
+                  </button>
+                  <button
+                    className={humanColor==="b" ? "active" : ""}
+                    onClick={()=>reset("b","computer")}
+                  >
+                    ♟ Black
+                  </button>
+                </div>
+
+                <div className="chess-option-row chess-difficulty-row">
+                  <span>Difficulty</span>
+                  {(["easy","medium","hard"] as Difficulty[]).map(level=>(
+                    <button
+                      key={level}
+                      className={difficulty===level ? "active" : ""}
+                      onClick={()=>{ setDifficulty(level); reset(humanColor,"computer"); }}
+                    >
+                      {level.charAt(0).toUpperCase()+level.slice(1)}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+
           <div className="chess-status">
             <div>
               <span>Status</span>
               <strong>{status}</strong>
             </div>
-            <button onClick={reset}><RotateCcw className="h-4 w-4" /> New Game</button>
+            <button onClick={()=>reset()}><RotateCcw className="h-4 w-4" /> New Game</button>
           </div>
 
           <div className="chess-board" role="grid" aria-label="Chess board">
@@ -341,6 +531,7 @@ export default function ChessPage() {
               const isLast=lastMove && (lastMove.from===i || lastMove.to===i);
               const file=String.fromCharCode(97+c);
               const rank=8-r;
+
               return (
                 <button
                   key={i}
@@ -357,7 +548,11 @@ export default function ChessPage() {
                 >
                   {c===0 && <span className="chess-rank">{rank}</span>}
                   {r===7 && <span className="chess-file">{file}</span>}
-                  {piece && <span className={`chess-piece ${piece.color==="w"?"white":"black"}`}>{glyphs[piece.color][piece.kind]}</span>}
+                  {piece && (
+                    <span className={`chess-piece ${piece.color==="w"?"white":"black"}`}>
+                      {glyphs[piece.color][piece.kind]}
+                    </span>
+                  )}
                   {move && !board[i] && <span className="chess-move-dot" />}
                 </button>
               );
@@ -367,13 +562,13 @@ export default function ChessPage() {
               <div className="chess-overlay">
                 <h2>{inCheck ? "Checkmate" : "Stalemate"}</h2>
                 <p>{status}</p>
-                <button onClick={reset}>Play Again</button>
+                <button onClick={()=>reset()}>Play Again</button>
               </div>
             )}
           </div>
 
           <div className="chess-help">
-            <strong>How to play:</strong> tap a piece, then tap a highlighted square. Castling, en passant, check, checkmate, stalemate, and automatic queen promotion are supported.
+            <strong>Computer levels:</strong> Easy makes random legal moves, Medium evaluates the next position, and Hard looks farther ahead. Castling, en passant, check, checkmate, stalemate, and automatic queen promotion are supported.
           </div>
         </section>
       </div>
