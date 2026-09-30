@@ -1748,3 +1748,127 @@ body {
     font-size:.8rem;
   }
 }
+
+
+.chess-game-layout {
+  width:min(980px,100%);
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:minmax(0,680px) minmax(240px,1fr);
+  gap:1rem;
+  align-items:start;
+}
+
+.chess-game-layout .chess-board {
+  width:100%;
+  margin:0;
+}
+
+.chess-history-panel {
+  min-height:100%;
+  padding:1rem;
+  border-radius:1rem;
+  background:#171f2d;
+  border:1px solid rgba(255,255,255,.07);
+}
+
+.chess-history-header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:.75rem;
+  margin-bottom:.9rem;
+}
+
+.chess-history-header span {
+  display:block;
+  color:#8f99aa;
+  font-size:.68rem;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+}
+
+.chess-history-header h2 {
+  margin-top:.15rem;
+  color:#f8fafc;
+  font-size:1.2rem;
+  font-weight:900;
+}
+
+.chess-history-header button {
+  min-height:42px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:.4rem;
+  padding:.6rem .75rem;
+  border-radius:.75rem;
+  background:#f8fafc;
+  color:#111827;
+  font-size:.8rem;
+  font-weight:900;
+}
+
+.chess-history-list {
+  display:grid;
+  gap:.35rem;
+  max-height:620px;
+  overflow:auto;
+  padding-right:.15rem;
+}
+
+.chess-history-row {
+  display:grid;
+  grid-template-columns:2rem minmax(0,1fr) minmax(0,1fr);
+  gap:.45rem;
+  align-items:center;
+  padding:.55rem .6rem;
+  border-radius:.65rem;
+  background:#202938;
+  color:#e5e7eb;
+  font-family:"SFMono-Regular",Consolas,monospace;
+  font-size:.8rem;
+}
+
+.chess-history-number {
+  color:#8f99aa;
+  font-weight:800;
+}
+
+.chess-history-empty {
+  margin:0;
+  padding:.8rem;
+  border-radius:.7rem;
+  background:#202938;
+  color:#8f99aa;
+  line-height:1.5;
+  font-size:.82rem;
+}
+
+@media (max-width:900px) {
+  .chess-game-layout {
+    grid-template-columns:1fr;
+  }
+
+  .chess-history-list {
+    max-height:260px;
+  }
+}
+
+@media (max-width:640px) {
+  .chess-history-header {
+    align-items:flex-start;
+  }
+
+  .chess-history-header button {
+    min-height:46px;
+  }
+
+  .chess-history-row {
+    grid-template-columns:1.7rem 1fr 1fr;
+    gap:.3rem;
+    padding:.5rem;
+    font-size:.74rem;
+  }
+}
