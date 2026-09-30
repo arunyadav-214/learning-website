@@ -389,6 +389,10 @@ export default function Home() {
                       <span>Play Neon Snake</span>
                       <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
                     </a>
+                    <a href="/games/lion-goats" className="showcase-play-link">
+                      <span>Play Lion & Goats</span>
+                      <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                    </a>
                   </div>
                 ) : item.title === "Certificates" ? (
                   <a href="/certificates/blueprint-reading-131" className="showcase-play-link">
