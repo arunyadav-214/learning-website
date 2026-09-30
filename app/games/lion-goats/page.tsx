@@ -1,43 +1,26 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { RotateCcw } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Bot, RotateCcw, Users } from "lucide-react";
 
 type Side = "lion" | "goat";
 type Piece = Side | null;
+type Mode = "computer" | "friend";
 
 const nodes = [
-  { x: 50, y: 7 },   // 0 top
-  { x: 27, y: 30 },  // 1 upper-left
-  { x: 50, y: 30 },  // 2 upper-center
-  { x: 73, y: 30 },  // 3 upper-right
-  { x: 15, y: 55 },  // 4 middle-left
-  { x: 50, y: 55 },  // 5 middle-center
-  { x: 85, y: 55 },  // 6 middle-right
-  { x: 50, y: 73 },  // 7 lower-center
-  { x: 25, y: 92 },  // 8 lower-left
-  { x: 75, y: 92 },  // 9 lower-right
+  { x: 50, y: 7 }, { x: 27, y: 30 }, { x: 50, y: 30 }, { x: 73, y: 30 },
+  { x: 15, y: 55 }, { x: 50, y: 55 }, { x: 85, y: 55 },
+  { x: 50, y: 73 }, { x: 25, y: 92 }, { x: 75, y: 92 },
 ];
 
 const edges: [number, number][] = [
-  [0,1],[0,3],
-  [1,2],[2,3],
-  [1,5],[2,5],[3,5],
-  [4,5],[5,6],
-  [5,7],
-  [7,8],[7,9],
-  [8,9],
+  [0,1],[0,3],[1,2],[2,3],[1,5],[2,5],[3,5],
+  [4,5],[5,6],[5,7],[7,8],[7,9],[8,9],
 ];
 
 const captureTriples: [number, number, number][] = [
-  [1,2,3],
-  [3,2,1],
-  [4,5,6],
-  [6,5,4],
-  [2,5,7],
-  [7,5,2],
-  [8,7,9],
-  [9,7,8],
+  [1,2,3],[3,2,1],[4,5,6],[6,5,4],
+  [2,5,7],[7,5,2],[8,7,9],[9,7,8],
 ];
 
 const initialBoard: Piece[] = [
@@ -57,8 +40,37 @@ function lionCaptures(board: Piece[], from: number) {
 function lionHasMove(board: Piece[]) {
   const lion = board.findIndex(p => p === "lion");
   if (lion < 0) return false;
-  const step = edges.some(([a,b]) => (a === lion && board[b] === null) || (b === lion && board[a] === null));
+  const step = edges.some(([a,b]) =>
+    (a === lion && board[b] === null) || (b === lion && board[a] === null)
+  );
   return step || lionCaptures(board, lion).length > 0;
+}
+
+function legalMoves(board: Piece[], side: Side) {
+  const moves: { from: number; to: number; capture?: number }[] = [];
+
+  if (side === "lion") {
+    const from = board.findIndex(p => p === "lion");
+    if (from < 0) return moves;
+
+    nodes.forEach((_, to) => {
+      if (board[to] === null && adjacent(from, to)) moves.push({ from, to });
+    });
+
+    lionCaptures(board, from).forEach(({ over, land }) => {
+      moves.push({ from, to: land, capture: over });
+    });
+    return moves;
+  }
+
+  board.forEach((piece, from) => {
+    if (piece !== "goat") return;
+    nodes.forEach((_, to) => {
+      if (board[to] === null && adjacent(from, to)) moves.push({ from, to });
+    });
+  });
+
+  return moves;
 }
 
 export default function LionGoatPage() {
@@ -67,6 +79,25 @@ export default function LionGoatPage() {
   const [selected, setSelected] = useState<number | null>(null);
   const [winner, setWinner] = useState<Side | null>(null);
   const [message, setMessage] = useState("Goats move first.");
+  const [mode, setMode] = useState<Mode>("computer");
+  const [humanSide, setHumanSide] = useState<Side>("goat");
+  const [thinking, setThinking] = useState(false);
+
+  const computerSide: Side = humanSide === "goat" ? "lion" : "goat";
+  const computerTurn = mode === "computer" && turn === computerSide && !winner;
+
+  function resetGame(nextHumanSide = humanSide, nextMode = mode) {
+    setBoard(initialBoard);
+    setTurn("goat");
+    setSelected(null);
+    setWinner(null);
+    setThinking(false);
+    setMessage(
+      nextMode === "computer" && nextHumanSide === "lion"
+        ? "Computer goats move first."
+        : "Goats move first."
+    );
+  }
 
   const validTargets = useMemo(() => {
     if (selected === null || winner) return [] as number[];
@@ -81,46 +112,15 @@ export default function LionGoatPage() {
     return [];
   }, [selected, board, turn, winner]);
 
-  function restart() {
-    setBoard(initialBoard);
-    setTurn("goat");
-    setSelected(null);
-    setWinner(null);
-    setMessage("Goats move first.");
-  }
-
-  function choose(index: number) {
-    if (winner) return;
-    const piece = board[index];
-
-    if (piece === turn) {
-      setSelected(index);
-      setMessage(turn === "goat" ? "Choose an adjacent empty point." : "Move or jump over a goat to capture.");
-      return;
-    }
-
-    if (selected === null || !validTargets.includes(index)) return;
-
-    const next = [...board];
-    const moving = next[selected];
-    next[selected] = null;
-
-    if (moving === "lion") {
-      const capture = lionCaptures(board, selected).find(c => c.land === index);
-      if (capture) {
-        next[capture.over] = null;
-        next[index] = "lion";
-        setBoard(next);
-        setSelected(null);
-        setWinner("lion");
-        setMessage("Lion captured a goat and wins.");
-        return;
-      }
-    }
-
-    next[index] = moving;
+  function finishMove(next: Piece[], moving: Side, captured = false) {
     setBoard(next);
     setSelected(null);
+
+    if (captured) {
+      setWinner("lion");
+      setMessage("Lion captured a goat and wins.");
+      return;
+    }
 
     if (moving === "goat") {
       if (!lionHasMove(next)) {
@@ -129,12 +129,115 @@ export default function LionGoatPage() {
         return;
       }
       setTurn("lion");
-      setMessage("Lion's turn.");
+      setMessage(mode === "computer" && computerSide === "lion" ? "Computer lion is thinking…" : "Lion's turn.");
     } else {
       setTurn("goat");
-      setMessage("Goats' turn.");
+      setMessage(mode === "computer" && computerSide === "goat" ? "Computer goats are thinking…" : "Goats' turn.");
     }
   }
+
+  function makeMove(from: number, to: number) {
+    const next = [...board];
+    const moving = next[from] as Side;
+    next[from] = null;
+
+    if (moving === "lion") {
+      const capture = lionCaptures(board, from).find(c => c.land === to);
+      if (capture) {
+        next[capture.over] = null;
+        next[to] = "lion";
+        finishMove(next, moving, true);
+        return;
+      }
+    }
+
+    next[to] = moving;
+    finishMove(next, moving, false);
+  }
+
+  function choose(index: number) {
+    if (winner || thinking || computerTurn) return;
+    const piece = board[index];
+
+    if (piece === turn) {
+      if (mode === "computer" && piece !== humanSide) return;
+      setSelected(index);
+      setMessage(turn === "goat" ? "Choose an adjacent empty point." : "Move or jump over a goat to capture.");
+      return;
+    }
+
+    if (selected === null || !validTargets.includes(index)) return;
+    makeMove(selected, index);
+  }
+
+  useEffect(() => {
+    if (!computerTurn) return;
+
+    setThinking(true);
+    const timer = window.setTimeout(() => {
+      const moves = legalMoves(board, computerSide);
+
+      if (!moves.length) {
+        if (computerSide === "lion") {
+          setWinner("goat");
+          setMessage("The lion is trapped. Goats win!");
+        }
+        setThinking(false);
+        return;
+      }
+
+      let move = moves[Math.floor(Math.random() * moves.length)];
+
+      if (computerSide === "lion") {
+        const captures = moves.filter(m => m.capture !== undefined);
+        if (captures.length) move = captures[Math.floor(Math.random() * captures.length)];
+      } else {
+        const trappingMoves = moves.filter(m => {
+          const test = [...board];
+          test[m.from] = null;
+          test[m.to] = "goat";
+          return !lionHasMove(test);
+        });
+        if (trappingMoves.length) move = trappingMoves[Math.floor(Math.random() * trappingMoves.length)];
+      }
+
+      const next = [...board];
+      const moving = next[move.from] as Side;
+      next[move.from] = null;
+
+      if (move.capture !== undefined) {
+        next[move.capture] = null;
+        next[move.to] = "lion";
+        setBoard(next);
+        setSelected(null);
+        setWinner("lion");
+        setMessage("Computer lion captured a goat and wins.");
+        setThinking(false);
+        return;
+      }
+
+      next[move.to] = moving;
+      setBoard(next);
+      setSelected(null);
+
+      if (moving === "goat") {
+        if (!lionHasMove(next)) {
+          setWinner("goat");
+          setMessage("Computer goats trapped the lion. Goats win!");
+        } else {
+          setTurn("lion");
+          setMessage("Your turn — Lion.");
+        }
+      } else {
+        setTurn("goat");
+        setMessage("Your turn — Goats.");
+      }
+
+      setThinking(false);
+    }, 650);
+
+    return () => window.clearTimeout(timer);
+  }, [computerTurn, board, computerSide]);
 
   return (
     <main className="lion-goat-page">
@@ -147,19 +250,52 @@ export default function LionGoatPage() {
         <header className="lion-goat-hero">
           <p className="section-kicker">PLAYABLE TRADITIONAL GAME</p>
           <h1>Lion & Goats</h1>
-          <p>
-            Trap the lion with four goats — or escape and capture a goat as the lion.
-          </p>
+          <p>Trap the lion with four goats — or escape and capture a goat as the lion.</p>
         </header>
 
         <section className="lion-goat-shell">
+          <div className="lion-goat-modes">
+            <div className="lion-goat-mode-row">
+              <button
+                className={mode === "computer" ? "active" : ""}
+                onClick={() => { setMode("computer"); resetGame(humanSide, "computer"); }}
+              >
+                <Bot className="h-4 w-4" /> Play vs Computer
+              </button>
+              <button
+                className={mode === "friend" ? "active" : ""}
+                onClick={() => { setMode("friend"); resetGame(humanSide, "friend"); }}
+              >
+                <Users className="h-4 w-4" /> 2 Players
+              </button>
+            </div>
+
+            {mode === "computer" && (
+              <div className="lion-goat-side-row">
+                <span>Play as</span>
+                <button
+                  className={humanSide === "goat" ? "active" : ""}
+                  onClick={() => { setHumanSide("goat"); resetGame("goat", "computer"); }}
+                >
+                  🐐 Goats
+                </button>
+                <button
+                  className={humanSide === "lion" ? "active" : ""}
+                  onClick={() => { setHumanSide("lion"); resetGame("lion", "computer"); }}
+                >
+                  🦁 Lion
+                </button>
+              </div>
+            )}
+          </div>
+
           <div className="lion-goat-status">
             <div>
               <span>Turn</span>
-              <strong>{winner ? "Game over" : turn === "goat" ? "Goats" : "Lion"}</strong>
+              <strong>{winner ? "Game over" : thinking ? "Computer" : turn === "goat" ? "Goats" : "Lion"}</strong>
             </div>
             <p>{message}</p>
-            <button onClick={restart}><RotateCcw className="h-4 w-4" /> Restart</button>
+            <button onClick={() => resetGame()}><RotateCcw className="h-4 w-4" /> Restart</button>
           </div>
 
           <div className="lion-goat-board" aria-label="Lion and Goats game board">
@@ -177,8 +313,13 @@ export default function LionGoatPage() {
 
             {nodes.map((node, i) => {
               const piece = board[i];
-              const selectable = piece === turn && !winner;
-              const target = validTargets.includes(i);
+              const selectable =
+                piece === turn &&
+                !winner &&
+                !thinking &&
+                !(mode === "computer" && piece !== humanSide);
+              const target = validTargets.includes(i) && !computerTurn;
+
               return (
                 <button
                   key={i}
@@ -208,7 +349,7 @@ export default function LionGoatPage() {
               <div className="lion-goat-overlay">
                 <h2>{winner === "lion" ? "🦁 Lion Wins!" : "🐐 Goats Win!"}</h2>
                 <p>{winner === "lion" ? "The lion captured a goat." : "The lion has no legal move."}</p>
-                <button onClick={restart}>Play Again</button>
+                <button onClick={() => resetGame()}>Play Again</button>
               </div>
             )}
           </div>
