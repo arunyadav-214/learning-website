@@ -366,7 +366,7 @@ export default function Home() {
               <article id={itemId} key={item.title} className="showcase-card">
                 <div className="showcase-card-top">
                   <span className="showcase-icon"><Icon className="h-6 w-6" /></span>
-                  <span className="showcase-status">Coming soon</span>
+                  {item.title !== "Games" && <span className="showcase-status">Coming soon</span>}
                 </div>
 
                 <div>
