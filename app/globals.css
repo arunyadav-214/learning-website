@@ -1440,3 +1440,53 @@ body {
     font-size:.82rem;
   }
 }
+
+
+.lion-goat-difficulty-row {
+  display:flex;
+  flex-wrap:wrap;
+  gap:.55rem;
+  align-items:center;
+}
+
+.lion-goat-difficulty-row span {
+  margin-right:.2rem;
+  color:#91a397;
+  font-size:.78rem;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+}
+
+.lion-goat-difficulty-row button {
+  min-height:42px;
+  padding:.6rem .8rem;
+  border-radius:.75rem;
+  border:1px solid rgba(255,255,255,.1);
+  background:#142f1d;
+  color:#dbe8df;
+  font-weight:850;
+}
+
+.lion-goat-difficulty-row button.active {
+  background:#86efac;
+  border-color:#86efac;
+  color:#08210f;
+}
+
+@media (max-width:640px) {
+  .lion-goat-difficulty-row {
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+  }
+
+  .lion-goat-difficulty-row span {
+    grid-column:1/-1;
+  }
+
+  .lion-goat-difficulty-row button {
+    min-height:48px;
+    padding:.55rem .35rem;
+    font-size:.82rem;
+  }
+}
