@@ -1371,3 +1371,72 @@ body {
   }
   .lion-piece,.goat-piece { font-size:1.65rem; }
 }
+
+
+.lion-goat-modes {
+  display:grid;
+  gap:.75rem;
+  margin-bottom:1rem;
+  padding:.9rem;
+  border-radius:1rem;
+  background:#102718;
+  border:1px solid rgba(255,255,255,.07);
+}
+
+.lion-goat-mode-row,
+.lion-goat-side-row {
+  display:flex;
+  flex-wrap:wrap;
+  gap:.55rem;
+  align-items:center;
+}
+
+.lion-goat-mode-row button,
+.lion-goat-side-row button {
+  min-height:44px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:.45rem;
+  padding:.65rem .85rem;
+  border-radius:.75rem;
+  border:1px solid rgba(255,255,255,.1);
+  background:#142f1d;
+  color:#dbe8df;
+  font-weight:850;
+}
+
+.lion-goat-mode-row button.active,
+.lion-goat-side-row button.active {
+  background:#fbbf24;
+  border-color:#fbbf24;
+  color:#241a03;
+}
+
+.lion-goat-side-row span {
+  margin-right:.2rem;
+  color:#91a397;
+  font-size:.78rem;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+}
+
+@media (max-width:640px) {
+  .lion-goat-mode-row {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+  }
+
+  .lion-goat-side-row {
+    display:grid;
+    grid-template-columns:auto 1fr 1fr;
+  }
+
+  .lion-goat-mode-row button,
+  .lion-goat-side-row button {
+    min-height:50px;
+    padding:.6rem;
+    font-size:.82rem;
+  }
+}
