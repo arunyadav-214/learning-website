@@ -18,6 +18,12 @@ type Move = {
   enPassant?: boolean;
 };
 
+type HistoryEntry = {
+  number: number;
+  color: Color;
+  notation: string;
+};
+
 const glyphs: Record<Color, Record<Kind, string>> = {
   w: { k:"♔", q:"♕", r:"♖", b:"♗", n:"♘", p:"♙" },
   b: { k:"♚", q:"♛", r:"♜", b:"♝", n:"♞", p:"♟" },
@@ -253,6 +259,25 @@ function nextEnPassant(board:Board,move:Move) {
   return null;
 }
 
+function squareName(square:number) {
+  const {r,c}=rc(square);
+  return String.fromCharCode(97+c) + (8-r);
+}
+
+function moveNotation(board:Board, move:Move) {
+  const piece=board[move.from]!;
+  if (move.castle==="k") return "O-O";
+  if (move.castle==="q") return "O-O-O";
+
+  const captured = move.enPassant ? true : Boolean(board[move.to]);
+  const pieceLetter = piece.kind==="p" ? "" : piece.kind.toUpperCase();
+  const captureMark = captured ? "x" : "";
+  const pawnFile = piece.kind==="p" && captured ? squareName(move.from)[0] : "";
+  const promotion = move.promotion ? "=Q" : "";
+
+  return pieceLetter + pawnFile + captureMark + squareName(move.to) + promotion;
+}
+
 function legalMoves(board:Board,color:Color,enPassant:number|null,rights:Rights) {
   const all:Move[]=[];
   board.forEach((p,from)=>{
@@ -363,6 +388,7 @@ export default function ChessPage() {
   const [humanColor,setHumanColor]=useState<Color>("w");
   const [difficulty,setDifficulty]=useState<Difficulty>("medium");
   const [thinking,setThinking]=useState(false);
+  const [history,setHistory]=useState<HistoryEntry[]>([]);
 
   const computerColor:Color=humanColor==="w" ? "b" : "w";
   const moves=useMemo(()=>legalMoves(board,turn,enPassant,rights),[board,turn,enPassant,rights]);
@@ -389,11 +415,14 @@ export default function ChessPage() {
     setRights({wk:true,wq:true,bk:true,bq:true});
     setLastMove(null);
     setThinking(false);
+    setHistory([]);
     setHumanColor(nextHuman);
     setMode(nextMode);
   }
 
   function commitMove(move:Move) {
+    const notation=moveNotation(board,move);
+    const moveNumber=Math.floor(history.length/2)+1;
     const board2=applyMove(board,move);
     const rights2=nextRights(board,move,rights);
     const ep2=nextEnPassant(board,move);
@@ -402,6 +431,7 @@ export default function ChessPage() {
     setRights(rights2);
     setEnPassant(ep2);
     setLastMove(move);
+    setHistory(prev=>[...prev,{number:moveNumber,color:turn,notation}]);
     setSelected(null);
     setTurn(other(turn));
   }
@@ -432,6 +462,8 @@ export default function ChessPage() {
         return;
       }
 
+      const notation=moveNotation(board,move);
+      const moveNumber=Math.floor(history.length/2)+1;
       const board2=applyMove(board,move);
       const rights2=nextRights(board,move,rights);
       const ep2=nextEnPassant(board,move);
@@ -440,13 +472,14 @@ export default function ChessPage() {
       setRights(rights2);
       setEnPassant(ep2);
       setLastMove(move);
+      setHistory(prev=>[...prev,{number:moveNumber,color:computerColor,notation}]);
       setSelected(null);
       setTurn(other(computerColor));
       setThinking(false);
     },550);
 
     return ()=>window.clearTimeout(timer);
-  },[computerTurn,board,computerColor,difficulty,enPassant,rights]);
+  },[computerTurn,board,computerColor,difficulty,enPassant,rights,history.length]);
 
   return (
     <main className="chess-page">
@@ -522,7 +555,8 @@ export default function ChessPage() {
             <button onClick={()=>reset()}><RotateCcw className="h-4 w-4" /> New Game</button>
           </div>
 
-          <div className="chess-board" role="grid" aria-label="Chess board">
+          <div className="chess-game-layout">
+            <div className="chess-board" role="grid" aria-label="Chess board">
             {board.map((piece,i)=>{
               const {r,c}=rc(i);
               const light=(r+c)%2===0;
@@ -565,6 +599,38 @@ export default function ChessPage() {
                 <button onClick={()=>reset()}>Play Again</button>
               </div>
             )}
+            </div>
+
+            <aside className="chess-history-panel">
+              <div className="chess-history-header">
+                <div>
+                  <span>Game log</span>
+                  <h2>Move History</h2>
+                </div>
+                <button onClick={()=>reset()}>
+                  <RotateCcw className="h-4 w-4" />
+                  New Game
+                </button>
+              </div>
+
+              <div className="chess-history-list" aria-live="polite">
+                {history.length===0 ? (
+                  <p className="chess-history-empty">Moves will appear here as the game is played.</p>
+                ) : (
+                  Array.from({length:Math.ceil(history.length/2)},(_,i)=>{
+                    const white=history[i*2];
+                    const black=history[i*2+1];
+                    return (
+                      <div key={i} className="chess-history-row">
+                        <span className="chess-history-number">{i+1}.</span>
+                        <span>{white?.notation ?? ""}</span>
+                        <span>{black?.notation ?? ""}</span>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+            </aside>
           </div>
 
           <div className="chess-help">
