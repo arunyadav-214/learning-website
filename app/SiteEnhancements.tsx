@@ -59,9 +59,9 @@ function formatClock(timeZone: string) {
 
   const hour = Number(hourPart ?? 0);
   const isDay = hour >= 6 && hour < 18;
-  const icon = isDay ? "☀️" : "🌙";
+  const icon = isDay ? "☀️" : "☾";
 
-  return { time, date, icon };
+  return { time, date, icon, isDay };
 }
 
 function updateWorldClocks() {
@@ -77,10 +77,16 @@ function updateWorldClocks() {
 
   if (usaTime) usaTime.textContent = usa.time;
   if (usaDate) usaDate.textContent = usa.date;
-  if (usaIcon) usaIcon.textContent = usa.icon;
+  if (usaIcon) {
+    usaIcon.textContent = usa.icon;
+    usaIcon.classList.toggle("is-night", !usa.isDay);
+  }
   if (nepalTime) nepalTime.textContent = nepal.time;
   if (nepalDate) nepalDate.textContent = nepal.date;
-  if (nepalIcon) nepalIcon.textContent = nepal.icon;
+  if (nepalIcon) {
+    nepalIcon.textContent = nepal.icon;
+    nepalIcon.classList.toggle("is-night", !nepal.isDay);
+  }
 }
 
 function ensureWorldClocks() {
@@ -133,6 +139,10 @@ function ensureWorldClocks() {
       .header-clock-icon {
         font-size: 1rem;
         line-height: 1;
+      }
+      .header-clock-icon.is-night {
+        color: #ffffff;
+        text-shadow: 0 0 10px rgba(255,255,255,.55);
       }
       .header-clock-time {
         display: block;
