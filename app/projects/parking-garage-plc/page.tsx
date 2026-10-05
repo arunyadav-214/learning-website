@@ -25,6 +25,22 @@ export default function ParkingGarageProjectPage() {
           </div>
         </section>
 
+        <section className="mt-8 overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/[0.03]">
+          <img
+            src="/projects/parking-garage-plc-preview.webp"
+            alt="Parking Garage PLC Project preview"
+            className="block w-full object-cover"
+          />
+        </section>
+
+        <section className="mt-8 rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-6 sm:p-8">
+          <p className="text-xs font-black tracking-[0.16em] text-emerald-300">OVERVIEW</p>
+          <h2 className="mt-3 text-3xl font-black tracking-[-0.03em]">Parking automation with PLC simulation</h2>
+          <p className="mt-4 max-w-4xl leading-7 text-slate-400">
+            This project was built as a PLC automation exercise for a parking-garage system. The original package is a Do-more Designer project configured for the DM-SIM controller, so the control logic can be tested in simulation without requiring a physical PLC. The project package includes the main Do-more project together with its workspace and interface-layout files.
+          </p>
+        </section>
+
         <section className="mt-8 grid gap-5 md:grid-cols-2">
           <article className="rounded-[1.5rem] border border-white/10 bg-white/[0.035] p-6">
             <p className="text-xs font-black uppercase tracking-[0.15em] text-cyan-300">Project format</p>
@@ -38,7 +54,7 @@ export default function ParkingGarageProjectPage() {
             <p className="text-xs font-black uppercase tracking-[0.15em] text-emerald-300">Controller</p>
             <h2 className="mt-3 text-2xl font-black">DM-SIM configuration</h2>
             <p className="mt-3 leading-7 text-slate-400">
-              The project is configured for Do-more's simulator, allowing the ladder-logic program to be tested without a physical PLC.
+              The project is configured for Do-more&apos;s simulator, allowing the ladder-logic program to be tested without a physical PLC.
             </p>
           </article>
         </section>
@@ -60,12 +76,22 @@ export default function ParkingGarageProjectPage() {
               <p className="mt-2 text-sm leading-6 text-slate-400">Workspace settings, including the main ladder view.</p>
             </div>
           </div>
+
+          <div className="mt-6">
+            <a
+              href="/files/parkingarage.zip"
+              download
+              className="inline-flex items-center justify-center rounded-xl bg-emerald-300 px-5 py-3 font-black text-emerald-950 transition hover:bg-emerald-200"
+            >
+              Download Project ZIP
+            </a>
+          </div>
         </section>
 
         <section className="mt-8 rounded-[1.75rem] border border-amber-300/15 bg-amber-300/[0.04] p-6 sm:p-8">
           <p className="text-xs font-black tracking-[0.16em] text-amber-300">NOTE</p>
           <p className="mt-3 max-w-4xl leading-7 text-slate-300">
-            The uploaded project uses Do-more Designer's native project format. This page describes the project information that can be verified from the uploaded files without inventing details that are not exposed in the project package's readable metadata.
+            The uploaded project uses Do-more Designer&apos;s native project format. This page describes the project information that can be verified from the uploaded files without inventing details that are not exposed in the project package&apos;s readable metadata.
           </p>
         </section>
       </div>
