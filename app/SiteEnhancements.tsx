@@ -32,9 +32,149 @@ function removeEmptyState(card: HTMLElement) {
   card.querySelectorAll(".showcase-placeholder").forEach((node) => node.remove());
 }
 
+function formatClock(timeZone: string) {
+  const now = new Date();
+  const time = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    hour: "numeric",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  }).format(now);
+
+  const date = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+  }).format(now);
+
+  return { time, date };
+}
+
+function updateWorldClocks() {
+  const usa = formatClock("America/Chicago");
+  const nepal = formatClock("Asia/Kathmandu");
+
+  const usaTime = document.querySelector<HTMLElement>("[data-clock='usa-time']");
+  const usaDate = document.querySelector<HTMLElement>("[data-clock='usa-date']");
+  const nepalTime = document.querySelector<HTMLElement>("[data-clock='nepal-time']");
+  const nepalDate = document.querySelector<HTMLElement>("[data-clock='nepal-date']");
+
+  if (usaTime) usaTime.textContent = usa.time;
+  if (usaDate) usaDate.textContent = usa.date;
+  if (nepalTime) nepalTime.textContent = nepal.time;
+  if (nepalDate) nepalDate.textContent = nepal.date;
+}
+
+function ensureWorldClocks() {
+  const nav = document.querySelector<HTMLElement>(".glass-nav .header-showcase-links");
+  if (!nav || document.querySelector(".header-world-clocks")) return;
+
+  if (!document.getElementById("world-clock-styles")) {
+    const style = document.createElement("style");
+    style.id = "world-clock-styles";
+    style.textContent = `
+      .header-right-stack {
+        margin-left: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: .55rem;
+      }
+      .header-right-stack .header-showcase-links { margin-left: 0; }
+      .header-world-clocks {
+        display: flex;
+        justify-content: flex-end;
+        gap: .55rem;
+        width: 100%;
+      }
+      .header-clock-card {
+        min-width: 156px;
+        padding: .48rem .7rem;
+        border-radius: .78rem;
+        border: 1px solid rgba(255,255,255,.09);
+        background: rgba(255,255,255,.045);
+        text-align: center;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.035);
+      }
+      .header-clock-country {
+        display: block;
+        margin-bottom: .14rem;
+        color: #9aa6c3;
+        font-size: .62rem;
+        font-weight: 900;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+      }
+      .header-clock-time {
+        display: block;
+        color: #f4f7ff;
+        font-size: .92rem;
+        font-weight: 900;
+        line-height: 1.1;
+        font-variant-numeric: tabular-nums;
+      }
+      .header-clock-date {
+        display: block;
+        margin-top: .18rem;
+        color: #7f8da8;
+        font-size: .62rem;
+        font-weight: 700;
+      }
+      @media (max-width: 820px) {
+        .header-right-stack {
+          width: 100%;
+          margin-left: 0;
+          align-items: stretch;
+        }
+        .header-world-clocks {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: .45rem;
+        }
+        .header-clock-card { min-width: 0; }
+        .header-clock-time { font-size: .82rem; }
+      }
+      @media (max-width: 390px) {
+        .header-clock-card { padding: .45rem .4rem; }
+        .header-clock-country { font-size: .56rem; }
+        .header-clock-time { font-size: .76rem; }
+        .header-clock-date { font-size: .56rem; }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  const stack = document.createElement("div");
+  stack.className = "header-right-stack";
+  nav.parentElement?.insertBefore(stack, nav);
+  stack.appendChild(nav);
+
+  const clocks = document.createElement("div");
+  clocks.className = "header-world-clocks";
+  clocks.setAttribute("aria-label", "Current time in Alabama, USA and Nepal");
+  clocks.innerHTML = `
+    <div class="header-clock-card">
+      <span class="header-clock-country">🇺🇸 USA · Alabama</span>
+      <strong class="header-clock-time" data-clock="usa-time"></strong>
+      <span class="header-clock-date" data-clock="usa-date"></span>
+    </div>
+    <div class="header-clock-card">
+      <span class="header-clock-country">🇳🇵 Nepal · Kathmandu</span>
+      <strong class="header-clock-time" data-clock="nepal-time"></strong>
+      <span class="header-clock-date" data-clock="nepal-date"></span>
+    </div>
+  `;
+  stack.appendChild(clocks);
+  updateWorldClocks();
+}
+
 export default function SiteEnhancements() {
   useEffect(() => {
     const enhance = () => {
+      ensureWorldClocks();
+
       document.querySelectorAll<HTMLElement>(".showcase-card").forEach((card) => {
         const title = card.querySelector(".showcase-title")?.textContent?.trim();
 
@@ -111,7 +251,12 @@ export default function SiteEnhancements() {
     enhance();
     const observer = new MutationObserver(enhance);
     observer.observe(document.body, { childList: true, subtree: true });
-    return () => observer.disconnect();
+    const timer = window.setInterval(updateWorldClocks, 1000);
+
+    return () => {
+      observer.disconnect();
+      window.clearInterval(timer);
+    };
   }, []);
 
   return null;
