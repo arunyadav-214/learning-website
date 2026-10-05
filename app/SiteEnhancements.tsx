@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 
 const certificateLinks = [
+  ["Learning C++ (2018)", "/certificates/learning-cpp-2018"],
   ["Basic Measurement 101", "/certificates/basic-measurement-101"],
   ["Basics of Tolerance 121", "/certificates/basics-of-tolerance-121"],
   ["Interpreting Prints 231", "/certificates/interpreting-prints-231"],
