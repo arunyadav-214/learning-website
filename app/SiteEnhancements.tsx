@@ -10,6 +10,13 @@ const certificateLinks = [
   ["Types of Prints & Engineering Drawings 132", "/certificates/types-of-prints-engineering-drawings-132"],
 ] as const;
 
+const researchLinks = [
+  [
+    "Application of Machine Learning in Sports Analytics",
+    "/research/machine-learning-sports-analytics",
+  ],
+] as const;
+
 export default function SiteEnhancements() {
   useEffect(() => {
     const enhance = () => {
@@ -23,33 +30,54 @@ export default function SiteEnhancements() {
           card.querySelector(".showcase-status")?.remove();
         }
 
-        if (title !== "Certificates") return;
+        if (title === "Certificates") {
+          let list = card.querySelector<HTMLElement>(".showcase-certificate-links");
+          if (!list) {
+            list = document.createElement("div");
+            list.className = "showcase-game-links showcase-certificate-links";
+            list.setAttribute("data-showcase-content", "true");
 
-        let list = card.querySelector<HTMLElement>(".showcase-certificate-links");
-        if (!list) {
-          list = document.createElement("div");
-          list.className = "showcase-game-links showcase-certificate-links";
-          list.setAttribute("data-showcase-content", "true");
-
-          const existing = card.querySelector(".showcase-play-link");
-          if (existing) {
-            existing.parentElement?.insertBefore(list, existing);
-            list.appendChild(existing);
-          } else {
-            card.appendChild(list);
+            const existing = card.querySelector(".showcase-play-link");
+            if (existing) {
+              existing.parentElement?.insertBefore(list, existing);
+              list.appendChild(existing);
+            } else {
+              card.appendChild(list);
+            }
           }
+
+          certificateLinks.forEach(([label, href]) => {
+            if (list?.querySelector(`a[href="${href}"]`)) return;
+            const link = document.createElement("a");
+            link.href = href;
+            link.className = "showcase-play-link";
+            link.innerHTML = `<span>View ${label}</span><span aria-hidden="true">↗</span>`;
+            list?.appendChild(link);
+          });
+
+          card.querySelector(".showcase-status")?.remove();
         }
 
-        certificateLinks.forEach(([label, href]) => {
-          if (list?.querySelector(`a[href="${href}"]`)) return;
-          const link = document.createElement("a");
-          link.href = href;
-          link.className = "showcase-play-link";
-          link.innerHTML = `<span>View ${label}</span><span aria-hidden="true">↗</span>`;
-          list?.appendChild(link);
-        });
+        if (title === "Research Papers") {
+          let list = card.querySelector<HTMLElement>(".showcase-research-links");
+          if (!list) {
+            list = document.createElement("div");
+            list.className = "showcase-game-links showcase-research-links";
+            list.setAttribute("data-showcase-content", "true");
+            card.appendChild(list);
+          }
 
-        card.querySelector(".showcase-status")?.remove();
+          researchLinks.forEach(([label, href]) => {
+            if (list?.querySelector(`a[href="${href}"]`)) return;
+            const link = document.createElement("a");
+            link.href = href;
+            link.className = "showcase-play-link";
+            link.innerHTML = `<span>View ${label}</span><span aria-hidden="true">↗</span>`;
+            list?.appendChild(link);
+          });
+
+          card.querySelector(".showcase-status")?.remove();
+        }
       });
     };
 
