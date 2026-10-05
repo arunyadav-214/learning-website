@@ -38,7 +38,6 @@ function formatClock(timeZone: string) {
     timeZone,
     hour: "numeric",
     minute: "2-digit",
-    second: "2-digit",
     hour12: true,
   }).format(now);
 
@@ -52,42 +51,6 @@ function formatClock(timeZone: string) {
   return { time, date };
 }
 
-function getTimeZoneOffsetMinutes(timeZone: string, date: Date) {
-  const parts = new Intl.DateTimeFormat("en-US", {
-    timeZone,
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hourCycle: "h23",
-  }).formatToParts(date);
-
-  const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
-  const asUTC = Date.UTC(
-    Number(values.year),
-    Number(values.month) - 1,
-    Number(values.day),
-    Number(values.hour),
-    Number(values.minute),
-    Number(values.second)
-  );
-
-  return Math.round((asUTC - date.getTime()) / 60000);
-}
-
-function formatTimeDifference() {
-  const now = new Date();
-  const usOffset = getTimeZoneOffsetMinutes("America/Chicago", now);
-  const nepalOffset = getTimeZoneOffsetMinutes("Asia/Kathmandu", now);
-  const difference = nepalOffset - usOffset;
-  const hours = Math.floor(Math.abs(difference) / 60);
-  const minutes = Math.abs(difference) % 60;
-
-  return `Nepal is ${hours}h ${minutes}m ahead of US`;
-}
-
 function updateWorldClocks() {
   const usa = formatClock("America/Chicago");
   const nepal = formatClock("Asia/Kathmandu");
@@ -96,13 +59,11 @@ function updateWorldClocks() {
   const usaDate = document.querySelector<HTMLElement>("[data-clock='usa-date']");
   const nepalTime = document.querySelector<HTMLElement>("[data-clock='nepal-time']");
   const nepalDate = document.querySelector<HTMLElement>("[data-clock='nepal-date']");
-  const difference = document.querySelector<HTMLElement>("[data-clock='difference']");
 
   if (usaTime) usaTime.textContent = usa.time;
   if (usaDate) usaDate.textContent = usa.date;
   if (nepalTime) nepalTime.textContent = nepal.time;
   if (nepalDate) nepalDate.textContent = nepal.date;
-  if (difference) difference.textContent = formatTimeDifference();
 }
 
 function ensureWorldClocks() {
@@ -123,7 +84,7 @@ function ensureWorldClocks() {
       .header-right-stack .header-showcase-links { margin-left: 0; }
       .header-world-clocks {
         display: grid;
-        grid-template-columns: 1fr auto 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         align-items: center;
         gap: .55rem;
         width: 100%;
@@ -162,18 +123,6 @@ function ensureWorldClocks() {
         font-size: .62rem;
         font-weight: 750;
       }
-      .header-time-difference {
-        padding: .4rem .55rem;
-        border-radius: 999px;
-        border: 1px solid rgba(239,68,68,.28);
-        background: rgba(239,68,68,.07);
-        color: #fca5a5;
-        font-size: .6rem;
-        font-weight: 900;
-        line-height: 1.25;
-        text-align: center;
-        white-space: nowrap;
-      }
       @media (max-width: 820px) {
         .header-right-stack {
           width: 100%;
@@ -186,18 +135,12 @@ function ensureWorldClocks() {
         }
         .header-clock-card { min-width: 0; }
         .header-clock-time { font-size: .84rem; }
-        .header-time-difference {
-          grid-column: 1 / -1;
-          justify-self: center;
-          white-space: normal;
-        }
       }
       @media (max-width: 390px) {
         .header-clock-card { padding: .45rem .4rem; }
         .header-clock-country { font-size: .56rem; }
         .header-clock-time { font-size: .76rem; }
         .header-clock-date { font-size: .56rem; }
-        .header-time-difference { font-size: .56rem; }
       }
     `;
     document.head.appendChild(style);
@@ -217,7 +160,6 @@ function ensureWorldClocks() {
       <strong class="header-clock-time" data-clock="usa-time"></strong>
       <span class="header-clock-date" data-clock="usa-date"></span>
     </div>
-    <div class="header-time-difference" data-clock="difference"></div>
     <div class="header-clock-card">
       <span class="header-clock-country">🇳🇵 Nepal</span>
       <strong class="header-clock-time" data-clock="nepal-time"></strong>
@@ -309,7 +251,7 @@ export default function SiteEnhancements() {
     enhance();
     const observer = new MutationObserver(enhance);
     observer.observe(document.body, { childList: true, subtree: true });
-    const timer = window.setInterval(updateWorldClocks, 1000);
+    const timer = window.setInterval(updateWorldClocks, 30000);
 
     return () => {
       observer.disconnect();
