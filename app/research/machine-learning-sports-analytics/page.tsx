@@ -22,13 +22,11 @@ export default function MachineLearningSportsAnalyticsPage() {
             Application of Machine Learning in Sports Analytics
           </h1>
           <p className="mt-6 max-w-4xl text-lg leading-8 text-slate-300">
-            A group presentation exploring how machine learning is used in sports for performance prediction,
+            A presentation exploring how machine learning is used in sports for performance prediction,
             injury prevention, strategy, player monitoring, scouting, video analysis, and fan engagement.
           </p>
           <div className="mt-8 flex flex-wrap gap-2 text-sm font-bold text-slate-200">
-            {['Arun Kumar Yadav','Joyeb Kashyeb','Om Yadav','Coleton Thrash'].map((name) => (
-              <span key={name} className="rounded-full border border-white/10 bg-white/5 px-4 py-2">{name}</span>
-            ))}
+            <span className="rounded-full border border-white/10 bg-white/5 px-4 py-2">Arun Kumar Yadav</span>
           </div>
         </section>
 
