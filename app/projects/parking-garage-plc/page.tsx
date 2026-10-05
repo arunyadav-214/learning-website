@@ -27,7 +27,7 @@ export default function ParkingGarageProjectPage() {
 
         <section className="mt-8 overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/[0.03]">
           <img
-            src="/projects/parking-garage-plc-preview.webp"
+            src="/projects/parking-garage-plc-preview.svg"
             alt="Parking Garage PLC Project preview"
             className="block w-full object-cover"
           />
