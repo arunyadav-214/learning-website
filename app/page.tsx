@@ -1,196 +1,90 @@
 import {
   ArrowRight,
   ArrowUpRight,
-  BadgeCheck,
+  Award,
   BookOpen,
-  Boxes,
+  BriefcaseBusiness,
   Code2,
   Cpu,
   Database,
+  FileText,
+  FlaskConical,
+  Gamepad2,
   GraduationCap,
+  Layers3,
+  Mail,
+  MapPin,
   Rocket,
   Sparkles,
   Terminal,
-  Users,
-  FolderOpen,
-  FileText,
-  Award,
-  Gamepad2,
   Video,
-  FlaskConical,
+  Wrench,
 } from "lucide-react";
 
-const learningTracks = [
+const featuredProjects = [
   {
-    icon: Code2,
-    label: "Software",
-    title: "Build real software",
+    title: "Parking Garage PLC Project",
     description:
-      "Turn ideas into working projects while learning the tools and habits used by developers.",
-    tag: "Code + Projects",
+      "A Do-more Designer automation project configured for DM-SIM, with ladder-logic simulation and a packaged project download.",
+    tags: ["Do-more Designer", "DM-SIM", "PLC", "Ladder Logic"],
+    href: "/projects/parking-garage-plc",
+    image: "/projects/parking-garage-plc-preview.svg",
+    label: "Engineering + Automation",
   },
   {
-    icon: Cpu,
-    label: "Systems",
-    title: "Understand what is underneath",
+    title: "Application of Machine Learning in Sports Analytics",
     description:
-      "Explore computer architecture, operating systems, logic, and the foundations behind modern computing.",
-    tag: "Hardware + OS",
+      "A research presentation exploring performance prediction, injury prevention, sports strategy, data sources, and real-world machine-learning applications.",
+    tags: ["Machine Learning", "Sports Analytics", "Research"],
+    href: "/research/machine-learning-sports-analytics",
+    image: null,
+    label: "Research",
   },
   {
-    icon: Database,
-    label: "Data",
-    title: "Work with useful data",
+    title: "Arun Learning Hub",
     description:
-      "Practice databases, SQL, APIs, and structured information through practical examples.",
-    tag: "SQL + Data",
-  },
-  {
-    icon: Boxes,
-    label: "Engineering",
-    title: "Connect software and engineering",
-    description:
-      "Bring technical problem-solving into hands-on engineering, design, and manufacturing topics.",
-    tag: "Applied Learning",
+      "My personal portfolio and learning website for software, engineering projects, certificates, research, games, and academic work.",
+    tags: ["Next.js", "TypeScript", "React", "Cloudflare"],
+    href: "#top",
+    image: null,
+    label: "Web Development",
   },
 ];
 
-const showcaseItems = [
-  {
-    icon: FolderOpen,
-    title: "Projects",
-    description: "Software, engineering, database, and personal projects with screenshots, demos, and links.",
-    type: "Projects",
-  },
-  {
-    icon: FileText,
-    title: "Assignments",
-    description: "Selected coursework, reports, diagrams, code, and completed academic assignments.",
-    type: "Coursework",
-  },
-  {
-    icon: FlaskConical,
-    title: "Research Papers",
-    description: "Research writing, technical reports, posters, abstracts, and academic papers.",
-    type: "Research",
-  },
-  {
-    icon: Award,
-    title: "Certificates",
-    description: "Certificates, achievements, training completions, awards, and professional milestones.",
-    type: "Achievements",
-  },
-  {
-    icon: Gamepad2,
-    title: "Games",
-    description: "Playable web games, game-development experiments, demos, and interactive projects.",
-    type: "Interactive",
-  },
-  {
-    icon: Video,
-    title: "Videos",
-    description: "Project demos, presentations, tutorials, walkthroughs, and embedded videos.",
-    type: "Media",
-  },
+const skills = [
+  { icon: Code2, title: "Programming", items: ["Java", "Python", "C++", "JavaScript / TypeScript"] },
+  { icon: Layers3, title: "Web", items: ["Next.js", "React", "HTML", "CSS"] },
+  { icon: Database, title: "Data", items: ["MySQL", "SQL", "Database Design", "DAO Patterns"] },
+  { icon: Cpu, title: "Systems", items: ["Computer Architecture", "Operating Systems", "Logisim", "Digital Logic"] },
+  { icon: Wrench, title: "Engineering", items: ["PLC", "Do-more Designer", "Manufacturing", "Technical Drawing"] },
+  { icon: Terminal, title: "Tools", items: ["Git", "GitHub", "NetBeans", "VS Code"] },
 ];
 
-const principles = [
-  {
-    icon: BookOpen,
-    title: "Make it clear",
-    description:
-      "Break difficult ideas into explanations that are easier to understand and remember.",
-  },
-  {
-    icon: Rocket,
-    title: "Make it practical",
-    description:
-      "Move from reading to building so each topic becomes something you can actually use.",
-  },
-  {
-    icon: Users,
-    title: "Make it shareable",
-    description:
-      "Create projects, notes, and resources that can help other learners move forward too.",
-  },
+const certificates = [
+  { title: "Learning C++ (2018)", provider: "LinkedIn Learning", date: "Nov 2025", href: "/certificates/learning-cpp-2018" },
+  { title: "Basic Measurement 101", provider: "Tooling U-SME", date: "Oct 2026", href: "/certificates/basic-measurement-101" },
+  { title: "Basics of Tolerance 121", provider: "Tooling U-SME", date: "Oct 2026", href: "/certificates/basics-of-tolerance-121" },
+  { title: "Interpreting Prints 231", provider: "Tooling U-SME", date: "Sep 2026", href: "/certificates/interpreting-prints-231" },
+  { title: "Introduction to Physical Properties 101", provider: "Tooling U-SME", date: "Oct 2026", href: "/certificates/introduction-to-physical-properties-101" },
+  { title: "Types of Prints & Engineering Drawings 132", provider: "Tooling U-SME", date: "Sep 2026", href: "/certificates/types-of-prints-engineering-drawings-132" },
+  { title: "Blueprint Reading 131", provider: "Tooling U-SME", date: "Sep 2026", href: "/certificates/blueprint-reading-131" },
 ];
 
-const stats = [
-  { value: "2026", label: "Started" },
-  { value: "4", label: "Learning tracks" },
-  { value: "100%", label: "Project-driven" },
-];
+const games = [
+  ["Tic-Tac-Toe Arena", "/games/tic-tac-toe"],
+  ["Lion & Goats", "/games/lion-goats"],
+  ["Chess", "/games/chess"],
+  ["Curious Monkey Adventure", "/games/curious-monkey"],
+  ["Neon Snake", "/games/snake"],
+  ["Rock-Paper-Scissors", "/games/rock-paper-scissors"],
+] as const;
 
 const socials = [
-  {
-    name: "Instagram",
-    href: "https://www.instagram.com/ay.run_",
-  },
-  {
-    name: "X",
-    href: "https://x.com/aruny71582",
-  },
-  {
-    name: "TikTok",
-    href: "https://www.tiktok.com/@arunyadav999",
-  },
-  {
-    name: "LinkedIn",
-    href: "https://www.linkedin.com/in/arun-kumar-yadav-5a60373ab/",
-  },
-];
-
-function SocialIcon({ name }: { name: string }) {
-  if (name === "Instagram") {
-    return (
-      <svg viewBox="0 0 24 24" aria-hidden="true" className="social-svg">
-        <rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" strokeWidth="2.2" />
-        <circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" strokeWidth="2.2" />
-        <circle cx="17.4" cy="6.8" r="1.2" fill="currentColor" />
-      </svg>
-    );
-  }
-
-  if (name === "TikTok") {
-    return (
-      <svg viewBox="0 0 24 24" aria-hidden="true" className="social-svg">
-        <path
-          d="M14.2 3.2v10.5a4.6 4.6 0 1 1-3.3-4.4v3.2a1.8 1.8 0 1 0 .5 1.2V3.2h2.8Zm0 0c.4 2.3 1.8 3.8 4.2 4.2v2.9c-1.7-.1-3.1-.7-4.2-1.6"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2.2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    );
-  }
-
-  if (name === "LinkedIn") {
-    return (
-      <svg viewBox="0 0 24 24" aria-hidden="true" className="social-svg">
-        <rect x="4" y="9" width="3" height="11" rx="1" fill="currentColor" />
-        <circle cx="5.5" cy="5.5" r="1.8" fill="currentColor" />
-        <path
-          d="M10 9h3v1.6c1-1.3 2.2-2 4-2 3 0 4.5 1.9 4.5 5.4V20h-3v-5.4c0-2-.7-3-2.3-3-1.8 0-3.2 1.2-3.2 3.8V20h-3V9Z"
-          fill="currentColor"
-        />
-      </svg>
-    );
-  }
-
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true" className="social-svg">
-      <path
-        d="M4 4l16 16M20 4 4 20"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2.4"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
+  ["LinkedIn", "https://www.linkedin.com/in/arun-kumar-yadav-5a60373ab/"],
+  ["Instagram", "https://www.instagram.com/ay.run_"],
+  ["X", "https://x.com/aruny71582"],
+  ["TikTok", "https://www.tiktok.com/@arunyadav999"],
+] as const;
 
 export default function Home() {
   return (
@@ -201,54 +95,53 @@ export default function Home() {
         <div className="aurora aurora-three" aria-hidden="true" />
 
         <div className="mx-auto max-w-7xl px-5 pb-20 pt-5 sm:px-8 lg:pb-28">
-          <header className="glass-nav sticky top-4 z-50 flex items-center justify-between rounded-[1.4rem] px-4 py-3 sm:px-5">
+          <header className="glass-nav sticky top-4 z-50 flex flex-wrap items-center justify-between gap-4 rounded-[1.4rem] px-4 py-3 sm:px-5">
             <a href="#top" className="brand-home-link" aria-label="Arun Learning Hub home">
               <img src="/arun-logo.svg" alt="Arun logo" className="brand-logo-full" />
               <span className="brand-name">Arun K. Yadav</span>
             </a>
 
-            <nav className="header-showcase-links" aria-label="Showcase navigation">
+            <nav className="header-showcase-links" aria-label="Portfolio navigation">
               <a href="#projects" className="header-showcase-link">Projects</a>
               <a href="#assignments" className="header-showcase-link">Assignments</a>
-              <a href="#research-papers" className="header-showcase-link">Research Papers</a>
+              <a href="#research-papers" className="header-showcase-link">Research</a>
               <a href="#certificates" className="header-showcase-link">Certificates</a>
               <a href="#games" className="header-showcase-link">Games</a>
               <a href="#videos" className="header-showcase-link">Videos</a>
+              <a href="/resume" className="header-showcase-link">Resume</a>
             </nav>
           </header>
 
-          <div className="grid min-h-[760px] items-center gap-14 pb-8 pt-20 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10 lg:pt-16">
+          <div className="grid min-h-[760px] items-center gap-14 pb-8 pt-20 lg:grid-cols-[1.08fr_.92fr] lg:gap-12 lg:pt-16">
             <div className="relative z-10">
               <div className="hero-pill mb-7">
                 <Sparkles className="h-4 w-4" aria-hidden="true" />
-                STUDENT-BUILT • PROJECT-DRIVEN • 2026
+                COMPUTER SCIENCE • APPLIED ENGINEERING
               </div>
 
               <h1 className="hero-title font-heading">
-                Learn the idea.
-                <span className="block text-gradient">Build the proof.</span>
+                Arun K. Yadav
+                <span className="mt-3 block text-gradient">I build software, systems & practical engineering projects.</span>
               </h1>
 
               <p className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl">
-                Arun Learning Hub is a practical technology learning space for
-                turning confusing concepts into clear notes, useful projects,
-                and skills you can keep building on.
+                Computer Science student with an Applied Engineering minor, building across software,
+                databases, automation, digital logic, research, and interactive web projects.
               </p>
 
               <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-                <a href="#learn" className="primary-button">
-                  Explore learning tracks
-                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                <a href="#projects" className="primary-button">
+                  View my projects <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </a>
-                <a href="#about" className="secondary-button">
-                  Meet the builder
+                <a href="/resume" className="secondary-button">
+                  View resume
                 </a>
               </div>
 
               <div className="mt-11 flex flex-wrap gap-3 text-sm text-muted-foreground">
-                <span className="mini-chip"><BadgeCheck className="h-4 w-4" /> Clear explanations</span>
-                <span className="mini-chip"><Terminal className="h-4 w-4" /> Hands-on practice</span>
-                <span className="mini-chip"><GraduationCap className="h-4 w-4" /> Student focused</span>
+                <span className="mini-chip"><GraduationCap className="h-4 w-4" /> Computer Science</span>
+                <span className="mini-chip"><Wrench className="h-4 w-4" /> Applied Engineering</span>
+                <span className="mini-chip"><MapPin className="h-4 w-4" /> Nepal → USA</span>
               </div>
             </div>
 
@@ -261,289 +154,240 @@ export default function Home() {
                     <span className="window-dot bg-amber-300" />
                     <span className="window-dot bg-emerald-400" />
                   </div>
-                  <span className="text-xs font-semibold tracking-wide text-white/50">learning.ts</span>
+                  <span className="text-xs font-semibold tracking-wide text-white/50">portfolio.ts</span>
                 </div>
                 <div className="space-y-5 p-6 sm:p-8">
-                  <div>
-                    <p className="code-line"><span className="code-purple">const</span> learner = &#123;</p>
-                    <p className="code-line pl-5"><span className="code-blue">curiosity</span>: <span className="code-green">true</span>,</p>
-                    <p className="code-line pl-5"><span className="code-blue">practice</span>: <span className="code-green">&quot;daily&quot;</span>,</p>
-                    <p className="code-line pl-5"><span className="code-blue">goal</span>: <span className="code-amber">&quot;build something real&quot;</span></p>
-                    <p className="code-line">&#125;;</p>
-                  </div>
+                  <p className="code-line"><span className="code-purple">const</span> focus = [</p>
+                  <p className="code-line pl-5"><span className="code-green">&quot;software&quot;</span>,</p>
+                  <p className="code-line pl-5"><span className="code-green">&quot;automation&quot;</span>,</p>
+                  <p className="code-line pl-5"><span className="code-green">&quot;systems&quot;</span>,</p>
+                  <p className="code-line pl-5"><span className="code-green">&quot;research&quot;</span></p>
+                  <p className="code-line">];</p>
                   <div className="terminal-result">
                     <span className="text-emerald-300">✓</span>
-                    <span>concept → practice → project → growth</span>
+                    <span>learn → build → test → improve → share</span>
                   </div>
                 </div>
               </div>
-
-              <div className="floating-card floating-card-one">
-                <span className="floating-icon"><Code2 className="h-5 w-5" /></span>
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">Current mode</p>
-                  <p className="mt-1 font-heading text-lg font-black">Build & learn</p>
-                </div>
-              </div>
-
-              <div className="floating-card floating-card-two">
-                <span className="pulse-dot" aria-hidden="true" />
-                <div>
-                  <p className="text-xs text-muted-foreground">Learning hub</p>
-                  <p className="font-heading font-black">Always evolving</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="stats-strip">
-            {stats.map((stat) => (
-              <div key={stat.label} className="stat-item">
-                <p className="font-heading text-2xl font-black tracking-[-0.04em] sm:text-3xl">{stat.value}</p>
-                <p className="mt-1 text-xs font-semibold uppercase tracking-[0.13em] text-muted-foreground">{stat.label}</p>
-              </div>
-            ))}
-            <div className="stat-item hidden md:block">
-              <p className="font-heading text-2xl font-black tracking-[-0.04em] sm:text-3xl">∞</p>
-              <p className="mt-1 text-xs font-semibold uppercase tracking-[0.13em] text-muted-foreground">Room to grow</p>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="learn" className="section-shell border-y border-border/70">
+      <section id="projects" className="border-y border-border/70 bg-white/[0.015]">
         <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:py-28">
-          <div className="mb-12 grid gap-6 lg:grid-cols-[0.72fr_1.28fr] lg:items-end">
+          <div className="mb-12 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <p className="section-kicker">LEARNING TRACKS</p>
-              <h2 className="section-title font-heading">A hub built around doing.</h2>
+              <p className="section-kicker">FEATURED PROJECTS</p>
+              <h2 className="section-title font-heading">Work that shows what I can build.</h2>
             </div>
-            <p className="max-w-2xl text-lg leading-8 text-muted-foreground lg:ml-auto">
-              Learn across software, systems, data, and engineering without losing
-              sight of the most important part: making something that proves what you know.
+            <p className="max-w-2xl text-lg leading-8 text-muted-foreground">
+              A focused collection of software, engineering, research, and interactive projects.
             </p>
           </div>
 
-          <div className="bento-grid">
-            {learningTracks.map((track, index) => {
-              const Icon = track.icon;
-              return (
-                <article key={track.title} className={`bento-card group ${index === 0 ? "bento-featured" : ""}`}>
-                  <div className="flex items-start justify-between gap-4">
-                    <span className="bento-icon"><Icon className="h-6 w-6" /></span>
-                    <span className="bento-tag">{track.tag}</span>
+          <div className="grid gap-6 lg:grid-cols-3">
+            {featuredProjects.map((project) => (
+              <article key={project.title} className="group overflow-hidden rounded-[1.7rem] border border-white/10 bg-white/[0.035] transition hover:-translate-y-1 hover:border-violet-400/40">
+                {project.image ? (
+                  <div className="aspect-[16/9] overflow-hidden border-b border-white/10 bg-slate-950/70">
+                    <img src={project.image} alt={`${project.title} preview`} className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]" />
                   </div>
-                  <div className="mt-12">
-                    <p className="text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">{track.label}</p>
-                    <h3 className="mt-3 font-heading text-2xl font-black tracking-[-0.03em]">{track.title}</h3>
-                    <p className="mt-3 max-w-xl leading-7 text-muted-foreground">{track.description}</p>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-
-      <section id="showcase" className="mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:py-28">
-        <div className="showcase-heading">
-          <div>
-            <p className="section-kicker">MY SHOWCASE</p>
-            <h2 className="section-title font-heading">Work worth showing.</h2>
-          </div>
-          <p className="max-w-2xl text-lg leading-8 text-muted-foreground">
-            This is where I’ll organize the work I create over time — from class assignments
-            and research papers to certificates, games, project demos, videos, and more.
-          </p>
-        </div>
-
-        <div className="showcase-grid">
-          {showcaseItems.map((item) => {
-            const Icon = item.icon;
-            const itemId = item.title.toLowerCase().replaceAll(" ", "-");
-            return (
-              <article id={itemId} key={item.title} className="showcase-card">
-                <div className="showcase-card-top">
-                  <span className="showcase-icon"><Icon className="h-6 w-6" /></span>
-                  {item.title !== "Games" && <span className="showcase-status">Coming soon</span>}
-                </div>
-
-                <div>
-                  <p className="showcase-type">{item.type}</p>
-                  <h3 className="showcase-title font-heading">{item.title}</h3>
-                  <p className="showcase-description">{item.description}</p>
-                </div>
-
-                {item.title === "Games" ? (
-                  <div className="showcase-game-links">
-                    <a href="/games/tic-tac-toe" className="showcase-play-link">
-                      <span>Play Tic-Tac-Toe Arena</span>
-                      <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-                    </a>
-                    <a href="/games/lion-goats" className="showcase-play-link">
-                      <span>Play Lion & Goats</span>
-                      <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-                    </a>
-                    <a href="/games/chess" className="showcase-play-link">
-                      <span>Play Chess</span>
-                      <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-                    </a>
-                    <a href="/games/curious-monkey" className="showcase-play-link">
-                      <span>Play Curious Monkey Adventure</span>
-                      <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-                    </a>
-                    <a href="/games/snake" className="showcase-play-link">
-                      <span>Play Neon Snake</span>
-                      <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-                    </a>
-                  </div>
-                ) : item.title === "Certificates" ? (
-                  <a href="/certificates/blueprint-reading-131" className="showcase-play-link">
-                    <span>View Blueprint Reading 131</span>
-                    <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-                  </a>
                 ) : (
-                  <div className="showcase-placeholder">
-                    <span>Ready for files, links, images, video, or live demos</span>
-                    <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                  <div className="flex aspect-[16/9] items-center justify-center border-b border-white/10 bg-gradient-to-br from-violet-950/70 via-slate-950 to-cyan-950/60">
+                    <Rocket className="h-16 w-16 text-violet-300/70" aria-hidden="true" />
                   </div>
                 )}
+                <div className="p-6">
+                  <p className="text-xs font-black uppercase tracking-[0.15em] text-cyan-300">{project.label}</p>
+                  <h3 className="mt-3 text-2xl font-black tracking-[-0.03em]">{project.title}</h3>
+                  <p className="mt-3 leading-7 text-muted-foreground">{project.description}</p>
+                  <div className="mt-5 flex flex-wrap gap-2">
+                    {project.tags.map((tag) => <span key={tag} className="skill-chip">{tag}</span>)}
+                  </div>
+                  <a href={project.href} className="mt-6 inline-flex items-center gap-2 font-black text-violet-300 hover:text-cyan-300">
+                    View project <ArrowUpRight className="h-4 w-4" />
+                  </a>
+                </div>
               </article>
-            );
-          })}
-        </div>
-
-        <div className="showcase-note">
-          <Sparkles className="h-5 w-5" aria-hidden="true" />
-          <p>
-            Later, each card can open a dedicated page where I can add PDFs, screenshots,
-            YouTube videos, downloadable files, source links, certificates, or playable content.
-          </p>
+            ))}
+          </div>
         </div>
       </section>
 
       <section id="about" className="mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:py-28">
-        <div className="about-card overflow-hidden rounded-[2rem]">
-          <div className="grid lg:grid-cols-[0.72fr_1.28fr]">
-            <div className="profile-pane relative grid min-h-[360px] place-items-center p-10">
-              <div className="profile-ring">
-                <div className="profile-logo-card">
-                  <img src="/arun-logo.svg" alt="Arun mountain logo" className="profile-logo-img" />
-                </div>
-              </div>
-              <div className="profile-badge">
-                <span className="pulse-dot" />
-                Building in public
-              </div>
-            </div>
-
-            <div className="p-8 sm:p-12 lg:p-16">
-              <p className="section-kicker">THE BUILDER</p>
-              <h2 className="mt-3 font-heading text-4xl font-black tracking-[-0.04em] sm:text-5xl">
-                Arun K. Yadav
-              </h2>
-              <p className="mt-3 text-lg font-semibold text-gradient">Student developer & lifelong learner</p>
-              <p className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground">
-                I built Arun Learning Hub as a place to turn class concepts, technical
-                practice, and personal projects into useful learning resources. The goal
-                is simple: understand more deeply by building more often.
-              </p>
-
-              <div className="mt-8 flex flex-wrap gap-3">
-                <span className="skill-chip">Software development</span>
-                <span className="skill-chip">Computer systems</span>
-                <span className="skill-chip">Databases</span>
-                <span className="skill-chip">Applied engineering</span>
-              </div>
-
-              <div id="socials" className="mt-9">
-                <p className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-muted-foreground">
-                  Find me online
-                </p>
-                <div className="flex flex-wrap gap-3">
-                  {socials.map((social) => (
-                    <a
-                      key={social.name}
-                      href={social.href}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="social-link"
-                      aria-label={`Follow Arun on ${social.name}`}
-                    >
-                      <span className="social-mark"><SocialIcon name={social.name} /></span>
-                      <span>{social.name}</span>
-                      <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-                    </a>
-                  ))}
-                </div>
-              </div>
-            </div>
+        <div className="grid gap-8 rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900 via-slate-900 to-violet-950/70 p-7 sm:p-10 lg:grid-cols-[.9fr_1.1fr] lg:p-14">
+          <div>
+            <p className="section-kicker">ABOUT ME</p>
+            <h2 className="mt-4 text-4xl font-black tracking-[-0.04em] sm:text-5xl">From Nepal to the United States.</h2>
           </div>
-        </div>
-      </section>
-
-      <section id="principles" className="section-shell border-y border-border/70">
-        <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:py-28">
-          <div className="mx-auto max-w-3xl text-center">
-            <p className="section-kicker">THE APPROACH</p>
-            <h2 className="section-title font-heading">Learn in a way that sticks.</h2>
-            <p className="mt-5 text-lg leading-8 text-muted-foreground">
-              Good learning feels clear, active, and connected to something real.
+          <div className="space-y-5 text-lg leading-8 text-slate-300">
+            <p>
+              My journey combines computer science, applied engineering, and hands-on problem solving.
+              I use this site to document what I build, what I learn, and the projects that best represent my growth.
+            </p>
+            <p>
+              I am especially interested in software development, databases, automation, systems, digital logic,
+              research, and creating useful interactive experiences on the web.
             </p>
           </div>
+        </div>
+      </section>
 
-          <div className="mt-12 grid gap-5 md:grid-cols-3">
-            {principles.map((item) => {
-              const Icon = item.icon;
-              return (
-                <article key={item.title} className="principle-card">
-                  <span className="principle-number">0{principles.indexOf(item) + 1}</span>
-                  <span className="principle-icon"><Icon className="h-6 w-6" /></span>
-                  <h3 className="mt-8 font-heading text-2xl font-black tracking-[-0.03em]">{item.title}</h3>
-                  <p className="mt-3 leading-7 text-muted-foreground">{item.description}</p>
-                </article>
-              );
-            })}
+      <section id="skills" className="border-y border-border/70 bg-white/[0.015]">
+        <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:py-28">
+          <p className="section-kicker">SKILLS</p>
+          <h2 className="section-title font-heading">A technical toolkit that spans software and engineering.</h2>
+          <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {skills.map(({ icon: Icon, title, items }) => (
+              <article key={title} className="rounded-[1.45rem] border border-white/10 bg-white/[0.035] p-6">
+                <span className="bento-icon"><Icon className="h-6 w-6" /></span>
+                <h3 className="mt-5 text-xl font-black">{title}</h3>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {items.map((item) => <span key={item} className="skill-chip">{item}</span>)}
+                </div>
+              </article>
+            ))}
           </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:py-28">
-        <div className="cta-panel">
+      <section id="research-papers" className="mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:py-28">
+        <div className="grid gap-6 lg:grid-cols-2">
+          <article className="rounded-[1.7rem] border border-white/10 bg-white/[0.03] p-7 sm:p-9">
+            <FlaskConical className="h-8 w-8 text-cyan-300" />
+            <p className="mt-6 section-kicker">RESEARCH</p>
+            <h2 className="mt-3 text-3xl font-black tracking-[-0.03em]">Application of Machine Learning in Sports Analytics</h2>
+            <p className="mt-4 leading-7 text-muted-foreground">
+              Research on machine learning techniques, sports data, fatigue tracking, performance prediction,
+              real-world tools, challenges, and the role of human expertise.
+            </p>
+            <a href="/research/machine-learning-sports-analytics" className="mt-6 inline-flex items-center gap-2 font-black text-cyan-300">
+              View research <ArrowUpRight className="h-4 w-4" />
+            </a>
+          </article>
+
+          <article id="assignments" className="rounded-[1.7rem] border border-white/10 bg-white/[0.03] p-7 sm:p-9">
+            <BookOpen className="h-8 w-8 text-violet-300" />
+            <p className="mt-6 section-kicker">ACADEMIC WORK</p>
+            <h2 className="mt-3 text-3xl font-black tracking-[-0.03em]">Selected assignments & coursework</h2>
+            <p className="mt-4 leading-7 text-muted-foreground">
+              A growing collection of strong coursework across programming, data structures, databases,
+              operating systems, computer architecture, manufacturing, and engineering.
+            </p>
+            <a href="#assignments" className="mt-6 inline-flex items-center gap-2 font-black text-violet-300">
+              More assignments coming soon
+            </a>
+          </article>
+        </div>
+      </section>
+
+      <section id="certificates" className="border-y border-border/70 bg-white/[0.015]">
+        <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:py-28">
+          <p className="section-kicker">CERTIFICATES</p>
+          <h2 className="section-title font-heading">Training and achievements.</h2>
+          <div className="mt-12 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {certificates.map((certificate) => (
+              <a key={certificate.href} href={certificate.href} className="group rounded-[1.35rem] border border-white/10 bg-white/[0.035] p-5 transition hover:-translate-y-1 hover:border-cyan-300/40">
+                <Award className="h-7 w-7 text-amber-300" />
+                <h3 className="mt-4 text-lg font-black">{certificate.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{certificate.provider}</p>
+                <div className="mt-5 flex items-center justify-between gap-4 text-sm">
+                  <span className="font-bold text-slate-400">{certificate.date}</span>
+                  <span className="inline-flex items-center gap-1 font-black text-cyan-300">View <ArrowUpRight className="h-4 w-4" /></span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="games" className="mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:py-28">
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="section-kicker text-white/60">KEEP BUILDING</p>
-            <h2 className="mt-3 max-w-3xl font-heading text-4xl font-black tracking-[-0.04em] text-white sm:text-5xl lg:text-6xl">
-              One useful project can change what you think you can do.
-            </h2>
+            <p className="section-kicker">GAME ARCADE</p>
+            <h2 className="section-title font-heading">Interactive projects you can play.</h2>
           </div>
-          <a href="#top" className="cta-button">
-            Back to the top
-            <ArrowRight className="h-4 w-4 -rotate-90" />
-          </a>
+          <p className="max-w-xl text-lg leading-8 text-muted-foreground">
+            Small games that combine programming, UI, logic, AI difficulty levels, and browser interaction.
+          </p>
+        </div>
+        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {games.map(([title, href], index) => (
+            <a key={href} href={href} className="group rounded-[1.4rem] border border-white/10 bg-gradient-to-br from-slate-900 to-slate-950 p-6 transition hover:-translate-y-1 hover:border-violet-400/40">
+              <div className="flex items-start justify-between gap-4">
+                <span className="grid h-12 w-12 place-items-center rounded-xl bg-violet-500/10 text-violet-300"><Gamepad2 className="h-6 w-6" /></span>
+                <span className="text-4xl font-black text-white/[0.04]">0{index + 1}</span>
+              </div>
+              <h3 className="mt-8 text-xl font-black">{title}</h3>
+              <span className="mt-4 inline-flex items-center gap-1 font-bold text-cyan-300">Play now <ArrowRight className="h-4 w-4" /></span>
+            </a>
+          ))}
         </div>
       </section>
 
-      <footer className="border-t border-border/70">
-        <div className="mx-auto max-w-7xl px-5 py-8 sm:px-8">
-          <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
-            <p className="text-sm text-muted-foreground">© 2026 Arun Learning Hub. Built by Arun Yadav.</p>
-            <div className="flex flex-wrap gap-2" aria-label="Social media links">
-              {socials.map((social) => (
-                <a
-                  key={social.name}
-                  href={social.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="footer-social"
-                  aria-label={social.name}
-                >
-                  <span className="social-mark social-mark-small"><SocialIcon name={social.name} /></span>
-                  {social.name}
-                </a>
-              ))}
-            </div>
+      <section id="videos" className="border-y border-border/70 bg-white/[0.015]">
+        <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:py-24">
+          <div className="rounded-[1.6rem] border border-white/10 bg-white/[0.03] p-7 sm:p-10">
+            <Video className="h-8 w-8 text-cyan-300" />
+            <p className="mt-5 section-kicker">VIDEOS</p>
+            <h2 className="mt-3 text-3xl font-black tracking-[-0.03em]">Project demos & walkthroughs</h2>
+            <p className="mt-4 max-w-3xl leading-7 text-muted-foreground">
+              This section is ready for project demonstrations, presentations, tutorials, and walkthrough videos.
+            </p>
           </div>
+        </div>
+      </section>
+
+      <section id="timeline" className="mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:py-28">
+        <p className="section-kicker">TIMELINE</p>
+        <h2 className="section-title font-heading">Building the story over time.</h2>
+        <div className="mt-10 grid gap-4 md:grid-cols-3">
+          <div className="rounded-[1.3rem] border border-white/10 bg-white/[0.03] p-6">
+            <p className="text-3xl font-black text-violet-300">2025</p>
+            <p className="mt-3 font-bold">C++ training and continued programming growth.</p>
+          </div>
+          <div className="rounded-[1.3rem] border border-white/10 bg-white/[0.03] p-6">
+            <p className="text-3xl font-black text-cyan-300">2026</p>
+            <p className="mt-3 font-bold">Computer science projects, PLC automation, certificates, research, and this portfolio.</p>
+          </div>
+          <div className="rounded-[1.3rem] border border-white/10 bg-white/[0.03] p-6">
+            <p className="text-3xl font-black text-emerald-300">2027</p>
+            <p className="mt-3 font-bold">Internship experience, advanced coursework, and graduation progress.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="resume" className="border-y border-border/70 bg-gradient-to-r from-violet-950/40 via-slate-950 to-cyan-950/30">
+        <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:py-20">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <p className="section-kicker">RESUME</p>
+              <h2 className="mt-3 text-3xl font-black tracking-[-0.03em] sm:text-4xl">A quick view of my education, skills, and projects.</h2>
+            </div>
+            <a href="/resume" className="primary-button w-fit"><BriefcaseBusiness className="h-4 w-4" /> View resume</a>
+          </div>
+        </div>
+      </section>
+
+      <footer className="mx-auto max-w-7xl px-5 py-16 sm:px-8">
+        <div className="grid gap-8 rounded-[1.8rem] border border-white/10 bg-white/[0.03] p-7 sm:p-10 lg:grid-cols-[1fr_auto] lg:items-end">
+          <div>
+            <p className="section-kicker">LET&apos;S CONNECT</p>
+            <h2 className="mt-3 text-4xl font-black tracking-[-0.04em]">Thanks for visiting my portfolio.</h2>
+            <p className="mt-4 max-w-2xl leading-7 text-muted-foreground">
+              Follow my work, projects, and learning journey across the platforms below.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            {socials.map(([name, href]) => (
+              <a key={name} href={href} target="_blank" rel="noreferrer" className="secondary-button">{name}</a>
+            ))}
+          </div>
+        </div>
+        <div className="mt-7 flex flex-wrap items-center justify-between gap-3 text-sm text-muted-foreground">
+          <span>© 2026 Arun K. Yadav</span>
+          <a href="#top" className="font-bold text-white hover:text-cyan-300">Back to top ↑</a>
         </div>
       </footer>
     </main>
