@@ -48,7 +48,19 @@ function formatClock(timeZone: string) {
     day: "numeric",
   }).format(now);
 
-  return { time, date };
+  const hourPart = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    hour: "2-digit",
+    hourCycle: "h23",
+  })
+    .formatToParts(now)
+    .find((part) => part.type === "hour")?.value;
+
+  const hour = Number(hourPart ?? 0);
+  const isDay = hour >= 6 && hour < 18;
+  const icon = isDay ? "☀️" : "🌙";
+
+  return { time, date, icon };
 }
 
 function updateWorldClocks() {
@@ -57,13 +69,17 @@ function updateWorldClocks() {
 
   const usaTime = document.querySelector<HTMLElement>("[data-clock='usa-time']");
   const usaDate = document.querySelector<HTMLElement>("[data-clock='usa-date']");
+  const usaIcon = document.querySelector<HTMLElement>("[data-clock='usa-icon']");
   const nepalTime = document.querySelector<HTMLElement>("[data-clock='nepal-time']");
   const nepalDate = document.querySelector<HTMLElement>("[data-clock='nepal-date']");
+  const nepalIcon = document.querySelector<HTMLElement>("[data-clock='nepal-icon']");
 
   if (usaTime) usaTime.textContent = usa.time;
   if (usaDate) usaDate.textContent = usa.date;
+  if (usaIcon) usaIcon.textContent = usa.icon;
   if (nepalTime) nepalTime.textContent = nepal.time;
   if (nepalDate) nepalDate.textContent = nepal.date;
+  if (nepalIcon) nepalIcon.textContent = nepal.icon;
 }
 
 function ensureWorldClocks() {
@@ -107,6 +123,16 @@ function ensureWorldClocks() {
         letter-spacing: .12em;
         text-transform: uppercase;
       }
+      .header-clock-main {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: .35rem;
+      }
+      .header-clock-icon {
+        font-size: 1rem;
+        line-height: 1;
+      }
       .header-clock-time {
         display: block;
         color: #22c55e;
@@ -141,6 +167,7 @@ function ensureWorldClocks() {
         .header-clock-country { font-size: .56rem; }
         .header-clock-time { font-size: .76rem; }
         .header-clock-date { font-size: .56rem; }
+        .header-clock-icon { font-size: .9rem; }
       }
     `;
     document.head.appendChild(style);
@@ -157,12 +184,18 @@ function ensureWorldClocks() {
   clocks.innerHTML = `
     <div class="header-clock-card">
       <span class="header-clock-country">🇳🇵 Nepal</span>
-      <strong class="header-clock-time" data-clock="nepal-time"></strong>
+      <div class="header-clock-main">
+        <span class="header-clock-icon" data-clock="nepal-icon" aria-hidden="true"></span>
+        <strong class="header-clock-time" data-clock="nepal-time"></strong>
+      </div>
       <span class="header-clock-date" data-clock="nepal-date"></span>
     </div>
     <div class="header-clock-card">
       <span class="header-clock-country">🇺🇸 America</span>
-      <strong class="header-clock-time" data-clock="usa-time"></strong>
+      <div class="header-clock-main">
+        <span class="header-clock-icon" data-clock="usa-icon" aria-hidden="true"></span>
+        <strong class="header-clock-time" data-clock="usa-time"></strong>
+      </div>
       <span class="header-clock-date" data-clock="usa-date"></span>
     </div>
   `;
