@@ -52,6 +52,42 @@ function formatClock(timeZone: string) {
   return { time, date };
 }
 
+function getTimeZoneOffsetMinutes(timeZone: string, date: Date) {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hourCycle: "h23",
+  }).formatToParts(date);
+
+  const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+  const asUTC = Date.UTC(
+    Number(values.year),
+    Number(values.month) - 1,
+    Number(values.day),
+    Number(values.hour),
+    Number(values.minute),
+    Number(values.second)
+  );
+
+  return Math.round((asUTC - date.getTime()) / 60000);
+}
+
+function formatTimeDifference() {
+  const now = new Date();
+  const usOffset = getTimeZoneOffsetMinutes("America/Chicago", now);
+  const nepalOffset = getTimeZoneOffsetMinutes("Asia/Kathmandu", now);
+  const difference = nepalOffset - usOffset;
+  const hours = Math.floor(Math.abs(difference) / 60);
+  const minutes = Math.abs(difference) % 60;
+
+  return `Nepal is ${hours}h ${minutes}m ahead of US`;
+}
+
 function updateWorldClocks() {
   const usa = formatClock("America/Chicago");
   const nepal = formatClock("Asia/Kathmandu");
@@ -60,11 +96,13 @@ function updateWorldClocks() {
   const usaDate = document.querySelector<HTMLElement>("[data-clock='usa-date']");
   const nepalTime = document.querySelector<HTMLElement>("[data-clock='nepal-time']");
   const nepalDate = document.querySelector<HTMLElement>("[data-clock='nepal-date']");
+  const difference = document.querySelector<HTMLElement>("[data-clock='difference']");
 
   if (usaTime) usaTime.textContent = usa.time;
   if (usaDate) usaDate.textContent = usa.date;
   if (nepalTime) nepalTime.textContent = nepal.time;
   if (nepalDate) nepalDate.textContent = nepal.date;
+  if (difference) difference.textContent = formatTimeDifference();
 }
 
 function ensureWorldClocks() {
@@ -84,43 +122,57 @@ function ensureWorldClocks() {
       }
       .header-right-stack .header-showcase-links { margin-left: 0; }
       .header-world-clocks {
-        display: flex;
-        justify-content: flex-end;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
         gap: .55rem;
         width: 100%;
       }
       .header-clock-card {
         min-width: 156px;
-        padding: .48rem .7rem;
+        padding: .5rem .7rem;
         border-radius: .78rem;
-        border: 1px solid rgba(255,255,255,.09);
-        background: rgba(255,255,255,.045);
+        border: 1px solid rgba(239,68,68,.35);
+        background: rgba(239,68,68,.08);
         text-align: center;
-        box-shadow: inset 0 1px 0 rgba(255,255,255,.035);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.035), 0 0 20px rgba(239,68,68,.08);
       }
       .header-clock-country {
         display: block;
         margin-bottom: .14rem;
-        color: #9aa6c3;
-        font-size: .62rem;
+        color: #fca5a5;
+        font-size: .64rem;
         font-weight: 900;
         letter-spacing: .12em;
         text-transform: uppercase;
       }
       .header-clock-time {
         display: block;
-        color: #f4f7ff;
-        font-size: .92rem;
-        font-weight: 900;
+        color: #ef4444;
+        font-size: .95rem;
+        font-weight: 950;
         line-height: 1.1;
         font-variant-numeric: tabular-nums;
+        text-shadow: 0 0 18px rgba(239,68,68,.22);
       }
       .header-clock-date {
         display: block;
         margin-top: .18rem;
-        color: #7f8da8;
+        color: #f87171;
         font-size: .62rem;
-        font-weight: 700;
+        font-weight: 750;
+      }
+      .header-time-difference {
+        padding: .4rem .55rem;
+        border-radius: 999px;
+        border: 1px solid rgba(239,68,68,.28);
+        background: rgba(239,68,68,.07);
+        color: #fca5a5;
+        font-size: .6rem;
+        font-weight: 900;
+        line-height: 1.25;
+        text-align: center;
+        white-space: nowrap;
       }
       @media (max-width: 820px) {
         .header-right-stack {
@@ -129,18 +181,23 @@ function ensureWorldClocks() {
           align-items: stretch;
         }
         .header-world-clocks {
-          display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
           gap: .45rem;
         }
         .header-clock-card { min-width: 0; }
-        .header-clock-time { font-size: .82rem; }
+        .header-clock-time { font-size: .84rem; }
+        .header-time-difference {
+          grid-column: 1 / -1;
+          justify-self: center;
+          white-space: normal;
+        }
       }
       @media (max-width: 390px) {
         .header-clock-card { padding: .45rem .4rem; }
         .header-clock-country { font-size: .56rem; }
         .header-clock-time { font-size: .76rem; }
         .header-clock-date { font-size: .56rem; }
+        .header-time-difference { font-size: .56rem; }
       }
     `;
     document.head.appendChild(style);
@@ -153,15 +210,16 @@ function ensureWorldClocks() {
 
   const clocks = document.createElement("div");
   clocks.className = "header-world-clocks";
-  clocks.setAttribute("aria-label", "Current time in Alabama, USA and Nepal");
+  clocks.setAttribute("aria-label", "Current time in the US and Nepal");
   clocks.innerHTML = `
     <div class="header-clock-card">
-      <span class="header-clock-country">🇺🇸 USA · Alabama</span>
+      <span class="header-clock-country">🇺🇸 US</span>
       <strong class="header-clock-time" data-clock="usa-time"></strong>
       <span class="header-clock-date" data-clock="usa-date"></span>
     </div>
+    <div class="header-time-difference" data-clock="difference"></div>
     <div class="header-clock-card">
-      <span class="header-clock-country">🇳🇵 Nepal · Kathmandu</span>
+      <span class="header-clock-country">🇳🇵 Nepal</span>
       <strong class="header-clock-time" data-clock="nepal-time"></strong>
       <span class="header-clock-date" data-clock="nepal-date"></span>
     </div>
