@@ -93,15 +93,15 @@ function ensureWorldClocks() {
         min-width: 156px;
         padding: .5rem .7rem;
         border-radius: .78rem;
-        border: 1px solid rgba(239,68,68,.35);
-        background: rgba(239,68,68,.08);
+        border: 1px solid rgba(34,197,94,.38);
+        background: rgba(34,197,94,.09);
         text-align: center;
-        box-shadow: inset 0 1px 0 rgba(255,255,255,.035), 0 0 20px rgba(239,68,68,.08);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.035), 0 0 20px rgba(34,197,94,.10);
       }
       .header-clock-country {
         display: block;
         margin-bottom: .14rem;
-        color: #fca5a5;
+        color: #86efac;
         font-size: .64rem;
         font-weight: 900;
         letter-spacing: .12em;
@@ -109,17 +109,17 @@ function ensureWorldClocks() {
       }
       .header-clock-time {
         display: block;
-        color: #ef4444;
+        color: #22c55e;
         font-size: .95rem;
         font-weight: 950;
         line-height: 1.1;
         font-variant-numeric: tabular-nums;
-        text-shadow: 0 0 18px rgba(239,68,68,.22);
+        text-shadow: 0 0 18px rgba(34,197,94,.24);
       }
       .header-clock-date {
         display: block;
         margin-top: .18rem;
-        color: #f87171;
+        color: #4ade80;
         font-size: .62rem;
         font-weight: 750;
       }
