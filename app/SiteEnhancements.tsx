@@ -153,17 +153,17 @@ function ensureWorldClocks() {
 
   const clocks = document.createElement("div");
   clocks.className = "header-world-clocks";
-  clocks.setAttribute("aria-label", "Current time in America and Nepal");
+  clocks.setAttribute("aria-label", "Current time in Nepal and America");
   clocks.innerHTML = `
-    <div class="header-clock-card">
-      <span class="header-clock-country">🇺🇸 America</span>
-      <strong class="header-clock-time" data-clock="usa-time"></strong>
-      <span class="header-clock-date" data-clock="usa-date"></span>
-    </div>
     <div class="header-clock-card">
       <span class="header-clock-country">🇳🇵 Nepal</span>
       <strong class="header-clock-time" data-clock="nepal-time"></strong>
       <span class="header-clock-date" data-clock="nepal-date"></span>
+    </div>
+    <div class="header-clock-card">
+      <span class="header-clock-country">🇺🇸 America</span>
+      <strong class="header-clock-time" data-clock="usa-time"></strong>
+      <span class="header-clock-date" data-clock="usa-date"></span>
     </div>
   `;
   stack.appendChild(clocks);
