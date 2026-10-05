@@ -21,18 +21,24 @@ const projectLinks = [
   ["Parking Garage PLC Project", "/projects/parking-garage-plc"],
 ] as const;
 
+function removeEmptyState(card: HTMLElement) {
+  const hasRealContent = !!card.querySelector(
+    '.showcase-play-link, [data-showcase-content="true"]'
+  );
+
+  if (!hasRealContent) return;
+
+  card.querySelectorAll(".showcase-status").forEach((node) => node.remove());
+  card.querySelectorAll(".showcase-placeholder").forEach((node) => node.remove());
+}
+
 export default function SiteEnhancements() {
   useEffect(() => {
     const enhance = () => {
       document.querySelectorAll<HTMLElement>(".showcase-card").forEach((card) => {
         const title = card.querySelector(".showcase-title")?.textContent?.trim();
-        const hasRealContent = !!card.querySelector(
-          '.showcase-play-link, [data-showcase-content="true"]'
-        );
 
-        if (hasRealContent) {
-          card.querySelector(".showcase-status")?.remove();
-        }
+        removeEmptyState(card);
 
         if (title === "Certificates") {
           let list = card.querySelector<HTMLElement>(".showcase-certificate-links");
@@ -58,8 +64,6 @@ export default function SiteEnhancements() {
             link.innerHTML = `<span>View ${label}</span><span aria-hidden="true">↗</span>`;
             list?.appendChild(link);
           });
-
-          card.querySelector(".showcase-status")?.remove();
         }
 
         if (title === "Research Papers") {
@@ -79,8 +83,6 @@ export default function SiteEnhancements() {
             link.innerHTML = `<span>View ${label}</span><span aria-hidden="true">↗</span>`;
             list?.appendChild(link);
           });
-
-          card.querySelector(".showcase-status")?.remove();
         }
 
         if (title === "Projects") {
@@ -100,9 +102,9 @@ export default function SiteEnhancements() {
             link.innerHTML = `<span>View ${label}</span><span aria-hidden="true">↗</span>`;
             list?.appendChild(link);
           });
-
-          card.querySelector(".showcase-status")?.remove();
         }
+
+        removeEmptyState(card);
       });
     };
 
