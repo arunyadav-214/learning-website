@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Parking Garage PLC Project</title>
+  <desc id="desc">Illustrated preview of a PLC-controlled parking garage with entry and exit gates, sensors, occupancy display, and control cabinet.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#061a2b"/>
+      <stop offset="1" stop-color="#0b3a42"/>
+    </linearGradient>
+    <linearGradient id="road" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1f2937"/>
+      <stop offset="1" stop-color="#0f172a"/>
+    </linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <g opacity=".16" stroke="#38bdf8" fill="none">
+    <path d="M40 140H430V80M1180 90v150h350M1250 760h300M80 760h330" stroke-width="3"/>
+    <circle cx="430" cy="80" r="8"/><circle cx="1180" cy="90" r="8"/><circle cx="1250" cy="760" r="8"/>
+  </g>
+  <text x="70" y="90" font-family="Arial,Helvetica,sans-serif" font-size="54" font-weight="800" fill="#ffffff">Parking Garage <tspan fill="#fbbf24">PLC Project</tspan></text>
+  <text x="72" y="132" font-family="Arial,Helvetica,sans-serif" font-size="24" fill="#cbd5e1">PLC-based parking control and vehicle flow simulation</text>
+
+  <g transform="translate(95 205)">
+    <rect x="0" y="0" width="1030" height="405" rx="24" fill="#132238" stroke="#31506e" stroke-width="4"/>
+    <rect x="42" y="58" width="946" height="265" rx="12" fill="#29384a"/>
+    <rect x="72" y="82" width="886" height="36" fill="#111827"/>
+    <text x="92" y="109" font-family="Arial" font-size="28" font-weight="700" fill="#ffffff">PARKING GARAGE</text>
+    <text x="755" y="109" font-family="Arial" font-size="24" fill="#86efac">SPACES 24 / 50</text>
+    <g fill="#475569">
+      <rect x="115" y="150" width="180" height="115" rx="10"/><rect x="425" y="150" width="180" height="115" rx="10"/><rect x="735" y="150" width="180" height="115" rx="10"/>
+    </g>
+    <g fill="#0f172a" stroke="#94a3b8" stroke-width="4">
+      <rect x="130" y="190" width="150" height="56" rx="18"/><rect x="440" y="190" width="150" height="56" rx="18"/><rect x="750" y="190" width="150" height="56" rx="18"/>
+    </g>
+    <g fill="#38bdf8"><circle cx="160" cy="245" r="16"/><circle cx="250" cy="245" r="16"/><circle cx="470" cy="245" r="16"/><circle cx="560" cy="245" r="16"/><circle cx="780" cy="245" r="16"/><circle cx="870" cy="245" r="16"/></g>
+    <rect x="0" y="324" width="1030" height="81" fill="url(#road)"/>
+    <path d="M250 365H70" stroke="#22c55e" stroke-width="18" stroke-linecap="round"/><path d="M780 365h180" stroke="#fbbf24" stroke-width="18" stroke-linecap="round"/>
+    <path d="M80 365l36-25v50z" fill="#22c55e"/><path d="M950 365l-36-25v50z" fill="#fbbf24"/>
+    <text x="125" y="397" font-family="Arial" font-size="24" font-weight="700" fill="#dcfce7">ENTRY</text>
+    <text x="835" y="397" font-family="Arial" font-size="24" font-weight="700" fill="#fef3c7">EXIT</text>
+    <g stroke="#ef4444" stroke-width="9"><line x1="290" y1="330" x2="415" y2="330"/><line x1="615" y1="330" x2="740" y2="330"/></g>
+    <g fill="#e2e8f0"><rect x="276" y="315" width="18" height="62" rx="4"/><rect x="740" y="315" width="18" height="62" rx="4"/></g>
+    <g fill="#67e8f9" filter="url(#glow)"><circle cx="250" cy="305" r="8"/><circle cx="786" cy="305" r="8"/></g>
+  </g>
+
+  <g transform="translate(1185 240)">
+    <rect width="325" height="470" rx="28" fill="#0f172a" stroke="#334155" stroke-width="4"/>
+    <text x="32" y="58" font-family="Arial" font-size="25" font-weight="800" fill="#f8fafc">PLC CONTROL</text>
+    <text x="32" y="94" font-family="Arial" font-size="18" fill="#67e8f9">DM-SIM / Ladder Logic</text>
+    <rect x="38" y="130" width="249" height="210" rx="16" fill="#1e293b"/>
+    <g fill="#0ea5e9"><rect x="58" y="155" width="58" height="145" rx="6"/><rect x="128" y="155" width="58" height="145" rx="6"/></g>
+    <rect x="198" y="155" width="68" height="145" rx="6" fill="#475569"/>
+    <g fill="#a7f3d0"><circle cx="76" cy="178" r="6"/><circle cx="94" cy="178" r="6"/><circle cx="146" cy="178" r="6"/><circle cx="164" cy="178" r="6"/></g>
+    <g stroke="#fbbf24" stroke-width="5"><path d="M70 305v45h160v-45"/><path d="M105 305v80M155 305v80M205 305v80"/></g>
+    <text x="40" y="417" font-family="Arial" font-size="18" fill="#cbd5e1">Sensors • Gates • Occupancy</text>
+  </g>
+
+  <g transform="translate(85 690)" font-family="Arial">
+    <g transform="translate(0 0)"><rect width="310" height="105" rx="18" fill="#0b2135" stroke="#164e63"/><text x="24" y="43" font-size="20" font-weight="700" fill="#67e8f9">VEHICLE DETECTION</text><text x="24" y="75" font-size="17" fill="#cbd5e1">Entry / exit sensors</text></g>
+    <g transform="translate(335 0)"><rect width="310" height="105" rx="18" fill="#0b2135" stroke="#164e63"/><text x="24" y="43" font-size="20" font-weight="700" fill="#67e8f9">BARRIER CONTROL</text><text x="24" y="75" font-size="17" fill="#cbd5e1">Automated gate logic</text></g>
+    <g transform="translate(670 0)"><rect width="310" height="105" rx="18" fill="#0b2135" stroke="#164e63"/><text x="24" y="43" font-size="20" font-weight="700" fill="#67e8f9">OCCUPANCY</text><text x="24" y="75" font-size="17" fill="#cbd5e1">Parking-space tracking</text></g>
+    <g transform="translate(1005 0)"><rect width="310" height="105" rx="18" fill="#0b2135" stroke="#164e63"/><text x="24" y="43" font-size="20" font-weight="700" fill="#67e8f9">PLC SIMULATION</text><text x="24" y="75" font-size="17" fill="#cbd5e1">Do-more Designer</text></g>
+  </g>
+</svg>
