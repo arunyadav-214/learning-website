@@ -17,6 +17,10 @@ const researchLinks = [
   ],
 ] as const;
 
+const projectLinks = [
+  ["Parking Garage PLC Project", "/projects/parking-garage-plc"],
+] as const;
+
 export default function SiteEnhancements() {
   useEffect(() => {
     const enhance = () => {
@@ -68,6 +72,27 @@ export default function SiteEnhancements() {
           }
 
           researchLinks.forEach(([label, href]) => {
+            if (list?.querySelector(`a[href="${href}"]`)) return;
+            const link = document.createElement("a");
+            link.href = href;
+            link.className = "showcase-play-link";
+            link.innerHTML = `<span>View ${label}</span><span aria-hidden="true">↗</span>`;
+            list?.appendChild(link);
+          });
+
+          card.querySelector(".showcase-status")?.remove();
+        }
+
+        if (title === "Projects") {
+          let list = card.querySelector<HTMLElement>(".showcase-project-links");
+          if (!list) {
+            list = document.createElement("div");
+            list.className = "showcase-game-links showcase-project-links";
+            list.setAttribute("data-showcase-content", "true");
+            card.appendChild(list);
+          }
+
+          projectLinks.forEach(([label, href]) => {
             if (list?.querySelector(`a[href="${href}"]`)) return;
             const link = document.createElement("a");
             link.href = href;
