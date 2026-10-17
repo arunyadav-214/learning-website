@@ -22,6 +22,9 @@ const projectLinks = [
   ["Parking Garage PLC Project", "/projects/parking-garage-plc"],
 ] as const;
 
+const logisimDownload =
+  "https://github.com/logisim-evolution/logisim-evolution/releases/download/v4.1.0/logisim-evolution-4.1.0-all.jar";
+
 function removeEmptyState(card: HTMLElement) {
   const hasRealContent = !!card.querySelector(
     '.showcase-play-link, [data-showcase-content="true"]'
@@ -204,10 +207,182 @@ function ensureWorldClocks() {
   updateWorldClocks();
 }
 
+function ensureAppsSection() {
+  const nav = document.querySelector<HTMLElement>(".header-showcase-links");
+  if (nav && !nav.querySelector('a[href="#apps"]')) {
+    const appLink = document.createElement("a");
+    appLink.href = "#apps";
+    appLink.className = "header-showcase-link";
+    appLink.textContent = "Apps";
+
+    const videosLink = nav.querySelector('a[href="#videos"]');
+    if (videosLink) nav.insertBefore(appLink, videosLink);
+    else nav.appendChild(appLink);
+  }
+
+  if (document.getElementById("apps")) return;
+
+  const videos = document.getElementById("videos");
+  if (!videos?.parentElement) return;
+
+  if (!document.getElementById("apps-section-styles")) {
+    const style = document.createElement("style");
+    style.id = "apps-section-styles";
+    style.textContent = `
+      .apps-section-shell {
+        border-top: 1px solid rgba(255,255,255,.08);
+        border-bottom: 1px solid rgba(255,255,255,.08);
+        background: rgba(255,255,255,.015);
+      }
+      .apps-section-wrap {
+        max-width: 80rem;
+        margin: 0 auto;
+        padding: 5rem 1.25rem;
+      }
+      .apps-kicker {
+        color: #67e8f9;
+        font-size: .76rem;
+        font-weight: 900;
+        letter-spacing: .16em;
+      }
+      .apps-title {
+        margin-top: .8rem;
+        color: #f8fafc;
+        font-size: clamp(2rem, 4vw, 3.4rem);
+        line-height: 1.05;
+        font-weight: 950;
+        letter-spacing: -.04em;
+      }
+      .apps-intro {
+        max-width: 44rem;
+        margin-top: 1rem;
+        color: #94a3b8;
+        font-size: 1.05rem;
+        line-height: 1.8;
+      }
+      .app-card {
+        margin-top: 2.2rem;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: 1.25rem;
+        padding: 1.35rem;
+        border: 1px solid rgba(255,255,255,.10);
+        border-radius: 1.5rem;
+        background: linear-gradient(135deg, rgba(15,23,42,.88), rgba(8,47,73,.45));
+      }
+      .app-icon-box {
+        display: grid;
+        width: 4.5rem;
+        height: 4.5rem;
+        place-items: center;
+        border-radius: 1.15rem;
+        background: rgba(34,197,94,.11);
+        border: 1px solid rgba(34,197,94,.30);
+        font-size: 2rem;
+      }
+      .app-name {
+        color: #f8fafc;
+        font-size: 1.35rem;
+        font-weight: 950;
+      }
+      .app-version {
+        margin-top: .2rem;
+        color: #4ade80;
+        font-size: .8rem;
+        font-weight: 850;
+        letter-spacing: .06em;
+      }
+      .app-description {
+        max-width: 44rem;
+        margin-top: .55rem;
+        color: #94a3b8;
+        line-height: 1.65;
+      }
+      .app-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .45rem;
+        margin-top: .75rem;
+      }
+      .app-tag {
+        padding: .32rem .58rem;
+        border: 1px solid rgba(255,255,255,.10);
+        border-radius: 999px;
+        color: #cbd5e1;
+        background: rgba(255,255,255,.035);
+        font-size: .72rem;
+        font-weight: 800;
+      }
+      .app-download {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 10rem;
+        padding: .85rem 1rem;
+        border-radius: .9rem;
+        background: #22c55e;
+        color: #052e16;
+        font-weight: 950;
+        text-decoration: none;
+        transition: transform .18s ease, background .18s ease;
+      }
+      .app-download:hover {
+        transform: translateY(-2px);
+        background: #4ade80;
+      }
+      .app-note {
+        margin-top: .8rem;
+        color: #64748b;
+        font-size: .76rem;
+      }
+      @media (min-width: 640px) {
+        .apps-section-wrap { padding-left: 2rem; padding-right: 2rem; }
+      }
+      @media (max-width: 760px) {
+        .app-card { grid-template-columns: auto 1fr; }
+        .app-download { grid-column: 1 / -1; width: 100%; }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  const section = document.createElement("section");
+  section.id = "apps";
+  section.className = "apps-section-shell";
+  section.innerHTML = `
+    <div class="apps-section-wrap">
+      <p class="apps-kicker">APPS</p>
+      <h2 class="apps-title">Useful software I use for learning and projects.</h2>
+      <p class="apps-intro">A growing collection of tools connected to my computer science and engineering coursework.</p>
+
+      <article class="app-card">
+        <div class="app-icon-box" aria-hidden="true">⚙️</div>
+        <div>
+          <h3 class="app-name">Logisim Evolution</h3>
+          <p class="app-version">Version 4.1.0 · Java JAR</p>
+          <p class="app-description">Digital logic design and simulation software used for building, testing, and studying circuits in computer architecture and digital-logic work.</p>
+          <div class="app-tags">
+            <span class="app-tag">Digital Logic</span>
+            <span class="app-tag">Circuit Simulation</span>
+            <span class="app-tag">Computer Architecture</span>
+            <span class="app-tag">Java</span>
+          </div>
+          <p class="app-note">Requires a compatible Java runtime. The download is the official Logisim Evolution 4.1.0 JAR.</p>
+        </div>
+        <a class="app-download" href="${logisimDownload}" target="_blank" rel="noreferrer">Download App ↗</a>
+      </article>
+    </div>
+  `;
+
+  videos.parentElement.insertBefore(section, videos);
+}
+
 export default function SiteEnhancements() {
   useEffect(() => {
     const enhance = () => {
       ensureWorldClocks();
+      ensureAppsSection();
 
       document.querySelectorAll<HTMLElement>(".showcase-card").forEach((card) => {
         const title = card.querySelector(".showcase-title")?.textContent?.trim();
