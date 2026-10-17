@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import SiteEnhancements from "./SiteEnhancements";
 import HeroNameFix from "./HeroNameFix";
+import BookEnhancement from "./BookEnhancement";
 
 export const metadata: Metadata = {
   title: "Arun Learning Hub | Learn. Build. Grow.",
@@ -24,6 +25,7 @@ export default function RootLayout({
         {children}
         <SiteEnhancements />
         <HeroNameFix />
+        <BookEnhancement />
       </body>
     </html>
   );
