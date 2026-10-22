@@ -8,7 +8,6 @@ import {
   Cpu,
   Database,
   ExternalLink,
-  FileText,
   FlaskConical,
   Gamepad2,
   GraduationCap,
@@ -270,7 +269,7 @@ export default function Home() {
                 Building a personal chatbot concept for cybersecurity learning while continuing to turn this site into a stronger technical portfolio.
               </p>
               <div className="mt-5 flex flex-wrap gap-2">
-                {['Cybersecurity', 'AI', 'Knowledge Recall', 'Portfolio'].map((tag) => <span key={tag} className="skill-chip">{tag}</span>)}
+                {["Cybersecurity", "AI", "Knowledge Recall", "Portfolio"].map((tag) => <span key={tag} className="skill-chip">{tag}</span>)}
               </div>
               <div className="mt-7 grid grid-cols-2 gap-3">
                 {[
@@ -423,7 +422,7 @@ export default function Home() {
               manufacturing, and engineering—organized here as the strongest work becomes portfolio-ready.
             </p>
             <div className="mt-6 flex flex-wrap gap-2">
-              {['Software Engineering', 'Computer Architecture', 'Operating Systems', 'Manufacturing'].map((tag) => <span key={tag} className="skill-chip">{tag}</span>)}
+              {["Software Engineering", "Computer Architecture", "Operating Systems", "Manufacturing"].map((tag) => <span key={tag} className="skill-chip">{tag}</span>)}
             </div>
           </article>
         </div>
