@@ -1,10 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import SiteEnhancements from "./SiteEnhancements";
-import HeroNameFix from "./HeroNameFix";
-import BookEnhancement from "./BookEnhancement";
-import PortfolioExperience from "./PortfolioExperience";
-import ProjectSpotlight from "./ProjectSpotlight";
 
 export const metadata: Metadata = {
   title: "Arun Learning Hub | Learn. Build. Grow.",
@@ -23,14 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
-        {children}
-        <SiteEnhancements />
-        <HeroNameFix />
-        <BookEnhancement />
-        <PortfolioExperience />
-        <ProjectSpotlight />
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
