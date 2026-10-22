@@ -1,21 +1,21 @@
-/* White + Gold + Red portfolio theme.
-   Scoped to portfolio/content pages so the individual game experiences can keep their own arcade palettes. */
+/* Swiss Red color theme only.
+   Keeps the existing portfolio layout, spacing, cards, sections, navigation, and interactions unchanged. */
 
 :root {
-  --premium-white: #fffdf8;
-  --premium-soft: #f8f5ec;
+  --premium-white: #faf9f5;
+  --premium-soft: #f3f0e9;
   --premium-card: #ffffff;
-  --premium-ink: #1c1917;
-  --premium-muted: #6b6259;
-  --premium-gold: #c9a227;
-  --premium-gold-dark: #8f6d12;
-  --premium-gold-soft: #f7edc6;
-  --premium-red: #c62828;
-  --premium-red-dark: #8e1b1b;
-  --premium-red-soft: #fff0ee;
+  --premium-ink: #181818;
+  --premium-muted: #625e57;
+  --premium-gold: #c83025;
+  --premium-gold-dark: #a9271f;
+  --premium-gold-soft: #f7ded9;
+  --premium-red: #c83025;
+  --premium-red-dark: #a9271f;
+  --premium-red-soft: #fbe9e6;
 }
 
-/* Main portfolio and portfolio-style subpages. Game pages use dedicated *-page classes. */
+/* Main portfolio and portfolio-style subpages. Game pages keep their own palettes. */
 body > main:not([class*="-page"]),
 main#top {
   --background: var(--premium-white);
@@ -24,68 +24,68 @@ main#top {
   --card-foreground: var(--premium-ink);
   --popover: #ffffff;
   --popover-foreground: var(--premium-ink);
-  --primary: var(--premium-gold);
-  --primary-foreground: #241b05;
+  --primary: var(--premium-red);
+  --primary-foreground: #ffffff;
   --secondary: var(--premium-red);
   --secondary-foreground: #ffffff;
   --muted: var(--premium-soft);
   --muted-foreground: var(--premium-muted);
   --accent: var(--premium-red);
   --accent-foreground: #ffffff;
-  --border: #e7dcc0;
-  --input: #e7dcc0;
-  --ring: var(--premium-gold);
+  --border: #d6d1c8;
+  --input: #d6d1c8;
+  --ring: var(--premium-red);
   background:
-    radial-gradient(circle at 8% 8%, rgba(201,162,39,.11), transparent 27rem),
-    radial-gradient(circle at 94% 22%, rgba(198,40,40,.055), transparent 30rem),
-    linear-gradient(180deg, #fffefb 0%, #fffdf8 42%, #faf7ef 100%);
+    radial-gradient(circle at 8% 8%, rgba(200,48,37,.045), transparent 27rem),
+    radial-gradient(circle at 94% 22%, rgba(200,48,37,.035), transparent 30rem),
+    linear-gradient(180deg, #faf9f5 0%, #faf9f5 55%, #f6f3ed 100%);
   color: var(--premium-ink);
 }
 
 body > main:not([class*="-page"]) .hero-shell,
 main#top .hero-shell {
   background:
-    linear-gradient(rgba(143,109,18,.055) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(143,109,18,.055) 1px, transparent 1px),
-    linear-gradient(180deg,#fffdf8,#ffffff);
+    linear-gradient(rgba(24,24,24,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(24,24,24,.035) 1px, transparent 1px),
+    linear-gradient(180deg,#faf9f5,#ffffff);
   background-size: 54px 54px, 54px 54px, auto;
 }
 
 body > main:not([class*="-page"]) .hero-shell::after,
 main#top .hero-shell::after {
-  background: linear-gradient(180deg, transparent 62%, #fffdf8);
+  background: linear-gradient(180deg, transparent 62%, #faf9f5);
 }
 
 body > main:not([class*="-page"]) .aurora-one,
-main#top .aurora-one { background:#d4af37; opacity:.22; }
+main#top .aurora-one { background:#c83025; opacity:.11; }
 body > main:not([class*="-page"]) .aurora-two,
-main#top .aurora-two { background:#c62828; opacity:.12; }
+main#top .aurora-two { background:#c83025; opacity:.08; }
 body > main:not([class*="-page"]) .aurora-three,
-main#top .aurora-three { background:#e8c85c; opacity:.15; }
+main#top .aurora-three { background:#181818; opacity:.05; }
 
 body > main:not([class*="-page"]) .glass-nav,
 main#top .glass-nav {
-  border-color: rgba(143,109,18,.24);
-  background: rgba(255,255,255,.88);
-  box-shadow: 0 16px 45px rgba(93,72,18,.10);
+  border-color: rgba(24,24,24,.12);
+  background: rgba(250,249,245,.90);
+  box-shadow: 0 16px 45px rgba(24,24,24,.08);
 }
 
 body > main:not([class*="-page"]) .brand-name,
-main#top .brand-name { color:#231f1a; }
+main#top .brand-name { color:#181818; }
 
 body > main:not([class*="-page"]) .header-showcase-link,
 main#top .header-showcase-link {
-  color:#51483e;
+  color:#4d4a45;
 }
 body > main:not([class*="-page"]) .header-showcase-link:hover,
 main#top .header-showcase-link:hover {
   color:var(--premium-red);
-  background:rgba(201,162,39,.10);
+  background:rgba(200,48,37,.07);
 }
 
 body > main:not([class*="-page"]) .text-gradient,
 main#top .text-gradient {
-  background: linear-gradient(102deg,#7c5e10 3%,#c9a227 46%,#c62828 100%);
+  background: linear-gradient(102deg,#181818 3%,#181818 52%,#c83025 100%);
   -webkit-background-clip:text;
   background-clip:text;
   color:transparent;
@@ -95,91 +95,91 @@ body > main:not([class*="-page"]) .hero-pill,
 body > main:not([class*="-page"]) .mini-chip,
 main#top .hero-pill,
 main#top .mini-chip {
-  border-color:rgba(143,109,18,.22);
-  background:rgba(255,255,255,.78);
-  color:#795d14;
-  box-shadow:0 8px 24px rgba(143,109,18,.06);
+  border-color:rgba(24,24,24,.12);
+  background:rgba(255,255,255,.80);
+  color:#c83025;
+  box-shadow:0 8px 24px rgba(24,24,24,.04);
 }
 
 body > main:not([class*="-page"]) .primary-button,
 main#top .primary-button {
-  color:#241b05;
-  background:linear-gradient(135deg,#e7cc6b,#c9a227 68%,#b48613);
-  box-shadow:0 14px 34px rgba(143,109,18,.18);
+  color:#ffffff;
+  background:linear-gradient(135deg,#d63a2f,#c83025 68%,#a9271f);
+  box-shadow:0 14px 34px rgba(200,48,37,.18);
 }
 body > main:not([class*="-page"]) .primary-button:hover,
 main#top .primary-button:hover {
   color:white;
-  background:linear-gradient(135deg,#c62828,#9e1f1f);
-  box-shadow:0 16px 38px rgba(198,40,40,.20);
+  background:linear-gradient(135deg,#b72b22,#991f19);
+  box-shadow:0 16px 38px rgba(200,48,37,.22);
 }
 
 body > main:not([class*="-page"]) .secondary-button,
 main#top .secondary-button {
-  color:#4b4034;
-  border-color:rgba(143,109,18,.25);
+  color:#181818;
+  border-color:rgba(24,24,24,.18);
   background:rgba(255,255,255,.82);
 }
 body > main:not([class*="-page"]) .secondary-button:hover,
 main#top .secondary-button:hover {
   color:var(--premium-red-dark);
-  border-color:rgba(198,40,40,.28);
-  background:#fff5f2;
+  border-color:rgba(200,48,37,.30);
+  background:#fff7f5;
 }
 
 body > main:not([class*="-page"]) .hero-orbit,
-main#top .hero-orbit { border-color:rgba(201,162,39,.24); }
+main#top .hero-orbit { border-color:rgba(200,48,37,.16); }
 
 body > main:not([class*="-page"]) .glass-card,
 main#top .glass-card {
-  border-color:rgba(143,109,18,.24);
-  background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(248,245,236,.94));
-  box-shadow:0 30px 70px rgba(83,65,20,.13);
+  border-color:rgba(24,24,24,.13);
+  background:linear-gradient(145deg,rgba(255,255,255,.97),rgba(246,243,237,.95));
+  box-shadow:0 30px 70px rgba(24,24,24,.11);
 }
 
 body > main:not([class*="-page"]) .code-line,
-main#top .code-line { color:#40372f; }
+main#top .code-line { color:#262626; }
 body > main:not([class*="-page"]) .code-purple,
-main#top .code-purple { color:#8f6d12; }
+main#top .code-purple { color:#c83025; }
 body > main:not([class*="-page"]) .code-green,
-main#top .code-green { color:#a32121; }
+main#top .code-green { color:#c83025; }
 body > main:not([class*="-page"]) .code-blue,
-main#top .code-blue { color:#a77f13; }
+main#top .code-blue { color:#181818; }
 body > main:not([class*="-page"]) .code-amber,
-main#top .code-amber { color:#7b5d10; }
+main#top .code-amber { color:#6b6660; }
 
 body > main:not([class*="-page"]) .terminal-result,
 main#top .terminal-result {
-  color:#574d42;
-  background:#fbf7eb;
-  border-color:rgba(143,109,18,.20);
+  color:#47433e;
+  background:#f4f1eb;
+  border-color:rgba(24,24,24,.12);
 }
 
 body > main:not([class*="-page"]) .section-kicker,
-main#top .section-kicker { color:var(--premium-gold-dark); }
+main#top .section-kicker { color:var(--premium-red); }
 
 body > main:not([class*="-page"]) .section-shell,
-main#top .section-shell { background:rgba(201,162,39,.025); }
+main#top .section-shell { background:rgba(24,24,24,.018); }
 
 body > main:not([class*="-page"]) .skill-chip,
 body > main:not([class*="-page"]) .bento-tag,
 main#top .skill-chip,
 main#top .bento-tag {
-  color:#5d5143;
-  background:#fffdf8;
-  border-color:rgba(143,109,18,.20);
+  color:#55514c;
+  background:#faf9f5;
+  border-color:rgba(24,24,24,.13);
 }
 
 body > main:not([class*="-page"]) .bento-icon,
 main#top .bento-icon {
-  color:#8f6d12;
-  background:rgba(201,162,39,.12);
+  color:#c83025;
+  background:rgba(200,48,37,.08);
 }
 
-/* Convert the dark Tailwind cards used by portfolio pages into warm light cards. */
+/* Recolor the existing dark utility-based portfolio cards without changing their geometry. */
 body > main:not([class*="-page"]) [class*="border-white/"],
 main#top [class*="border-white/"] {
-  border-color:rgba(143,109,18,.18) !important;
+  border-color:rgba(24,24,24,.12) !important;
 }
 
 body > main:not([class*="-page"]) [class*="bg-white/"],
@@ -191,7 +191,7 @@ body > main:not([class*="-page"]) [class*="bg-slate-950"]:not([class*="fixed"]),
 body > main:not([class*="-page"]) [class*="bg-slate-900"],
 main#top [class*="bg-slate-950"]:not([class*="fixed"]),
 main#top [class*="bg-slate-900"] {
-  background-color:#fffaf0 !important;
+  background-color:#f6f3ed !important;
 }
 
 body > main:not([class*="-page"]) [class*="from-slate-"] ,
@@ -200,7 +200,7 @@ body > main:not([class*="-page"]) [class*="from-cyan-"] ,
 main#top [class*="from-slate-"] ,
 main#top [class*="from-violet-"] ,
 main#top [class*="from-cyan-"] {
-  background-image:linear-gradient(135deg,#ffffff 0%,#fbf7eb 70%,#fff2ef 100%) !important;
+  background-image:linear-gradient(135deg,#ffffff 0%,#f6f3ed 72%,#fbe9e6 100%) !important;
 }
 
 body > main:not([class*="-page"]) [class*="text-slate-300"],
@@ -209,50 +209,56 @@ body > main:not([class*="-page"]) [class*="text-slate-500"],
 main#top [class*="text-slate-300"],
 main#top [class*="text-slate-400"],
 main#top [class*="text-slate-500"] {
-  color:#6c6258 !important;
+  color:#625e57 !important;
 }
 
 body > main:not([class*="-page"]) [class*="text-white"],
 main#top [class*="text-white"] {
-  color:#211d19 !important;
+  color:#181818 !important;
 }
 
 body > main:not([class*="-page"]) [class*="text-cyan-"],
-main#top [class*="text-cyan-"] { color:var(--premium-red) !important; }
 body > main:not([class*="-page"]) [class*="text-violet-"],
-main#top [class*="text-violet-"] { color:var(--premium-gold-dark) !important; }
 body > main:not([class*="-page"]) [class*="text-emerald-"],
-main#top [class*="text-emerald-"] { color:#956f0d !important; }
 body > main:not([class*="-page"]) [class*="text-amber-"],
-main#top [class*="text-amber-"] { color:#9d7310 !important; }
+main#top [class*="text-cyan-"],
+main#top [class*="text-violet-"],
+main#top [class*="text-emerald-"],
+main#top [class*="text-amber-"] {
+  color:var(--premium-red) !important;
+}
 
-/* Status and clock accents. */
+/* Status, clocks, and colored accents all use the reference red. */
 body > main:not([class*="-page"]) [class*="border-emerald-"],
-main#top [class*="border-emerald-"] { border-color:rgba(201,162,39,.28) !important; }
-body > main:not([class*="-page"]) [class*="bg-emerald-"],
-main#top [class*="bg-emerald-"] { background-color:rgba(201,162,39,.10) !important; }
 body > main:not([class*="-page"]) [class*="border-cyan-"],
-main#top [class*="border-cyan-"] { border-color:rgba(198,40,40,.22) !important; }
-body > main:not([class*="-page"]) [class*="bg-cyan-"],
-main#top [class*="bg-cyan-"] { background-color:rgba(198,40,40,.065) !important; }
 body > main:not([class*="-page"]) [class*="border-violet-"],
-main#top [class*="border-violet-"] { border-color:rgba(143,109,18,.22) !important; }
-body > main:not([class*="-page"]) [class*="bg-violet-"],
-main#top [class*="bg-violet-"] { background-color:rgba(201,162,39,.09) !important; }
+main#top [class*="border-emerald-"],
+main#top [class*="border-cyan-"],
+main#top [class*="border-violet-"] {
+  border-color:rgba(200,48,37,.24) !important;
+}
 
-/* Keep overlays dark, but make the command-palette card part of the premium theme. */
+body > main:not([class*="-page"]) [class*="bg-emerald-"],
+body > main:not([class*="-page"]) [class*="bg-cyan-"],
+body > main:not([class*="-page"]) [class*="bg-violet-"],
+main#top [class*="bg-emerald-"],
+main#top [class*="bg-cyan-"],
+main#top [class*="bg-violet-"] {
+  background-color:rgba(200,48,37,.07) !important;
+}
+
+/* Command palette uses the same palette while keeping the existing layout. */
 body > main:not([class*="-page"]) [class*="fixed"][class*="bg-slate-950"],
 main#top [class*="fixed"][class*="bg-slate-950"] {
-  background-color:rgba(28,25,23,.62) !important;
+  background-color:rgba(24,24,24,.62) !important;
 }
 body > main:not([class*="-page"]) [class*="fixed"] [class*="bg-slate-950"],
 main#top [class*="fixed"] [class*="bg-slate-950"] {
-  background-color:#fffdf8 !important;
+  background-color:#faf9f5 !important;
 }
 body > main:not([class*="-page"]) [class*="fixed"] input,
-main#top [class*="fixed"] input { color:#211d19 !important; }
+main#top [class*="fixed"] input { color:#181818 !important; }
 
-/* Red is deliberately limited to actions, links, and selected emphasis. */
 body > main:not([class*="-page"]) a[class*="text-cyan-"],
 body > main:not([class*="-page"]) span[class*="text-cyan-"],
 main#top a[class*="text-cyan-"],
@@ -260,20 +266,19 @@ main#top span[class*="text-cyan-"] {
   color:var(--premium-red) !important;
 }
 body > main:not([class*="-page"]) a:hover,
-main#top a:hover { text-decoration-color:rgba(198,40,40,.45); }
+main#top a:hover { text-decoration-color:rgba(200,48,37,.45); }
 
-/* Cards and major content panels. */
 body > main:not([class*="-page"]) article,
 main#top article {
-  box-shadow:0 10px 32px rgba(96,75,23,.055);
+  box-shadow:0 10px 32px rgba(24,24,24,.05);
 }
 body > main:not([class*="-page"]) article:hover,
 main#top article:hover {
-  border-color:rgba(198,40,40,.25) !important;
-  box-shadow:0 16px 38px rgba(96,75,23,.09);
+  border-color:rgba(200,48,37,.25) !important;
+  box-shadow:0 16px 38px rgba(24,24,24,.08);
 }
 
-/* Preserve the secret terminal's terminal aesthetic. */
+/* Preserve the hidden terminal experience. */
 body > main:not([class*="-page"]) [class*="bg-[#000905]"],
 body > main:not([class*="-page"]) [class*="bg-[#010704]"],
 main#top [class*="bg-[#000905]"],
@@ -283,5 +288,5 @@ main#top [class*="bg-[#010704]"] {
 
 @media (max-width: 760px) {
   body > main:not([class*="-page"]) .glass-nav,
-  main#top .glass-nav { background:rgba(255,255,255,.94); }
+  main#top .glass-nav { background:rgba(250,249,245,.96); }
 }
