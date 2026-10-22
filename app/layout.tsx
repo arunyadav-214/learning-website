@@ -3,6 +3,7 @@ import "./globals.css";
 import SiteEnhancements from "./SiteEnhancements";
 import HeroNameFix from "./HeroNameFix";
 import BookEnhancement from "./BookEnhancement";
+import PortfolioExperience from "./PortfolioExperience";
 
 export const metadata: Metadata = {
   title: "Arun Learning Hub | Learn. Build. Grow.",
@@ -26,6 +27,7 @@ export default function RootLayout({
         <SiteEnhancements />
         <HeroNameFix />
         <BookEnhancement />
+        <PortfolioExperience />
       </body>
     </html>
   );
