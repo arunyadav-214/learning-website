@@ -64,22 +64,22 @@ export function WorldClocks() {
   ];
 
   return (
-    <div className="grid grid-cols-2 gap-px bg-[#d7d4cc]" aria-label="Current time in Nepal and America">
+    <div className="grid grid-cols-2 gap-3" aria-label="Current time in Nepal and America">
       {cards.map(({ name, data }) => (
-        <div key={name} className="bg-[#faf9f5] px-4 py-4 text-center">
-          <p className="font-mono text-[10px] font-bold uppercase tracking-[0.15em] text-[#c83025]">{name}</p>
+        <div key={name} className="rounded-xl border border-emerald-400/20 bg-emerald-400/[0.06] px-4 py-3 text-center">
+          <p className="text-[10px] font-black uppercase tracking-[0.15em] text-emerald-200">{name}</p>
           <div className="mt-1 flex items-center justify-center gap-2">
             <span aria-hidden="true">{data.icon}</span>
-            <strong className="font-mono text-sm text-[#181818]">{data.time || "--:--"}</strong>
+            <strong className="font-mono text-sm text-emerald-300">{data.time || "--:--"}</strong>
           </div>
-          <p className="mt-1 font-mono text-[10px] text-[#66635d]">{data.date}</p>
+          <p className="mt-1 text-[10px] font-bold text-emerald-300/70">{data.date}</p>
         </div>
       ))}
     </div>
   );
 }
 
-export function PortfolioInteractive({ showTrigger = true }: { showTrigger?: boolean }) {
+export function PortfolioInteractive() {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [terminal, setTerminal] = useState(false);
@@ -128,30 +128,28 @@ export function PortfolioInteractive({ showTrigger = true }: { showTrigger?: boo
 
   return (
     <>
-      {showTrigger && (
-        <button
-          type="button"
-          onClick={() => setOpen(true)}
-          className="border border-[#cfcac0] bg-transparent px-5 py-3 text-sm font-bold text-[#181818] transition hover:border-[#c83025] hover:text-[#c83025]"
-          aria-label="Open portfolio command palette"
-        >
-          Ctrl + K · Explore
-        </button>
-      )}
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="secondary-button"
+        aria-label="Open portfolio command palette"
+      >
+        Ctrl + K · Explore
+      </button>
 
       {open && (
-        <div className="fixed inset-0 z-[9999] flex items-start justify-center bg-[#181818]/80 px-4 pt-[10vh] backdrop-blur-md" onMouseDown={() => setOpen(false)}>
-          <div className="w-full max-w-2xl overflow-hidden border border-[#c83025]/30 bg-[#faf9f5] shadow-2xl" onMouseDown={(event) => event.stopPropagation()}>
-            <div className="flex items-center gap-3 border-b border-[#d7d4cc] px-4 py-4">
-              <span className="text-[#c83025]" aria-hidden="true">⌘</span>
+        <div className="fixed inset-0 z-[9999] flex items-start justify-center bg-slate-950/80 px-4 pt-[10vh] backdrop-blur-xl" onMouseDown={() => setOpen(false)}>
+          <div className="w-full max-w-2xl overflow-hidden rounded-2xl border border-violet-400/25 bg-slate-950 shadow-2xl" onMouseDown={(event) => event.stopPropagation()}>
+            <div className="flex items-center gap-3 border-b border-white/10 px-4 py-4">
+              <span className="text-cyan-300" aria-hidden="true">⌘</span>
               <input
                 autoFocus
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder="Search projects, games, books, apps..."
-                className="w-full bg-transparent text-base text-[#181818] outline-none placeholder:text-[#918d84]"
+                className="w-full bg-transparent text-base text-white outline-none placeholder:text-slate-600"
               />
-              <button type="button" onClick={() => setOpen(false)} className="text-sm font-bold text-[#77736b] hover:text-[#c83025]">ESC</button>
+              <button type="button" onClick={() => setOpen(false)} className="text-sm font-black text-slate-500 hover:text-white">ESC</button>
             </div>
             <div className="max-h-[55vh] overflow-y-auto p-2">
               {filtered.map((item) => (
@@ -159,20 +157,20 @@ export function PortfolioInteractive({ showTrigger = true }: { showTrigger?: boo
                   key={item.target}
                   type="button"
                   onClick={() => { setOpen(false); setQuery(""); go(item.target); }}
-                  className="flex w-full items-center gap-3 px-3 py-3 text-left transition hover:bg-[#f0ede6]"
+                  className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition hover:bg-violet-500/10"
                 >
-                  <span className="grid h-9 w-9 shrink-0 place-items-center border border-[#d7d4cc] font-mono text-[10px] font-bold text-[#c83025]">{item.code}</span>
+                  <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-white/10 bg-white/[0.03] text-[10px] font-black text-violet-300">{item.code}</span>
                   <span>
-                    <strong className="block text-sm text-[#181818]">{item.label}</strong>
-                    <span className="mt-1 block text-xs text-[#77736b]">{item.hint}</span>
+                    <strong className="block text-sm text-white">{item.label}</strong>
+                    <span className="mt-1 block text-xs text-slate-500">{item.hint}</span>
                   </span>
                 </button>
               ))}
-              {filtered.length === 0 && <p className="px-3 py-8 text-center text-sm text-[#77736b]">No matching section.</p>}
+              {filtered.length === 0 && <p className="px-3 py-8 text-center text-sm text-slate-500">No matching section.</p>}
             </div>
-            <div className="flex items-center justify-between border-t border-[#d7d4cc] px-4 py-3 font-mono text-[11px] text-[#77736b]">
+            <div className="flex items-center justify-between border-t border-white/10 px-4 py-3 text-[11px] text-slate-600">
               <span>Quick portfolio navigation</span>
-              <span>Try typing “arun”</span>
+              <span>Try typing “arun” on the homepage</span>
             </div>
           </div>
         </div>
@@ -180,7 +178,7 @@ export function PortfolioInteractive({ showTrigger = true }: { showTrigger?: boo
 
       {terminal && (
         <div className="fixed inset-0 z-[10000] grid place-items-center bg-[#000905]/95 px-4 backdrop-blur-sm">
-          <div className="w-full max-w-2xl border border-emerald-400/40 bg-[#010704] p-6 font-mono text-sm text-emerald-300 shadow-[0_0_80px_rgba(34,197,94,.15)]">
+          <div className="w-full max-w-2xl rounded-2xl border border-emerald-400/40 bg-[#010704] p-6 font-mono text-sm text-emerald-300 shadow-[0_0_80px_rgba(34,197,94,.15)]">
             <p>&gt; identity --lookup arun</p>
             <p className="mt-3">✓ Computer Science + Applied Engineering</p>
             <p className="mt-2">✓ Nepal → USA · learn → build → test → improve</p>
