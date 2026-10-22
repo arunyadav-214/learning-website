@@ -1,287 +1,116 @@
-/* White + Gold + Red portfolio theme.
-   Scoped to portfolio/content pages so the individual game experiences can keep their own arcade palettes. */
-
+/* Swiss Red portfolio system — based on the supplied visual reference. */
 :root {
-  --premium-white: #fffdf8;
-  --premium-soft: #f8f5ec;
-  --premium-card: #ffffff;
-  --premium-ink: #1c1917;
-  --premium-muted: #6b6259;
-  --premium-gold: #c9a227;
-  --premium-gold-dark: #8f6d12;
-  --premium-gold-soft: #f7edc6;
-  --premium-red: #c62828;
-  --premium-red-dark: #8e1b1b;
-  --premium-red-soft: #fff0ee;
+  --swiss-paper: #faf9f5;
+  --swiss-paper-alt: #f3f0e9;
+  --swiss-ink: #181818;
+  --swiss-muted: #625e57;
+  --swiss-line: #cbc7be;
+  --swiss-red: #c83025;
+  --swiss-red-dark: #a9271f;
 }
 
-/* Main portfolio and portfolio-style subpages. Game pages use dedicated *-page classes. */
-body > main:not([class*="-page"]),
-main#top {
-  --background: var(--premium-white);
-  --foreground: var(--premium-ink);
-  --card: var(--premium-card);
-  --card-foreground: var(--premium-ink);
-  --popover: #ffffff;
-  --popover-foreground: var(--premium-ink);
-  --primary: var(--premium-gold);
-  --primary-foreground: #241b05;
-  --secondary: var(--premium-red);
-  --secondary-foreground: #ffffff;
-  --muted: var(--premium-soft);
-  --muted-foreground: var(--premium-muted);
-  --accent: var(--premium-red);
+body {
+  background: var(--swiss-ink);
+}
+
+.swiss-site {
+  margin: 8px;
+  min-height: calc(100vh - 16px);
+  background: var(--swiss-paper);
+  color: var(--swiss-ink);
+}
+
+/* Shared portfolio-style pages use the same off-white / red / black system. */
+body > main:not([class*="-page"]):not(.swiss-site) {
+  --background: var(--swiss-paper);
+  --foreground: var(--swiss-ink);
+  --card: #ffffff;
+  --card-foreground: var(--swiss-ink);
+  --popover: var(--swiss-paper);
+  --popover-foreground: var(--swiss-ink);
+  --primary: var(--swiss-red);
+  --primary-foreground: #ffffff;
+  --secondary: #ffffff;
+  --secondary-foreground: var(--swiss-ink);
+  --muted: var(--swiss-paper-alt);
+  --muted-foreground: var(--swiss-muted);
+  --accent: var(--swiss-red);
   --accent-foreground: #ffffff;
-  --border: #e7dcc0;
-  --input: #e7dcc0;
-  --ring: var(--premium-gold);
-  background:
-    radial-gradient(circle at 8% 8%, rgba(201,162,39,.11), transparent 27rem),
-    radial-gradient(circle at 94% 22%, rgba(198,40,40,.055), transparent 30rem),
-    linear-gradient(180deg, #fffefb 0%, #fffdf8 42%, #faf7ef 100%);
-  color: var(--premium-ink);
+  --border: var(--swiss-line);
+  --input: var(--swiss-line);
+  --ring: var(--swiss-red);
+  background: var(--swiss-paper);
+  color: var(--swiss-ink);
 }
 
-body > main:not([class*="-page"]) .hero-shell,
-main#top .hero-shell {
-  background:
-    linear-gradient(rgba(143,109,18,.055) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(143,109,18,.055) 1px, transparent 1px),
-    linear-gradient(180deg,#fffdf8,#ffffff);
-  background-size: 54px 54px, 54px 54px, auto;
+body > main:not([class*="-page"]):not(.swiss-site) .primary-button,
+.swiss-site .primary-button {
+  border-radius: 0;
+  background: var(--swiss-red);
+  color: #ffffff;
+  box-shadow: none;
 }
 
-body > main:not([class*="-page"]) .hero-shell::after,
-main#top .hero-shell::after {
-  background: linear-gradient(180deg, transparent 62%, #fffdf8);
+body > main:not([class*="-page"]):not(.swiss-site) .primary-button:hover,
+.swiss-site .primary-button:hover {
+  transform: none;
+  background: var(--swiss-red-dark);
+  box-shadow: none;
 }
 
-body > main:not([class*="-page"]) .aurora-one,
-main#top .aurora-one { background:#d4af37; opacity:.22; }
-body > main:not([class*="-page"]) .aurora-two,
-main#top .aurora-two { background:#c62828; opacity:.12; }
-body > main:not([class*="-page"]) .aurora-three,
-main#top .aurora-three { background:#e8c85c; opacity:.15; }
-
-body > main:not([class*="-page"]) .glass-nav,
-main#top .glass-nav {
-  border-color: rgba(143,109,18,.24);
-  background: rgba(255,255,255,.88);
-  box-shadow: 0 16px 45px rgba(93,72,18,.10);
+body > main:not([class*="-page"]):not(.swiss-site) .secondary-button,
+.swiss-site .secondary-button {
+  border-radius: 0;
+  border: 1px solid var(--swiss-line);
+  background: transparent;
+  color: var(--swiss-ink);
 }
 
-body > main:not([class*="-page"]) .brand-name,
-main#top .brand-name { color:#231f1a; }
-
-body > main:not([class*="-page"]) .header-showcase-link,
-main#top .header-showcase-link {
-  color:#51483e;
-}
-body > main:not([class*="-page"]) .header-showcase-link:hover,
-main#top .header-showcase-link:hover {
-  color:var(--premium-red);
-  background:rgba(201,162,39,.10);
+body > main:not([class*="-page"]):not(.swiss-site) .secondary-button:hover,
+.swiss-site .secondary-button:hover {
+  border-color: var(--swiss-red);
+  background: transparent;
+  color: var(--swiss-red);
 }
 
-body > main:not([class*="-page"]) .text-gradient,
-main#top .text-gradient {
-  background: linear-gradient(102deg,#7c5e10 3%,#c9a227 46%,#c62828 100%);
-  -webkit-background-clip:text;
-  background-clip:text;
-  color:transparent;
+body > main:not([class*="-page"]):not(.swiss-site) .section-kicker {
+  color: var(--swiss-red);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 11px;
+  letter-spacing: .18em;
 }
 
-body > main:not([class*="-page"]) .hero-pill,
-body > main:not([class*="-page"]) .mini-chip,
-main#top .hero-pill,
-main#top .mini-chip {
-  border-color:rgba(143,109,18,.22);
-  background:rgba(255,255,255,.78);
-  color:#795d14;
-  box-shadow:0 8px 24px rgba(143,109,18,.06);
+body > main:not([class*="-page"]):not(.swiss-site) .skill-chip {
+  border-radius: 0;
+  border-color: var(--swiss-line);
+  background: transparent;
+  color: var(--swiss-muted);
 }
 
-body > main:not([class*="-page"]) .primary-button,
-main#top .primary-button {
-  color:#241b05;
-  background:linear-gradient(135deg,#e7cc6b,#c9a227 68%,#b48613);
-  box-shadow:0 14px 34px rgba(143,109,18,.18);
-}
-body > main:not([class*="-page"]) .primary-button:hover,
-main#top .primary-button:hover {
-  color:white;
-  background:linear-gradient(135deg,#c62828,#9e1f1f);
-  box-shadow:0 16px 38px rgba(198,40,40,.20);
+/* Bring older portfolio subpages closer to the Swiss reference without touching game-specific pages. */
+body > main:not([class*="-page"]):not(.swiss-site) [class*="border-white/"] {
+  border-color: var(--swiss-line) !important;
 }
 
-body > main:not([class*="-page"]) .secondary-button,
-main#top .secondary-button {
-  color:#4b4034;
-  border-color:rgba(143,109,18,.25);
-  background:rgba(255,255,255,.82);
-}
-body > main:not([class*="-page"]) .secondary-button:hover,
-main#top .secondary-button:hover {
-  color:var(--premium-red-dark);
-  border-color:rgba(198,40,40,.28);
-  background:#fff5f2;
+body > main:not([class*="-page"]):not(.swiss-site) [class*="bg-white/"] {
+  background-color: rgba(255,255,255,.62) !important;
 }
 
-body > main:not([class*="-page"]) .hero-orbit,
-main#top .hero-orbit { border-color:rgba(201,162,39,.24); }
-
-body > main:not([class*="-page"]) .glass-card,
-main#top .glass-card {
-  border-color:rgba(143,109,18,.24);
-  background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(248,245,236,.94));
-  box-shadow:0 30px 70px rgba(83,65,20,.13);
+body > main:not([class*="-page"]):not(.swiss-site) [class*="text-slate-300"],
+body > main:not([class*="-page"]):not(.swiss-site) [class*="text-slate-400"],
+body > main:not([class*="-page"]):not(.swiss-site) [class*="text-slate-500"] {
+  color: var(--swiss-muted) !important;
 }
 
-body > main:not([class*="-page"]) .code-line,
-main#top .code-line { color:#40372f; }
-body > main:not([class*="-page"]) .code-purple,
-main#top .code-purple { color:#8f6d12; }
-body > main:not([class*="-page"]) .code-green,
-main#top .code-green { color:#a32121; }
-body > main:not([class*="-page"]) .code-blue,
-main#top .code-blue { color:#a77f13; }
-body > main:not([class*="-page"]) .code-amber,
-main#top .code-amber { color:#7b5d10; }
-
-body > main:not([class*="-page"]) .terminal-result,
-main#top .terminal-result {
-  color:#574d42;
-  background:#fbf7eb;
-  border-color:rgba(143,109,18,.20);
+body > main:not([class*="-page"]):not(.swiss-site) [class*="text-cyan-"],
+body > main:not([class*="-page"]):not(.swiss-site) [class*="text-violet-"],
+body > main:not([class*="-page"]):not(.swiss-site) [class*="text-emerald-"] {
+  color: var(--swiss-red) !important;
 }
 
-body > main:not([class*="-page"]) .section-kicker,
-main#top .section-kicker { color:var(--premium-gold-dark); }
-
-body > main:not([class*="-page"]) .section-shell,
-main#top .section-shell { background:rgba(201,162,39,.025); }
-
-body > main:not([class*="-page"]) .skill-chip,
-body > main:not([class*="-page"]) .bento-tag,
-main#top .skill-chip,
-main#top .bento-tag {
-  color:#5d5143;
-  background:#fffdf8;
-  border-color:rgba(143,109,18,.20);
-}
-
-body > main:not([class*="-page"]) .bento-icon,
-main#top .bento-icon {
-  color:#8f6d12;
-  background:rgba(201,162,39,.12);
-}
-
-/* Convert the dark Tailwind cards used by portfolio pages into warm light cards. */
-body > main:not([class*="-page"]) [class*="border-white/"],
-main#top [class*="border-white/"] {
-  border-color:rgba(143,109,18,.18) !important;
-}
-
-body > main:not([class*="-page"]) [class*="bg-white/"],
-main#top [class*="bg-white/"] {
-  background-color:rgba(255,255,255,.82) !important;
-}
-
-body > main:not([class*="-page"]) [class*="bg-slate-950"]:not([class*="fixed"]),
-body > main:not([class*="-page"]) [class*="bg-slate-900"],
-main#top [class*="bg-slate-950"]:not([class*="fixed"]),
-main#top [class*="bg-slate-900"] {
-  background-color:#fffaf0 !important;
-}
-
-body > main:not([class*="-page"]) [class*="from-slate-"] ,
-body > main:not([class*="-page"]) [class*="from-violet-"] ,
-body > main:not([class*="-page"]) [class*="from-cyan-"] ,
-main#top [class*="from-slate-"] ,
-main#top [class*="from-violet-"] ,
-main#top [class*="from-cyan-"] {
-  background-image:linear-gradient(135deg,#ffffff 0%,#fbf7eb 70%,#fff2ef 100%) !important;
-}
-
-body > main:not([class*="-page"]) [class*="text-slate-300"],
-body > main:not([class*="-page"]) [class*="text-slate-400"],
-body > main:not([class*="-page"]) [class*="text-slate-500"],
-main#top [class*="text-slate-300"],
-main#top [class*="text-slate-400"],
-main#top [class*="text-slate-500"] {
-  color:#6c6258 !important;
-}
-
-body > main:not([class*="-page"]) [class*="text-white"],
-main#top [class*="text-white"] {
-  color:#211d19 !important;
-}
-
-body > main:not([class*="-page"]) [class*="text-cyan-"],
-main#top [class*="text-cyan-"] { color:var(--premium-red) !important; }
-body > main:not([class*="-page"]) [class*="text-violet-"],
-main#top [class*="text-violet-"] { color:var(--premium-gold-dark) !important; }
-body > main:not([class*="-page"]) [class*="text-emerald-"],
-main#top [class*="text-emerald-"] { color:#956f0d !important; }
-body > main:not([class*="-page"]) [class*="text-amber-"],
-main#top [class*="text-amber-"] { color:#9d7310 !important; }
-
-/* Status and clock accents. */
-body > main:not([class*="-page"]) [class*="border-emerald-"],
-main#top [class*="border-emerald-"] { border-color:rgba(201,162,39,.28) !important; }
-body > main:not([class*="-page"]) [class*="bg-emerald-"],
-main#top [class*="bg-emerald-"] { background-color:rgba(201,162,39,.10) !important; }
-body > main:not([class*="-page"]) [class*="border-cyan-"],
-main#top [class*="border-cyan-"] { border-color:rgba(198,40,40,.22) !important; }
-body > main:not([class*="-page"]) [class*="bg-cyan-"],
-main#top [class*="bg-cyan-"] { background-color:rgba(198,40,40,.065) !important; }
-body > main:not([class*="-page"]) [class*="border-violet-"],
-main#top [class*="border-violet-"] { border-color:rgba(143,109,18,.22) !important; }
-body > main:not([class*="-page"]) [class*="bg-violet-"],
-main#top [class*="bg-violet-"] { background-color:rgba(201,162,39,.09) !important; }
-
-/* Keep overlays dark, but make the command-palette card part of the premium theme. */
-body > main:not([class*="-page"]) [class*="fixed"][class*="bg-slate-950"],
-main#top [class*="fixed"][class*="bg-slate-950"] {
-  background-color:rgba(28,25,23,.62) !important;
-}
-body > main:not([class*="-page"]) [class*="fixed"] [class*="bg-slate-950"],
-main#top [class*="fixed"] [class*="bg-slate-950"] {
-  background-color:#fffdf8 !important;
-}
-body > main:not([class*="-page"]) [class*="fixed"] input,
-main#top [class*="fixed"] input { color:#211d19 !important; }
-
-/* Red is deliberately limited to actions, links, and selected emphasis. */
-body > main:not([class*="-page"]) a[class*="text-cyan-"],
-body > main:not([class*="-page"]) span[class*="text-cyan-"],
-main#top a[class*="text-cyan-"],
-main#top span[class*="text-cyan-"] {
-  color:var(--premium-red) !important;
-}
-body > main:not([class*="-page"]) a:hover,
-main#top a:hover { text-decoration-color:rgba(198,40,40,.45); }
-
-/* Cards and major content panels. */
-body > main:not([class*="-page"]) article,
-main#top article {
-  box-shadow:0 10px 32px rgba(96,75,23,.055);
-}
-body > main:not([class*="-page"]) article:hover,
-main#top article:hover {
-  border-color:rgba(198,40,40,.25) !important;
-  box-shadow:0 16px 38px rgba(96,75,23,.09);
-}
-
-/* Preserve the secret terminal's terminal aesthetic. */
-body > main:not([class*="-page"]) [class*="bg-[#000905]"],
-body > main:not([class*="-page"]) [class*="bg-[#010704]"],
-main#top [class*="bg-[#000905]"],
-main#top [class*="bg-[#010704]"] {
-  color:#86efac !important;
-}
-
-@media (max-width: 760px) {
-  body > main:not([class*="-page"]) .glass-nav,
-  main#top .glass-nav { background:rgba(255,255,255,.94); }
+@media (max-width: 640px) {
+  .swiss-site {
+    margin: 0;
+    min-height: 100vh;
+  }
 }
