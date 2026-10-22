@@ -39,8 +39,8 @@ body > main:not([class*="-page"]):not(.swiss-site) {
   --border: var(--swiss-line);
   --input: var(--swiss-line);
   --ring: var(--swiss-red);
-  background: var(--swiss-paper);
-  color: var(--swiss-ink);
+  background: var(--swiss-paper) !important;
+  color: var(--swiss-ink) !important;
 }
 
 body > main:not([class*="-page"]):not(.swiss-site) .primary-button,
@@ -87,13 +87,31 @@ body > main:not([class*="-page"]):not(.swiss-site) .skill-chip {
   color: var(--swiss-muted);
 }
 
-/* Bring older portfolio subpages closer to the Swiss reference without touching game-specific pages. */
+/* Bring older portfolio subpages close to the same Swiss reference while leaving game pages alone. */
+body > main:not([class*="-page"]):not(.swiss-site) [class*="rounded-"] {
+  border-radius: 0 !important;
+}
+
 body > main:not([class*="-page"]):not(.swiss-site) [class*="border-white/"] {
   border-color: var(--swiss-line) !important;
 }
 
 body > main:not([class*="-page"]):not(.swiss-site) [class*="bg-white/"] {
   background-color: rgba(255,255,255,.62) !important;
+}
+
+body > main:not([class*="-page"]):not(.swiss-site) [class*="bg-slate-950"],
+body > main:not([class*="-page"]):not(.swiss-site) [class*="bg-slate-900"],
+body > main:not([class*="-page"]):not(.swiss-site) [class*="bg-[#070b17]"] {
+  background-color: var(--swiss-paper) !important;
+}
+
+body > main:not([class*="-page"]):not(.swiss-site) [class*="bg-gradient-to-"] {
+  background-image: linear-gradient(135deg, #faf9f5 0%, #f3f0e9 100%) !important;
+}
+
+body > main:not([class*="-page"]):not(.swiss-site) [class*="text-white"] {
+  color: var(--swiss-ink) !important;
 }
 
 body > main:not([class*="-page"]):not(.swiss-site) [class*="text-slate-300"],
@@ -104,8 +122,17 @@ body > main:not([class*="-page"]):not(.swiss-site) [class*="text-slate-500"] {
 
 body > main:not([class*="-page"]):not(.swiss-site) [class*="text-cyan-"],
 body > main:not([class*="-page"]):not(.swiss-site) [class*="text-violet-"],
-body > main:not([class*="-page"]):not(.swiss-site) [class*="text-emerald-"] {
+body > main:not([class*="-page"]):not(.swiss-site) [class*="text-emerald-"],
+body > main:not([class*="-page"]):not(.swiss-site) [class*="text-amber-"] {
   color: var(--swiss-red) !important;
+}
+
+body > main:not([class*="-page"]):not(.swiss-site) article {
+  box-shadow: none !important;
+}
+
+body > main:not([class*="-page"]):not(.swiss-site) article:hover {
+  border-color: var(--swiss-red) !important;
 }
 
 @media (max-width: 640px) {
