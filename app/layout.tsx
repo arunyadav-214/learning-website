@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import "./premium-theme.css";
-import MidnightCityProject from "./MidnightCityProject";
 
 export const metadata: Metadata = {
   title: "Arun Learning Hub | Learn. Build. Grow.",
@@ -20,10 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
-        {children}
-        <MidnightCityProject />
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
