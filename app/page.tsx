@@ -31,6 +31,13 @@ const socials = [
   ["TikTok", "https://www.tiktok.com/@arunyadav999"],
 ] as const;
 
+const focusItems = [
+  ["01", "Software", "Building practical software and web experiences."],
+  ["02", "Systems", "Computer architecture, operating systems, and digital logic."],
+  ["03", "Automation", "PLC logic and hands-on engineering workflows."],
+  ["04", "Research", "Exploring applied technology through academic research."],
+] as const;
+
 export default function Home() {
   return (
     <main id="top" className="min-h-screen overflow-hidden bg-background text-foreground">
@@ -48,22 +55,22 @@ export default function Home() {
 
           <PortfolioNav />
 
-          <div className="grid items-center gap-9 pb-12 pt-12 sm:gap-12 sm:pb-16 sm:pt-16 lg:min-h-[620px] lg:grid-cols-[1.08fr_.92fr] lg:gap-16 lg:pt-20">
-            <div className="relative">
-              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#c83025]/20 bg-white/70 px-3.5 py-2 text-[10px] font-black uppercase tracking-[0.14em] text-[#c83025] shadow-sm backdrop-blur sm:mb-6 sm:px-4 sm:text-[11px] sm:tracking-[0.16em]">
+          <div className="grid items-center gap-10 pb-10 pt-12 sm:gap-12 sm:pb-14 sm:pt-16 lg:min-h-[610px] lg:grid-cols-[1.08fr_.92fr] lg:gap-16 lg:pt-18">
+            <div className="relative order-2 lg:order-1">
+              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#c83025]/20 bg-white/75 px-3.5 py-2 text-[10px] font-black uppercase tracking-[0.14em] text-[#c83025] shadow-sm backdrop-blur sm:mb-6 sm:px-4 sm:text-[11px] sm:tracking-[0.16em]">
                 <Sparkles className="h-4 w-4" aria-hidden="true" />
-                Introduction
+                Computer Science • Applied Engineering
               </div>
 
-              <h1 className="hero-title font-heading">
-                <span className="block text-gradient">Computer Science + Applied Engineering.</span>
+              <h1 className="font-heading text-[clamp(2.6rem,7vw,5.4rem)] font-black leading-[0.94] tracking-[-0.06em] text-[#181818]">
+                Building software, automation & engineering systems.
               </h1>
 
-              <p className="mt-5 max-w-2xl text-base leading-7 text-muted-foreground sm:mt-7 sm:text-xl sm:leading-8">
-                I&apos;m Arun K. Yadav. I build software, systems, automation projects, and interactive experiences while documenting what I learn along the way.
+              <p className="mt-6 max-w-2xl text-base leading-7 text-muted-foreground sm:mt-7 sm:text-xl sm:leading-8">
+                I&apos;m Arun K. Yadav, a Computer Science student combining software development with practical Applied Engineering experience.
               </p>
               <p className="mt-3 max-w-2xl text-base leading-7 text-muted-foreground sm:mt-4 sm:text-lg sm:leading-8">
-                My portfolio combines programming, databases, computer architecture, digital logic, PLC automation, research, and practical engineering work.
+                My work spans programming, databases, computer architecture, digital logic, PLC automation, research, and interactive projects.
               </p>
 
               <div className="mt-7 grid gap-2.5 text-sm text-muted-foreground sm:mt-9 sm:flex sm:flex-wrap sm:gap-3">
@@ -74,35 +81,56 @@ export default function Home() {
 
               <div className="mt-7 grid gap-3 sm:mt-9 sm:flex sm:flex-wrap">
                 <a href="/projects" className="primary-button justify-center">
-                  Explore my work <ArrowRight className="h-4 w-4" />
+                  View projects <ArrowRight className="h-4 w-4" />
                 </a>
                 <a href="/resume" className="secondary-button justify-center">View resume</a>
               </div>
             </div>
 
-            <div className="relative">
-              <div className="absolute -inset-3 -z-10 rounded-[2rem] bg-[#c83025]/[0.05] blur-2xl sm:-inset-4 sm:rounded-[2.4rem]" aria-hidden="true" />
-              <div className="glass-card overflow-hidden rounded-[1.6rem] p-0 sm:rounded-[2rem]">
-                <div className="h-1.5 w-full bg-gradient-to-r from-[#c83025] via-[#d86a62] to-[#181818]" />
-                <div className="p-5 sm:p-9">
-                  <p className="section-kicker">MY FOCUS</p>
-                  <h2 className="mt-3 text-2xl font-black tracking-[-0.04em] sm:mt-4 sm:text-4xl">Learn. Build. Test. Improve.</h2>
-                  <p className="mt-4 text-[15px] leading-7 text-muted-foreground sm:mt-5 sm:text-base sm:leading-8">
-                    I enjoy turning coursework and ideas into real projects that I can test, improve, and share. Use the navigation above to open each part of my portfolio as its own page.
-                  </p>
-
-                  <div className="mt-6 grid grid-cols-2 gap-2.5 sm:mt-8 sm:gap-3">
-                    {["Software", "Systems", "Automation", "Research"].map((item, index) => (
-                      <div key={item} className="rounded-xl border border-black/10 bg-white/75 p-3 shadow-sm sm:rounded-2xl sm:p-4">
-                        <span className="text-[9px] font-black uppercase tracking-[0.14em] text-[#c83025] sm:text-[10px]">0{index + 1}</span>
-                        <p className="mt-1.5 text-sm font-black text-[#181818] sm:mt-2 sm:text-base">{item}</p>
-                      </div>
-                    ))}
+            <div className="relative order-1 mx-auto w-full max-w-[430px] lg:order-2 lg:ml-auto">
+              <div className="absolute -inset-4 -z-10 rounded-[2.5rem] bg-[#c83025]/[0.07] blur-3xl" aria-hidden="true" />
+              <div className="overflow-hidden rounded-[2rem] border border-black/10 bg-[#faf9f5] p-2.5 shadow-[0_24px_70px_rgba(24,24,24,.13)] sm:rounded-[2.4rem] sm:p-3">
+                <div className="overflow-hidden rounded-[1.55rem] sm:rounded-[1.95rem]">
+                  <img
+                    src="/arun-professional.jpg"
+                    alt="Professional portrait of Arun K. Yadav"
+                    className="aspect-square w-full object-cover object-center"
+                  />
+                </div>
+                <div className="flex items-center justify-between gap-4 px-3 pb-2 pt-4 sm:px-4">
+                  <div>
+                    <p className="font-black text-[#181818]">Arun K. Yadav</p>
+                    <p className="mt-0.5 text-xs font-semibold text-muted-foreground">Computer Science • Applied Engineering</p>
                   </div>
+                  <span className="rounded-full border border-[#c83025]/20 bg-[#c83025]/[0.06] px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.14em] text-[#c83025]">Portfolio</span>
                 </div>
               </div>
             </div>
           </div>
+
+          <section className="pb-16 pt-4 sm:pb-20 sm:pt-8">
+            <div className="rounded-[1.7rem] border border-black/10 bg-white/75 p-5 shadow-[0_14px_45px_rgba(24,24,24,.06)] backdrop-blur sm:rounded-[2rem] sm:p-8">
+              <div className="grid gap-6 lg:grid-cols-[.72fr_1.28fr] lg:items-end">
+                <div>
+                  <p className="section-kicker">MY FOCUS</p>
+                  <h2 className="mt-3 text-2xl font-black tracking-[-0.04em] sm:text-4xl">Learn. Build. Test. Improve.</h2>
+                </div>
+                <p className="max-w-3xl text-[15px] leading-7 text-muted-foreground sm:text-base sm:leading-8">
+                  I enjoy turning coursework and ideas into real projects that I can test, improve, and share. Each area of the portfolio opens as its own focused page.
+                </p>
+              </div>
+
+              <div className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                {focusItems.map(([number, title, copy]) => (
+                  <article key={title} className="rounded-2xl border border-black/10 bg-[#faf9f5] p-4 transition hover:-translate-y-1 hover:border-[#c83025]/30 hover:shadow-[0_14px_35px_rgba(24,24,24,.07)]">
+                    <span className="text-[10px] font-black uppercase tracking-[0.14em] text-[#c83025]">{number}</span>
+                    <h3 className="mt-2 font-black text-[#181818]">{title}</h3>
+                    <p className="mt-2 text-sm leading-6 text-muted-foreground">{copy}</p>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </section>
 
           <section id="journey" className="pb-16 pt-2 sm:pb-24 sm:pt-6">
             <div className="grid gap-4 sm:gap-6 lg:grid-cols-[.8fr_1.2fr] lg:items-end lg:gap-8">
