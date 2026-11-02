@@ -24,6 +24,13 @@ const journey = [
   },
 ] as const;
 
+const socials = [
+  ["LinkedIn", "https://www.linkedin.com/in/arun-kumar-yadav-5a60373ab/"],
+  ["Instagram", "https://www.instagram.com/ay.run_"],
+  ["X", "https://x.com/aruny71582"],
+  ["TikTok", "https://www.tiktok.com/@arunyadav999"],
+] as const;
+
 export default function Home() {
   return (
     <main id="top" className="min-h-screen overflow-hidden bg-background text-foreground">
@@ -33,8 +40,8 @@ export default function Home() {
         <div className="aurora aurora-one" aria-hidden="true" />
         <div className="aurora aurora-two" aria-hidden="true" />
 
-        <div className="mx-auto max-w-6xl px-5 pb-20 pt-6 sm:px-8 lg:pr-64">
-          <header className="glass-nav flex items-center gap-4 rounded-[1.4rem] px-4 py-3 sm:px-5">
+        <div className="mx-auto max-w-6xl px-5 pb-20 pt-6 sm:px-8 lg:pt-20">
+          <header className="glass-nav flex items-center gap-4 rounded-[1.4rem] px-4 py-3 sm:px-5 lg:max-w-md">
             <a href="/" className="brand-home-link" aria-label="Arun Learning Hub home">
               <img src="/arun-logo.svg" alt="Arun logo" className="brand-logo-full" />
               <span className="brand-name">Arun K. Yadav</span>
@@ -71,7 +78,7 @@ export default function Home() {
               <p className="section-kicker">MY FOCUS</p>
               <h2 className="mt-4 text-3xl font-black tracking-[-0.04em]">Learn. Build. Test. Improve.</h2>
               <p className="mt-5 leading-8 text-muted-foreground">
-                I enjoy turning coursework and ideas into real projects that I can test, improve, and share. The navigation on the right opens each part of my portfolio as its own page.
+                I enjoy turning coursework and ideas into real projects that I can test, improve, and share. Use the navigation above to open each part of my portfolio as its own page.
               </p>
               <div className="mt-7 grid grid-cols-2 gap-3">
                 {["Software", "Systems", "Automation", "Research"].map((item) => (
@@ -100,6 +107,17 @@ export default function Home() {
                     </div>
                   </div>
                 </article>
+              ))}
+            </div>
+          </section>
+
+          <section id="social-media" className="border-t border-black/10 py-10">
+            <p className="section-kicker">SOCIAL MEDIA</p>
+            <div className="mt-5 flex flex-wrap gap-3">
+              {socials.map(([name, href]) => (
+                <a key={name} href={href} target="_blank" rel="noreferrer" className="secondary-button">
+                  {name}
+                </a>
               ))}
             </div>
           </section>
