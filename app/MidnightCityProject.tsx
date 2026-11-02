@@ -57,7 +57,7 @@ export default function MidnightCityProject() {
         </div>
       `;
 
-      grid.appendChild(article);
+      grid.prepend(article);
 
       document.querySelectorAll<HTMLElement>("#explore div").forEach((node) => {
         const label = node.querySelector("span");
