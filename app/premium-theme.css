@@ -268,7 +268,24 @@ main#top .glass-nav details > div[class*="absolute"] a:hover {
 
 @media (max-width: 760px) {
   body > main:not([class*="-page"]) .glass-nav,
-  main#top .glass-nav { background:rgba(250,249,245,.96); }
+  main#top .glass-nav {
+    background:rgba(250,249,245,.96);
+    flex-wrap:nowrap !important;
+  }
+
+  main#top .glass-nav > details {
+    margin-left:auto !important;
+    flex:0 0 auto;
+  }
+
+  main#top .glass-nav > details > summary {
+    margin-left:auto;
+  }
+
+  main#top .brand-home-link {
+    min-width:0;
+    flex:1 1 auto;
+  }
 
   main#top .glass-nav details > div[class*="absolute"] {
     right:0 !important;
