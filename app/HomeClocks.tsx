@@ -41,23 +41,26 @@ export default function HomeClocks() {
   }, []);
 
   const clocks = [
-    { name: "🇳🇵 Nepal", data: nepal },
-    { name: "🇺🇸 America", data: america },
+    { name: "Nepal", flag: "🇳🇵", data: nepal },
+    { name: "America", flag: "🇺🇸", data: america },
   ];
 
   return (
-    <div className="grid grid-cols-2 gap-2" aria-label="Current time in Nepal and America">
-      {clocks.map(({ name, data }) => (
+    <div className="grid grid-cols-2 gap-2.5" aria-label="Current time in Nepal and America">
+      {clocks.map(({ name, flag, data }) => (
         <div
           key={name}
-          className="rounded-xl border border-[#c83025]/20 bg-[#c83025]/[0.06] px-3 py-2 text-center"
+          className="rounded-2xl border border-[#c83025]/20 bg-[#faf9f5]/95 px-3.5 py-3 text-center shadow-[0_10px_28px_rgba(24,24,24,.06)] backdrop-blur transition hover:-translate-y-0.5 hover:border-[#c83025]/30 hover:shadow-[0_14px_34px_rgba(24,24,24,.09)]"
         >
-          <p className="text-[9px] font-black uppercase tracking-[0.13em] text-[#c83025]">{name}</p>
-          <div className="mt-1 flex items-center justify-center gap-1.5">
-            <span aria-hidden="true">{data.icon}</span>
-            <strong className="font-mono text-xs text-[#c83025]">{data.time || "--:--"}</strong>
+          <div className="flex items-center justify-center gap-1.5">
+            <span className="text-sm" aria-hidden="true">{flag}</span>
+            <p className="text-[9px] font-black uppercase tracking-[0.14em] text-[#c83025]">{name}</p>
           </div>
-          <p className="mt-1 text-[9px] font-bold text-[#a9271f]">{data.date}</p>
+          <div className="mt-1.5 flex items-center justify-center gap-2">
+            <span className="text-sm" aria-hidden="true">{data.icon}</span>
+            <strong className="font-mono text-sm tracking-tight text-[#181818]">{data.time || "--:--"}</strong>
+          </div>
+          <p className="mt-1 text-[9px] font-bold text-[#7b756d]">{data.date}</p>
         </div>
       ))}
     </div>
