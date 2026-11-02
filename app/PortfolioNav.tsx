@@ -4,9 +4,13 @@ const desktopLinks = [
   ["Projects", "/projects"],
   ["Skills", "/skills"],
   ["Research", "/research"],
+  ["Certificates", "/certificates"],
   ["Games", "/games"],
+  ["Books", "/books"],
+  ["Apps", "/apps"],
+  ["Videos", "/videos"],
+  ["Academic Work", "/academic-work"],
   ["Resume", "/resume"],
-  ["Social Media", "/#social-media"],
 ] as const;
 
 const mobileLinks = [
@@ -21,20 +25,19 @@ const mobileLinks = [
   ["Videos", "/videos"],
   ["Academic Work", "/academic-work"],
   ["Resume", "/resume"],
-  ["Social Media", "/#social-media"],
 ] as const;
 
 export default function PortfolioNav() {
   return (
     <>
-      <div className="fixed right-8 top-6 z-[100] hidden w-[650px] lg:block">
+      <div className="fixed left-1/2 top-4 z-[100] hidden w-[min(1120px,calc(100vw-2rem))] -translate-x-1/2 lg:block">
         <div className="rounded-[1.35rem] border border-black/10 bg-[#faf9f5]/90 px-5 py-3 shadow-[0_14px_45px_rgba(24,24,24,.07)] backdrop-blur-xl">
-          <nav className="flex items-center justify-end gap-6" aria-label="Portfolio navigation">
+          <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2" aria-label="Portfolio navigation">
             {desktopLinks.map(([label, href]) => (
               <a
                 key={href}
                 href={href}
-                className="relative text-sm font-semibold text-[#5f5b54] transition after:absolute after:-bottom-1.5 after:left-0 after:h-0.5 after:w-0 after:rounded-full after:bg-[#c83025] after:transition-all hover:text-[#c83025] hover:after:w-full"
+                className="relative whitespace-nowrap text-sm font-semibold text-[#5f5b54] transition after:absolute after:-bottom-1.5 after:left-0 after:h-0.5 after:w-0 after:rounded-full after:bg-[#c83025] after:transition-all hover:text-[#c83025] hover:after:w-full"
               >
                 {label}
               </a>
