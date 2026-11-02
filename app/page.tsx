@@ -34,13 +34,11 @@ const socials = [
 export default function Home() {
   return (
     <main id="top" className="min-h-screen overflow-hidden bg-background text-foreground">
-      <PortfolioNav />
-
       <section className="hero-shell relative isolate min-h-screen">
         <div className="aurora aurora-one" aria-hidden="true" />
         <div className="aurora aurora-two" aria-hidden="true" />
 
-        <div className="mx-auto max-w-6xl px-4 pb-14 pt-4 sm:px-8 sm:pb-20 sm:pt-6 lg:pt-24">
+        <div className="mx-auto max-w-6xl px-4 pb-14 pt-4 sm:px-8 sm:pb-20 sm:pt-6 lg:pt-8">
           <header className="glass-nav inline-flex max-w-[calc(100%-4.6rem)] items-center gap-3 rounded-[1.25rem] px-3 py-2.5 sm:max-w-none sm:gap-4 sm:rounded-[1.4rem] sm:px-5 sm:py-3">
             <a href="/" className="brand-home-link" aria-label="Arun Learning Hub home">
               <img src="/arun-logo.svg" alt="Arun logo" className="brand-logo-full" />
@@ -48,7 +46,9 @@ export default function Home() {
             </a>
           </header>
 
-          <div className="grid items-center gap-9 pb-12 pt-16 sm:gap-12 sm:pb-16 sm:pt-24 lg:min-h-[660px] lg:grid-cols-[1.08fr_.92fr] lg:gap-16">
+          <PortfolioNav />
+
+          <div className="grid items-center gap-9 pb-12 pt-12 sm:gap-12 sm:pb-16 sm:pt-16 lg:min-h-[620px] lg:grid-cols-[1.08fr_.92fr] lg:gap-16 lg:pt-20">
             <div className="relative">
               <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#c83025]/20 bg-white/70 px-3.5 py-2 text-[10px] font-black uppercase tracking-[0.14em] text-[#c83025] shadow-sm backdrop-blur sm:mb-6 sm:px-4 sm:text-[11px] sm:tracking-[0.16em]">
                 <Sparkles className="h-4 w-4" aria-hidden="true" />
