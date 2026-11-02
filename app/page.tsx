@@ -1,4 +1,4 @@
-import { ArrowRight, GraduationCap, MapPin, Wrench } from "lucide-react";
+import { ArrowRight, GraduationCap, MapPin, Sparkles, Wrench } from "lucide-react";
 import PortfolioNav from "./PortfolioNav";
 
 const journey = [
@@ -40,20 +40,25 @@ export default function Home() {
         <div className="aurora aurora-one" aria-hidden="true" />
         <div className="aurora aurora-two" aria-hidden="true" />
 
-        <div className="mx-auto max-w-6xl px-5 pb-20 pt-6 sm:px-8 lg:pt-20">
-          <header className="glass-nav flex items-center gap-4 rounded-[1.4rem] px-4 py-3 sm:px-5 lg:max-w-md">
+        <div className="mx-auto max-w-6xl px-5 pb-20 pt-6 sm:px-8 lg:pt-24">
+          <header className="glass-nav inline-flex items-center gap-4 rounded-[1.4rem] px-4 py-3 sm:px-5">
             <a href="/" className="brand-home-link" aria-label="Arun Learning Hub home">
               <img src="/arun-logo.svg" alt="Arun logo" className="brand-logo-full" />
               <span className="brand-name">Arun K. Yadav</span>
             </a>
           </header>
 
-          <div className="grid items-center gap-12 pb-14 pt-20 lg:min-h-[650px] lg:grid-cols-[1.05fr_.95fr]">
-            <div>
-              <p className="section-kicker">INTRODUCTION</p>
-              <h1 className="hero-title mt-5 font-heading">
+          <div className="grid items-center gap-12 pb-16 pt-24 lg:min-h-[660px] lg:grid-cols-[1.08fr_.92fr] lg:gap-16">
+            <div className="relative">
+              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#c83025]/20 bg-white/70 px-4 py-2 text-[11px] font-black uppercase tracking-[0.16em] text-[#c83025] shadow-sm backdrop-blur">
+                <Sparkles className="h-4 w-4" aria-hidden="true" />
+                Introduction
+              </div>
+
+              <h1 className="hero-title font-heading">
                 <span className="block text-gradient">Computer Science + Applied Engineering.</span>
               </h1>
+
               <p className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl">
                 I&apos;m Arun K. Yadav. I build software, systems, automation projects, and interactive experiences while documenting what I learn along the way.
               </p>
@@ -67,39 +72,56 @@ export default function Home() {
                 <span className="mini-chip"><MapPin className="h-4 w-4" /> Nepal → USA</span>
               </div>
 
-              <div className="mt-9 lg:hidden">
+              <div className="mt-9 flex flex-wrap gap-3">
                 <a href="/projects" className="primary-button">
                   Explore my work <ArrowRight className="h-4 w-4" />
                 </a>
+                <a href="/resume" className="secondary-button">View resume</a>
               </div>
             </div>
 
-            <div className="glass-card rounded-[2rem] p-7 sm:p-9">
-              <p className="section-kicker">MY FOCUS</p>
-              <h2 className="mt-4 text-3xl font-black tracking-[-0.04em]">Learn. Build. Test. Improve.</h2>
-              <p className="mt-5 leading-8 text-muted-foreground">
-                I enjoy turning coursework and ideas into real projects that I can test, improve, and share. Use the navigation above to open each part of my portfolio as its own page.
-              </p>
-              <div className="mt-7 grid grid-cols-2 gap-3">
-                {["Software", "Systems", "Automation", "Research"].map((item) => (
-                  <div key={item} className="rounded-xl border border-white/10 bg-white/[0.03] p-4 text-center font-black">{item}</div>
-                ))}
+            <div className="relative">
+              <div className="absolute -inset-4 -z-10 rounded-[2.4rem] bg-[#c83025]/[0.05] blur-2xl" aria-hidden="true" />
+              <div className="glass-card overflow-hidden rounded-[2rem] p-0">
+                <div className="h-1.5 w-full bg-gradient-to-r from-[#c83025] via-[#d86a62] to-[#181818]" />
+                <div className="p-7 sm:p-9">
+                  <p className="section-kicker">MY FOCUS</p>
+                  <h2 className="mt-4 text-3xl font-black tracking-[-0.04em] sm:text-4xl">Learn. Build. Test. Improve.</h2>
+                  <p className="mt-5 leading-8 text-muted-foreground">
+                    I enjoy turning coursework and ideas into real projects that I can test, improve, and share. Use the navigation above to open each part of my portfolio as its own page.
+                  </p>
+
+                  <div className="mt-8 grid grid-cols-2 gap-3">
+                    {["Software", "Systems", "Automation", "Research"].map((item, index) => (
+                      <div key={item} className="rounded-2xl border border-black/10 bg-white/75 p-4 shadow-sm">
+                        <span className="text-[10px] font-black uppercase tracking-[0.14em] text-[#c83025]">0{index + 1}</span>
+                        <p className="mt-2 font-black text-[#181818]">{item}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-          <section id="journey" className="pb-24">
-            <p className="section-kicker">MY JOURNEY</p>
-            <h2 className="section-title mt-3 font-heading">From Nepal to the United States.</h2>
-            <p className="mt-5 max-w-3xl text-lg leading-8 text-muted-foreground">
-              My path is still in progress. Each step has added new skills, new challenges, and a stronger interest in building useful technology.
-            </p>
+          <section id="journey" className="pb-24 pt-6">
+            <div className="grid gap-8 lg:grid-cols-[.8fr_1.2fr] lg:items-end">
+              <div>
+                <p className="section-kicker">MY JOURNEY</p>
+                <h2 className="section-title mt-3 font-heading">From Nepal to the United States.</h2>
+              </div>
+              <p className="max-w-3xl text-lg leading-8 text-muted-foreground">
+                My path is still in progress. Each step has added new skills, new challenges, and a stronger interest in building useful technology.
+              </p>
+            </div>
 
             <div className="relative mt-12 grid gap-5 md:grid-cols-2">
+              <div className="absolute left-1/2 top-6 hidden h-[calc(100%-3rem)] w-px -translate-x-1/2 bg-gradient-to-b from-[#c83025]/30 via-[#c83025]/10 to-transparent md:block" aria-hidden="true" />
               {journey.map((item, index) => (
-                <article key={item.title} className="rounded-[1.5rem] border border-white/10 bg-white/[0.035] p-6">
+                <article key={item.title} className="group relative overflow-hidden rounded-[1.6rem] border border-black/10 bg-white/75 p-6 shadow-[0_10px_35px_rgba(24,24,24,.05)] transition hover:-translate-y-1 hover:border-[#c83025]/30 hover:shadow-[0_18px_45px_rgba(24,24,24,.08)]">
+                  <div className="absolute right-5 top-4 text-5xl font-black text-[#c83025]/[0.06]">0{index + 1}</div>
                   <div className="flex items-start gap-4">
-                    <span className="text-4xl" aria-hidden="true">{item.flag}</span>
+                    <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl border border-[#c83025]/15 bg-[#c83025]/[0.06] text-3xl" aria-hidden="true">{item.flag}</span>
                     <div>
                       <p className="text-[10px] font-black uppercase tracking-[0.16em] text-[#c83025]">Step 0{index + 1}</p>
                       <h3 className="mt-2 text-xl font-black">{item.title}</h3>
@@ -111,14 +133,19 @@ export default function Home() {
             </div>
           </section>
 
-          <section id="social-media" className="border-t border-black/10 py-10">
-            <p className="section-kicker">SOCIAL MEDIA</p>
-            <div className="mt-5 flex flex-wrap gap-3">
-              {socials.map(([name, href]) => (
-                <a key={name} href={href} target="_blank" rel="noreferrer" className="secondary-button">
-                  {name}
-                </a>
-              ))}
+          <section id="social-media" className="border-t border-black/10 py-12">
+            <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p className="section-kicker">SOCIAL MEDIA</p>
+                <h2 className="mt-3 text-2xl font-black tracking-[-0.03em]">Connect with me online.</h2>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                {socials.map(([name, href]) => (
+                  <a key={name} href={href} target="_blank" rel="noreferrer" className="secondary-button">
+                    {name}
+                  </a>
+                ))}
+              </div>
             </div>
           </section>
 
