@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 
 const commands = [
   { label: "Projects", hint: "Featured work & case studies", target: "#projects", code: "01" },
@@ -47,6 +48,7 @@ function formatClock(timeZone: string) {
 export function WorldClocks() {
   const [nepal, setNepal] = useState(() => ({ time: "", date: "", icon: "" }));
   const [america, setAmerica] = useState(() => ({ time: "", date: "", icon: "" }));
+  const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
     const update = () => {
@@ -58,12 +60,35 @@ export function WorldClocks() {
     return () => window.clearInterval(timer);
   }, []);
 
+  useEffect(() => {
+    const header = document.querySelector<HTMLElement>("header.glass-nav");
+    if (!header) return;
+
+    let slot = document.getElementById("world-clocks-nav-slot");
+    let created = false;
+
+    if (!slot) {
+      slot = document.createElement("div");
+      slot.id = "world-clocks-nav-slot";
+      slot.className = "mt-3 ml-auto w-full max-w-[560px]";
+      header.insertAdjacentElement("afterend", slot);
+      created = true;
+    }
+
+    setPortalTarget(slot);
+
+    return () => {
+      setPortalTarget(null);
+      if (created) slot?.remove();
+    };
+  }, []);
+
   const cards = [
     { name: "🇳🇵 Nepal", data: nepal },
     { name: "🇺🇸 America", data: america },
   ];
 
-  return (
+  const clocks = (
     <div className="grid grid-cols-2 gap-3" aria-label="Current time in Nepal and America">
       {cards.map(({ name, data }) => (
         <div key={name} className="rounded-xl border border-emerald-400/20 bg-emerald-400/[0.06] px-4 py-3 text-center">
@@ -77,6 +102,8 @@ export function WorldClocks() {
       ))}
     </div>
   );
+
+  return portalTarget ? createPortal(clocks, portalTarget) : null;
 }
 
 export function PortfolioInteractive() {
