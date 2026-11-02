@@ -30,7 +30,7 @@ const mobileLinks = [
 export default function PortfolioNav() {
   return (
     <>
-      <div className="fixed left-1/2 top-4 z-[100] hidden w-[min(1120px,calc(100vw-2rem))] -translate-x-1/2 lg:block">
+      <div className="mx-auto hidden w-[min(1120px,calc(100vw-2rem))] pt-4 lg:block">
         <div className="rounded-[1.35rem] border border-black/10 bg-[#faf9f5]/90 px-5 py-3 shadow-[0_14px_45px_rgba(24,24,24,.07)] backdrop-blur-xl">
           <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2" aria-label="Portfolio navigation">
             {desktopLinks.map(([label, href]) => (
