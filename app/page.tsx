@@ -92,9 +92,13 @@ export default function Home() {
               <div className="overflow-hidden rounded-[2rem] border border-black/10 bg-[#faf9f5] p-2.5 shadow-[0_24px_70px_rgba(24,24,24,.13)] sm:rounded-[2.4rem] sm:p-3">
                 <div className="overflow-hidden rounded-[1.55rem] sm:rounded-[1.95rem]">
                   <img
-                    src="/arun-professional.jpg"
+                    src="/arun-portfolio-photo.jpg?v=3"
                     alt="Professional portrait of Arun K. Yadav"
-                    className="aspect-square w-full object-cover object-center"
+                    width="720"
+                    height="714"
+                    loading="eager"
+                    decoding="async"
+                    className="block aspect-square w-full object-cover object-center"
                   />
                 </div>
                 <div className="flex items-center justify-between gap-4 px-3 pb-2 pt-4 sm:px-4">
