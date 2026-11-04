@@ -1,9 +1,6 @@
 import { ArrowRight, GraduationCap, MapPin, Sparkles, Wrench } from "lucide-react";
 import PortfolioNav from "./PortfolioNav";
-import { profilePhotoPartA } from "./profilePhotoPartA";
-import { profilePhotoPartB } from "./profilePhotoPartB";
 
-const profilePhotoSrc = `data:image/jpeg;base64,${profilePhotoPartA}${profilePhotoPartB}`;
 
 const journey = [
   {
@@ -96,7 +93,7 @@ export default function Home() {
               <div className="overflow-hidden rounded-[2rem] border border-black/10 bg-[#faf9f5] p-2.5 shadow-[0_24px_70px_rgba(24,24,24,.13)] sm:rounded-[2.4rem] sm:p-3">
                 <div className="overflow-hidden rounded-[1.55rem] sm:rounded-[1.95rem]">
                   <img
-                    src={profilePhotoSrc}
+                    src="https://raw.githubusercontent.com/arunyadav-214/learning-website/main/public/arun-professional.jpg?v=20261103"
                     alt="Professional portrait of Arun K. Yadav"
                     width="720"
                     height="714"
