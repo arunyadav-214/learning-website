@@ -750,7 +750,7 @@ body {
   display:flex; flex-wrap:wrap; justify-content:center; gap:.55rem; padding:1rem; background:#091a0e;
 }
 .monkey-controls button {
-  min-width:88px; padding:.7rem .8rem; border-radius:.75rem; border:1px solid rgba(111,78,0,.16);
+  min-width:88px; padding:.7rem .8rem; border-radius:.75rem; border:1px solid rgba(255,248,232,.16);
   background:rgba(255,255,255,.06); color:white; font-weight:800; cursor:pointer;
 }
 .monkey-controls button:hover { background:rgba(255,255,255,.11); }
@@ -792,12 +792,12 @@ body {
   text-shadow:0 0 28px rgba(34,211,238,.35);
 }
 .ttt-hero p { max-width:760px; color:#9aa6c3; line-height:1.7; }
-.ttt-panel { border:1px solid rgba(111,78,0,.16); border-radius:1.5rem; padding:1.25rem; background:rgba(14,20,36,.9); box-shadow:0 28px 90px rgba(0,0,0,.32); }
+.ttt-panel { border:1px solid rgba(255,248,232,.16); border-radius:1.5rem; padding:1.25rem; background:rgba(14,20,36,.9); box-shadow:0 28px 90px rgba(0,0,0,.32); }
 .ttt-settings { display:grid; gap:1rem; }
 .ttt-mode-row, .ttt-difficulty, .ttt-actions { display:flex; flex-wrap:wrap; gap:.6rem; align-items:center; }
 .ttt-mode-row button, .ttt-difficulty button, .ttt-actions button {
   display:inline-flex; align-items:center; gap:.45rem; padding:.7rem .9rem; border-radius:.8rem;
-  border:1px solid rgba(111,78,0,.16); background:rgba(255,255,255,.05); color:white; font-weight:800;
+  border:1px solid rgba(255,248,232,.16); background:rgba(255,255,255,.05); color:white; font-weight:800;
 }
 .ttt-mode-row button.active, .ttt-difficulty button.active {
   background:linear-gradient(135deg,#7c3aed,#2563eb); border-color:transparent;
@@ -805,7 +805,7 @@ body {
 .ttt-difficulty span { color:#9aa6c3; font-size:.8rem; font-weight:800; margin-right:.2rem; }
 .ttt-names { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.8rem; }
 .ttt-names label { display:grid; gap:.35rem; color:#9aa6c3; font-size:.78rem; font-weight:800; text-transform:uppercase; letter-spacing:.08em; }
-.ttt-names input { width:100%; border:1px solid rgba(111,78,0,.16); border-radius:.75rem; padding:.7rem .8rem; background:#0a1020; color:white; outline:none; }
+.ttt-names input { width:100%; border:1px solid rgba(255,248,232,.16); border-radius:.75rem; padding:.7rem .8rem; background:#0a1020; color:white; outline:none; }
 .ttt-scoreboard { display:grid; grid-template-columns:repeat(3,1fr); gap:.6rem; margin:1.1rem 0; }
 .ttt-scoreboard div { position:relative; padding:.85rem; border-radius:1rem; background:#0b1120; border:1px solid rgba(255,255,255,.08); text-align:center; }
 .ttt-scoreboard span { display:block; color:#9aa6c3; font-size:.75rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
@@ -854,9 +854,9 @@ body {
 .snake-hero { margin:2rem 0 1.5rem; }
 .snake-hero h1 { margin:.35rem 0 .6rem; font-size:clamp(2.6rem,7vw,5rem); line-height:.95; letter-spacing:-.055em; font-weight:950; color:#86efac; }
 .snake-hero p { color:#9fb4a7; line-height:1.7; }
-.snake-panel { border:1px solid rgba(111,78,0,.16); border-radius:1.5rem; padding:1.1rem; background:#0b1a10; box-shadow:0 28px 90px rgba(0,0,0,.35); }
+.snake-panel { border:1px solid rgba(255,248,232,.16); border-radius:1.5rem; padding:1.1rem; background:#0b1a10; box-shadow:0 28px 90px rgba(0,0,0,.35); }
 .snake-hud { display:grid; grid-template-columns:repeat(3,1fr); gap:.6rem; margin-bottom:1rem; }
-.snake-hud div { padding:.8rem; border-radius:.9rem; background:#0d2415; border:1px solid rgba(111,78,0,.14); text-align:center; }
+.snake-hud div { padding:.8rem; border-radius:.9rem; background:#0d2415; border:1px solid rgba(255,248,232,.14); text-align:center; }
 .snake-hud span { display:block; color:#8ca497; font-size:.7rem; text-transform:uppercase; letter-spacing:.12em; font-weight:900; }
 .snake-hud strong { display:block; margin-top:.2rem; font-size:1.5rem; color:#f1fff5; }
 .snake-board {
@@ -886,7 +886,7 @@ body {
 .snake-overlay button { margin:auto; padding:.75rem 1rem; border-radius:.8rem; background:#86efac; color:#08210f; font-weight:900; }
 .snake-actions { display:flex; justify-content:center; gap:.6rem; flex-wrap:wrap; margin-top:1rem; }
 .snake-actions button {
-  display:inline-flex; align-items:center; gap:.45rem; padding:.72rem .9rem; border-radius:.8rem; border:1px solid rgba(111,78,0,.16);
+  display:inline-flex; align-items:center; gap:.45rem; padding:.72rem .9rem; border-radius:.8rem; border:1px solid rgba(255,248,232,.16);
   background:rgba(255,255,255,.06); color:#fff; font-weight:800;
 }
 .snake-actions button:disabled { opacity:.45; cursor:not-allowed; }
@@ -1142,7 +1142,7 @@ body {
 .certificate-meta {
   padding:1.5rem;
   border-radius:1.4rem;
-  border:1px solid rgba(111,78,0,.16);
+  border:1px solid rgba(255,248,232,.16);
   background:rgba(17,24,42,.92);
 }
 .certificate-meta h2 {
@@ -1239,7 +1239,7 @@ body {
   padding:.85rem 1rem;
   border-radius:1rem;
   background:#102718;
-  border:1px solid rgba(111,78,0,.14);
+  border:1px solid rgba(255,248,232,.14);
 }
 .lion-goat-status span {
   display:block;
@@ -1343,7 +1343,7 @@ body {
   padding:1rem 1.1rem;
   border-radius:1rem;
   background:#0f2216;
-  border:1px solid rgba(111,78,0,.14);
+  border:1px solid rgba(255,248,232,.14);
 }
 .lion-goat-rules h2 { font-size:1.25rem; font-weight:900; color:#fbbf24; }
 .lion-goat-rules ol {
@@ -1380,7 +1380,7 @@ body {
   padding:.9rem;
   border-radius:1rem;
   background:#102718;
-  border:1px solid rgba(111,78,0,.14);
+  border:1px solid rgba(255,248,232,.14);
 }
 
 .lion-goat-mode-row,
@@ -1400,7 +1400,7 @@ body {
   gap:.45rem;
   padding:.65rem .85rem;
   border-radius:.75rem;
-  border:1px solid rgba(111,78,0,.16);
+  border:1px solid rgba(255,248,232,.16);
   background:#142f1d;
   color:#dbe8df;
   font-weight:850;
@@ -1462,7 +1462,7 @@ body {
   min-height:42px;
   padding:.6rem .8rem;
   border-radius:.75rem;
-  border:1px solid rgba(111,78,0,.16);
+  border:1px solid rgba(255,248,232,.16);
   background:#142f1d;
   color:#dbe8df;
   font-weight:850;
@@ -1503,9 +1503,9 @@ body {
 .chess-wrap { width:min(980px,100%); margin:0 auto; }
 .chess-topbar {
   display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap;
-  color:#5d4700; font-size:.85rem; margin-bottom:1.5rem;
+  color:#d8e3dc; font-size:.85rem; margin-bottom:1.5rem;
 }
-.chess-topbar a { color:#3e2f00; font-weight:800; }
+.chess-topbar a { color:#fff8e8; font-weight:800; }
 .chess-hero { margin-bottom:1.5rem; }
 .chess-hero h1 {
   margin:.35rem 0 .55rem;
@@ -1513,15 +1513,15 @@ body {
   line-height:.94;
   letter-spacing:-.055em;
   font-weight:950;
-  color:#3e2f00;
+  color:#fff8e8;
 }
-.chess-hero p { color:#5d4700; line-height:1.7; }
+.chess-hero p { color:#d8e3dc; line-height:1.7; }
 .chess-shell {
   padding:1rem;
   border-radius:1.5rem;
-  border:1px solid rgba(111,78,0,.18);
-  background:linear-gradient(180deg,rgba(255,253,242,.96),rgba(245,224,157,.92));
-  box-shadow:0 24px 70px rgba(101,72,0,.22);
+  border:1px solid rgba(255,248,232,.18);
+  background:linear-gradient(180deg,rgba(255,248,232,.12),rgba(20,54,41,.9));
+  box-shadow:0 24px 70px rgba(5,20,14,.28);
   backdrop-filter:blur(10px);
 }
 .chess-status {
@@ -1533,12 +1533,12 @@ body {
   gap:1rem;
   padding:.85rem 1rem;
   border-radius:1rem;
-  background:rgba(255,250,230,.9);
-  border:1px solid rgba(111,78,0,.14);
+  background:rgba(13,45,34,.78);
+  border:1px solid rgba(255,248,232,.14);
 }
 .chess-status span {
   display:block;
-  color:#7b6418;
+  color:#bfd0c5;
   font-size:.68rem;
   font-weight:900;
   text-transform:uppercase;
@@ -1652,9 +1652,9 @@ body {
   margin:1rem auto 0;
   padding:1rem;
   border-radius:1rem;
-  background:rgba(255,250,230,.9);
-  border:1px solid rgba(111,78,0,.14);
-  color:#6d570d;
+  background:rgba(13,45,34,.78);
+  border:1px solid rgba(255,248,232,.14);
+  color:#cfddd4;
   line-height:1.65;
   font-size:.85rem;
 }
@@ -1683,8 +1683,8 @@ body {
   gap:.7rem;
   padding:.85rem;
   border-radius:1rem;
-  background:rgba(255,250,230,.9);
-  border:1px solid rgba(111,78,0,.14);
+  background:rgba(13,45,34,.78);
+  border:1px solid rgba(255,248,232,.14);
 }
 
 .chess-option-row {
@@ -1696,7 +1696,7 @@ body {
 
 .chess-option-row > span {
   width:78px;
-  color:#7b6418;
+  color:#bfd0c5;
   font-size:.72rem;
   font-weight:900;
   text-transform:uppercase;
@@ -1711,9 +1711,9 @@ body {
   gap:.4rem;
   padding:.6rem .8rem;
   border-radius:.75rem;
-  border:1px solid rgba(111,78,0,.16);
-  background:rgba(232,194,88,.88);
-  color:#3e2f00;
+  border:1px solid rgba(255,248,232,.16);
+  background:rgba(34,76,57,.9);
+  color:#f3ead7;
   font-weight:850;
 }
 
@@ -1770,8 +1770,8 @@ body {
   min-height:100%;
   padding:1rem;
   border-radius:1rem;
-  background:rgba(255,250,230,.9);
-  border:1px solid rgba(111,78,0,.14);
+  background:rgba(13,45,34,.78);
+  border:1px solid rgba(255,248,232,.14);
 }
 
 .chess-history-header {
@@ -1784,7 +1784,7 @@ body {
 
 .chess-history-header span {
   display:block;
-  color:#7b6418;
+  color:#bfd0c5;
   font-size:.68rem;
   font-weight:900;
   text-transform:uppercase;
@@ -1827,14 +1827,14 @@ body {
   align-items:center;
   padding:.55rem .6rem;
   border-radius:.65rem;
-  background:rgba(232,194,88,.88);
+  background:rgba(34,76,57,.9);
   color:#e5e7eb;
   font-family:"SFMono-Regular",Consolas,monospace;
   font-size:.8rem;
 }
 
 .chess-history-number {
-  color:#7b6418;
+  color:#bfd0c5;
   font-weight:800;
 }
 
@@ -1842,8 +1842,8 @@ body {
   margin:0;
   padding:.8rem;
   border-radius:.7rem;
-  background:rgba(232,194,88,.88);
-  color:#7b6418;
+  background:rgba(34,76,57,.9);
+  color:#bfd0c5;
   line-height:1.5;
   font-size:.82rem;
 }
