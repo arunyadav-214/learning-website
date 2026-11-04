@@ -498,7 +498,7 @@ export default function ChessPage() {
     stateRef.current=snapshot;
   }
 
-  function publishOnline(payload:any, important=true) {
+  function publishOnline(payload:any, important=true, persist=false) {
     const room=onlineRoomRef.current;
     if (!room || !onlineClientsRef.current.length) return;
     const packet=JSON.stringify({
@@ -506,9 +506,12 @@ export default function ChessPage() {
       sender:onlineRoleRef.current,
       payload,
     });
+    const topic=persist
+      ? `${ONLINE_PREFIX}/${room}/state`
+      : `${ONLINE_PREFIX}/${room}/events`;
     onlineClientsRef.current.forEach(client=>{
       try {
-        if (client.connected) client.publish(`${ONLINE_PREFIX}/${room}`,packet,{qos:important?1:0,retain:false});
+        if (client.connected) client.publish(topic,packet,{qos:important?1:0,retain:persist});
       } catch {}
     });
   }
@@ -543,7 +546,8 @@ export default function ChessPage() {
       "wss://broker.hivemq.com:8884/mqtt",
       "wss://test.mosquitto.org:8081/mqtt",
     ];
-    const topic=`${ONLINE_PREFIX}/${room}`;
+    const eventTopic=`${ONLINE_PREFIX}/${room}/events`;
+    const stateTopic=`${ONLINE_PREFIX}/${room}/state`;
     let readyCount=0;
 
     brokers.forEach((url,index)=>{
@@ -559,13 +563,19 @@ export default function ChessPage() {
       onlineClientsRef.current.push(client);
 
       client.on("connect",()=>{
-        client.subscribe(topic,{qos:1},()=>{
+        client.subscribe([eventTopic,stateTopic],{qos:1},()=>{
           readyCount++;
           onlineConnectedRef.current=true;
-          setOnlineStatus(role==="host" ? "Room created · waiting for Player 2" : "Connected to relay · finding host");
-          if (role==="guest") publishOnline({type:"join"},true);
+          setOnlineStatus(role==="host" ? "Room ready · restoring saved game…" : "Connected · restoring room…");
+          if (role==="guest") publishOnline({type:"join"},true,false);
+
           if (role==="host" && readyCount===1) {
-            publishOnline({type:"state",snapshot:stateRef.current},true);
+            window.setTimeout(()=>{
+              if (!opponentConnectedRef.current && stateRef.current.history.length===0) {
+                setOnlineStatus("Room created · waiting for Player 2");
+                publishOnline({type:"state",snapshot:stateRef.current},true,true);
+              }
+            },900);
           }
         });
       });
@@ -584,15 +594,22 @@ export default function ChessPage() {
           opponentConnectedRef.current=true;
           setOpponentConnected(true);
           setOnlineStatus("Player 2 joined · you are White");
-          publishOnline({type:"state",snapshot:stateRef.current},true);
+          publishOnline({type:"state",snapshot:stateRef.current},true,true);
           return;
         }
 
         if (data.type==="state" && data.snapshot) {
           applyOnlineSnapshot(data.snapshot);
-          opponentConnectedRef.current=true;
-          setOpponentConnected(true);
-          setOnlineStatus(role==="host" ? "Player 2 joined · you are White" : "Joined successfully · you are Black");
+          if (packet.sender && packet.sender!==role) {
+            opponentConnectedRef.current=true;
+            setOpponentConnected(true);
+          }
+          const resumed=(data.snapshot.history?.length||0)>0;
+          setOnlineStatus(
+            resumed
+              ? (role==="host" ? "Saved game restored · you are White" : "Saved game restored · you are Black")
+              : (role==="host" ? "Room ready · waiting for Player 2" : "Joined successfully · you are Black")
+          );
           return;
         }
 
@@ -604,17 +621,6 @@ export default function ChessPage() {
           return;
         }
 
-        if (data.type==="reset") {
-          const fresh:OnlineSnapshot={
-            board:startBoard(),
-            turn:"w",
-            enPassant:null,
-            rights:{wk:true,wq:true,bk:true,bq:true},
-            lastMove:null,
-            history:[],
-          };
-          applyOnlineSnapshot(fresh);
-        }
       });
     });
   }
@@ -662,7 +668,7 @@ export default function ChessPage() {
     setThinking(false);
     setHumanColor(nextHuman);
     setMode(nextMode);
-    if (nextMode==="online" && onlineConnectedRef.current) publishOnline({type:"reset"},true);
+    if (nextMode==="online" && onlineConnectedRef.current) publishOnline({type:"state",snapshot:fresh},true,true);
   }
 
   function commitMove(move:Move) {
@@ -691,7 +697,7 @@ export default function ChessPage() {
       history:history2,
     };
     stateRef.current=snapshot;
-    if (mode==="online") publishOnline({type:"move",snapshot},true);
+    if (mode==="online") publishOnline({type:"move",snapshot},true,true);
   }
 
   function choose(square:number) {
@@ -831,7 +837,7 @@ export default function ChessPage() {
                             className="w-full rounded-xl border border-white/15 bg-black/20 px-3 py-2 text-sm font-bold uppercase tracking-[0.14em] text-white outline-none"
                           />
                           <p style={{marginTop:"6px",fontSize:".78rem",opacity:.75}}>
-                            Use 3–12 letters or numbers, or leave blank for a random code.
+                            Use 3–12 letters or numbers. Reusing the same code restores the last saved game.
                           </p>
                         </div>
                         <button className="active" onClick={createOnlineRoom}>
