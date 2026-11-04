@@ -698,7 +698,7 @@ export default function ChessPage() {
           readyCount++;
           onlineConnectedRef.current=true;
           setOnlineStatus(role==="host" ? "Room ready · restoring saved game…" : "Connected · restoring room…");
-          if (role==="guest") publishOnline({type:"join",name:playerName.trim() || "Player 2"},true,false);
+          if (role==="guest") publishOnline({type:"join",name:playerName.trim().slice(0,24)},true,false);
 
           if (role==="host" && readyCount===1) {
             window.setTimeout(()=>{
@@ -763,6 +763,11 @@ export default function ChessPage() {
   }
 
   function createOnlineRoom() {
+    const cleanName=playerName.trim().slice(0,24);
+    if (!cleanName) {
+      setOnlineStatus("Enter your player name before hosting a game.");
+      return;
+    }
     const custom=hostRoomCode.trim().toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,12);
     const room=custom || makeRoomCode();
     if (custom && custom.length<3) {
@@ -777,7 +782,7 @@ export default function ChessPage() {
       rights:{wk:true,wq:true,bk:true,bq:true},
       lastMove:null,
       history:[],
-      whiteName:playerName.trim() || whiteName || "Player 1",
+      whiteName:cleanName,
       blackName:blackName,
       timerMinutes,
       whiteTime:timerMinutes*60,
@@ -792,6 +797,11 @@ export default function ChessPage() {
   }
 
   function joinOnlineRoom(code=joinCode) {
+    const cleanName=playerName.trim().slice(0,24);
+    if (!cleanName) {
+      setOnlineStatus("Enter your player name before joining a game.");
+      return;
+    }
     const room=code.trim().toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,12);
     if (room.length<3 || room.length>12) {
       setOnlineStatus("Enter a valid 3–12 character room code.");
@@ -1046,15 +1056,18 @@ export default function ChessPage() {
                       <>
                         <div>
                           <label style={{display:"block",marginBottom:"6px",fontWeight:800}}>
-                            Your player name
+                            Your player name <span aria-hidden="true">*</span>
                           </label>
                           <input
                             value={playerName}
                             onChange={e=>setPlayerName(e.target.value.slice(0,24))}
-                            placeholder="Your name"
+                            placeholder="Your name (required)"
                             maxLength={24}
                             className="w-full rounded-xl border border-white/15 bg-black/20 px-3 py-2 text-sm font-bold text-white outline-none"
                           />
+                          <p style={{marginTop:"6px",fontSize:".78rem",opacity:.82}}>
+                            Name is required to Host or Join an online game.
+                          </p>
                         </div>
 
                         <div>
@@ -1169,7 +1182,15 @@ export default function ChessPage() {
           </div>
 
           <div className="chess-game-layout">
-            <div className="chess-board" role="grid" aria-label="Chess board">
+            <div>
+              {(mode==="online" || whiteName || blackName) && (
+                <div className="chess-board-player chess-board-player-black">
+                  <span>Black</span>
+                  <strong>{blackName || "Waiting for player…"}</strong>
+                </div>
+              )}
+
+              <div className="chess-board" role="grid" aria-label="Chess board">
             {displaySquares.map(i=>{
               const piece=board[i];
               const {r,c}=rc(i);
@@ -1213,6 +1234,14 @@ export default function ChessPage() {
                 <button onClick={()=>reset()}>Play Again</button>
               </div>
             )}
+              </div>
+
+              {(mode==="online" || whiteName || blackName) && (
+                <div className="chess-board-player chess-board-player-white">
+                  <span>White</span>
+                  <strong>{whiteName || "Waiting for player…"}</strong>
+                </div>
+              )}
             </div>
 
             <aside className="chess-history-panel">
