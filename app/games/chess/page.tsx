@@ -1,13 +1,14 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Bot, RotateCcw, Users } from "lucide-react";
 
 type Color = "w" | "b";
 type Kind = "p" | "r" | "n" | "b" | "q" | "k";
 type Piece = { color: Color; kind: Kind } | null;
 type Board = Piece[];
-type Mode = "computer" | "friend";
+type Mode = "computer" | "friend" | "online";
+type OnlineRole = "host" | "guest" | null;
 type Difficulty = "easy" | "medium" | "hard";
 type Rights = { wk:boolean; wq:boolean; bk:boolean; bq:boolean };
 type Move = {
@@ -23,6 +24,59 @@ type HistoryEntry = {
   color: Color;
   notation: string;
 };
+
+
+type OnlineSnapshot = {
+  board: Board;
+  turn: Color;
+  enPassant: number | null;
+  rights: Rights;
+  lastMove: Move | null;
+  history: HistoryEntry[];
+};
+
+const ONLINE_PREFIX = "arun-chess-global-v1";
+
+function makeRoomCode() {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let out = "";
+  for (let i = 0; i < 6; i++) out += chars[Math.floor(Math.random() * chars.length)];
+  return out;
+}
+
+function loadMqtt() {
+  return new Promise<any>((resolve, reject) => {
+    const existing = (window as any).mqtt;
+    if (existing?.connect) {
+      resolve(existing);
+      return;
+    }
+
+    const previous = document.getElementById("arun-chess-mqtt");
+    if (previous) {
+      const timer = window.setInterval(() => {
+        const mqtt = (window as any).mqtt;
+        if (mqtt?.connect) {
+          window.clearInterval(timer);
+          resolve(mqtt);
+        }
+      }, 100);
+      window.setTimeout(() => {
+        window.clearInterval(timer);
+        if (!(window as any).mqtt?.connect) reject(new Error("MQTT library did not load."));
+      }, 10000);
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.id = "arun-chess-mqtt";
+    script.src = "https://cdn.jsdelivr.net/npm/mqtt@5.10.4/dist/mqtt.min.js";
+    script.async = true;
+    script.onload = () => resolve((window as any).mqtt);
+    script.onerror = () => reject(new Error("Unable to load multiplayer network library."));
+    document.head.appendChild(script);
+  });
+}
 
 const glyphs: Record<Color, Record<Kind, string>> = {
   w: { k:"♔", q:"♕", r:"♖", b:"♗", n:"♘", p:"♙" },
@@ -389,6 +443,24 @@ export default function ChessPage() {
   const [difficulty,setDifficulty]=useState<Difficulty>("medium");
   const [thinking,setThinking]=useState(false);
   const [history,setHistory]=useState<HistoryEntry[]>([]);
+  const [onlineRole,setOnlineRole]=useState<OnlineRole>(null);
+  const [roomCode,setRoomCode]=useState("");
+  const [joinCode,setJoinCode]=useState("");
+  const [onlineStatus,setOnlineStatus]=useState("Offline");
+  const [copied,setCopied]=useState(false);
+  const onlineClientsRef=useRef<any[]>([]);
+  const seenMessagesRef=useRef(new Set<string>());
+  const onlineRoomRef=useRef("");
+  const onlineRoleRef=useRef<OnlineRole>(null);
+  const onlineConnectedRef=useRef(false);
+  const stateRef=useRef<OnlineSnapshot>({
+    board:startBoard(),
+    turn:"w",
+    enPassant:null,
+    rights:{wk:true,wq:true,bk:true,bq:true},
+    lastMove:null,
+    history:[],
+  });
 
   const computerColor:Color=humanColor==="w" ? "b" : "w";
   const moves=useMemo(()=>legalMoves(board,turn,enPassant,rights),[board,turn,enPassant,rights]);
@@ -396,6 +468,8 @@ export default function ChessPage() {
   const inCheck=kingInCheck(board,turn);
   const gameOver=moves.length===0;
   const computerTurn=mode==="computer" && turn===computerColor && !gameOver;
+  const onlineColor:Color|null=onlineRole==="host" ? "w" : onlineRole==="guest" ? "b" : null;
+  const onlineTurnBlocked=mode==="online" && (!onlineConnectedRef.current || onlineColor!==turn);
 
   const status=gameOver
     ? inCheck
@@ -407,17 +481,178 @@ export default function ChessPage() {
         ? `${turn==="w" ? "White" : "Black"} is in check`
         : `${turn==="w" ? "White" : "Black"} to move`;
 
-  function reset(nextHuman=humanColor,nextMode=mode) {
-    setBoard(startBoard());
-    setTurn("w");
+  function applyOnlineSnapshot(snapshot:OnlineSnapshot) {
+    setBoard(snapshot.board);
+    setTurn(snapshot.turn);
+    setEnPassant(snapshot.enPassant);
+    setRights(snapshot.rights);
+    setLastMove(snapshot.lastMove);
+    setHistory(snapshot.history);
     setSelected(null);
-    setEnPassant(null);
-    setRights({wk:true,wq:true,bk:true,bq:true});
-    setLastMove(null);
+    stateRef.current=snapshot;
+  }
+
+  function publishOnline(payload:any, important=true) {
+    const room=onlineRoomRef.current;
+    if (!room || !onlineClientsRef.current.length) return;
+    const packet=JSON.stringify({
+      mid:`${Date.now().toString(36)}-${Math.random().toString(36).slice(2,10)}`,
+      sender:onlineRoleRef.current,
+      payload,
+    });
+    onlineClientsRef.current.forEach(client=>{
+      try {
+        if (client.connected) client.publish(`${ONLINE_PREFIX}/${room}`,packet,{qos:important?1:0,retain:false});
+      } catch {}
+    });
+  }
+
+  function disconnectOnline() {
+    onlineClientsRef.current.forEach(client=>{ try { client.end(true); } catch {} });
+    onlineClientsRef.current=[];
+    onlineConnectedRef.current=false;
+    onlineRoomRef.current="";
+    onlineRoleRef.current=null;
+    setOnlineRole(null);
+    setRoomCode("");
+    setOnlineStatus("Offline");
+  }
+
+  async function connectOnline(room:string,role:Exclude<OnlineRole,null>) {
+    disconnectOnline();
+    setMode("online");
+    setOnlineRole(role);
+    onlineRoleRef.current=role;
+    onlineRoomRef.current=room;
+    setRoomCode(room);
+    setOnlineStatus("Connecting to global relay…");
+
+    const mqtt=await loadMqtt();
+    const brokers=[
+      "wss://broker.emqx.io:8084/mqtt",
+      "wss://broker.hivemq.com:8884/mqtt",
+      "wss://test.mosquitto.org:8081/mqtt",
+    ];
+    const topic=`${ONLINE_PREFIX}/${room}`;
+    let readyCount=0;
+
+    brokers.forEach((url,index)=>{
+      const client=mqtt.connect(url,{
+        clientId:`arunchess_${room.toLowerCase()}_${Math.random().toString(36).slice(2,10)}_${index}`,
+        clean:true,
+        reconnectPeriod:1800,
+        connectTimeout:9000,
+        keepalive:30,
+        protocolVersion:4,
+        resubscribe:true,
+      });
+      onlineClientsRef.current.push(client);
+
+      client.on("connect",()=>{
+        client.subscribe(topic,{qos:1},()=>{
+          readyCount++;
+          onlineConnectedRef.current=true;
+          setOnlineStatus(role==="host" ? "Room ready · waiting for opponent" : "Connected · joining room");
+          if (role==="guest") publishOnline({type:"join"},true);
+          if (role==="host" && readyCount===1) {
+            publishOnline({type:"state",snapshot:stateRef.current},true);
+          }
+        });
+      });
+
+      client.on("message",(_topic:any,raw:any)=>{
+        let packet:any;
+        try { packet=JSON.parse(raw.toString()); } catch { return; }
+        if (!packet?.mid || seenMessagesRef.current.has(packet.mid)) return;
+        seenMessagesRef.current.add(packet.mid);
+        if (seenMessagesRef.current.size>2000) seenMessagesRef.current.clear();
+
+        const data=packet.payload;
+        if (!data) return;
+
+        if (data.type==="join" && role==="host") {
+          setOnlineStatus("Opponent connected · you are White");
+          publishOnline({type:"state",snapshot:stateRef.current},true);
+          return;
+        }
+
+        if (data.type==="state" && data.snapshot) {
+          applyOnlineSnapshot(data.snapshot);
+          setOnlineStatus(role==="host" ? "Opponent connected · you are White" : "Connected · you are Black");
+          return;
+        }
+
+        if (data.type==="move" && data.snapshot) {
+          applyOnlineSnapshot(data.snapshot);
+          setOnlineStatus(role==="host" ? "Online · you are White" : "Online · you are Black");
+          return;
+        }
+
+        if (data.type==="reset") {
+          const fresh:OnlineSnapshot={
+            board:startBoard(),
+            turn:"w",
+            enPassant:null,
+            rights:{wk:true,wq:true,bk:true,bq:true},
+            lastMove:null,
+            history:[],
+          };
+          applyOnlineSnapshot(fresh);
+        }
+      });
+    });
+  }
+
+  function createOnlineRoom() {
+    const room=makeRoomCode();
+    const fresh:OnlineSnapshot={
+      board:startBoard(),
+      turn:"w",
+      enPassant:null,
+      rights:{wk:true,wq:true,bk:true,bq:true},
+      lastMove:null,
+      history:[],
+    };
+    applyOnlineSnapshot(fresh);
+    connectOnline(room,"host").catch(()=>setOnlineStatus("Could not connect to a global relay."));
+  }
+
+  function joinOnlineRoom(code=joinCode) {
+    const room=code.trim().toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,6);
+    if (room.length!==6) {
+      setOnlineStatus("Enter a valid 6-character room code.");
+      return;
+    }
+    setJoinCode(room);
+    connectOnline(room,"guest").catch(()=>setOnlineStatus("Could not connect to that room."));
+  }
+
+  async function copyInvite() {
+    if (!roomCode) return;
+    const url=`${window.location.origin}/games/chess?room=${roomCode}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      window.setTimeout(()=>setCopied(false),1800);
+    } catch {
+      window.prompt("Copy this invite link:",url);
+    }
+  }
+
+  function reset(nextHuman=humanColor,nextMode=mode) {
+    const fresh:OnlineSnapshot={
+      board:startBoard(),
+      turn:"w",
+      enPassant:null,
+      rights:{wk:true,wq:true,bk:true,bq:true},
+      lastMove:null,
+      history:[],
+    };
+    applyOnlineSnapshot(fresh);
     setThinking(false);
-    setHistory([]);
     setHumanColor(nextHuman);
     setMode(nextMode);
+    if (nextMode==="online" && onlineConnectedRef.current) publishOnline({type:"reset"},true);
   }
 
   function commitMove(move:Move) {
@@ -431,17 +666,31 @@ export default function ChessPage() {
     setRights(rights2);
     setEnPassant(ep2);
     setLastMove(move);
-    setHistory(prev=>[...prev,{number:moveNumber,color:turn,notation}]);
+    const history2=[...history,{number:moveNumber,color:turn,notation}];
+    const turn2=other(turn);
+    setHistory(history2);
     setSelected(null);
-    setTurn(other(turn));
+    setTurn(turn2);
+
+    const snapshot:OnlineSnapshot={
+      board:board2,
+      turn:turn2,
+      enPassant:ep2,
+      rights:rights2,
+      lastMove:move,
+      history:history2,
+    };
+    stateRef.current=snapshot;
+    if (mode==="online") publishOnline({type:"move",snapshot},true);
   }
 
   function choose(square:number) {
-    if (gameOver || thinking || computerTurn) return;
+    if (gameOver || thinking || computerTurn || onlineTurnBlocked) return;
     const piece=board[square];
 
     if (piece?.color===turn) {
       if (mode==="computer" && piece.color!==humanColor) return;
+      if (mode==="online" && piece.color!==onlineColor) return;
       setSelected(square);
       return;
     }
@@ -450,6 +699,22 @@ export default function ChessPage() {
     const move=selectedMoves.find(m=>m.to===square);
     if (move) commitMove(move);
   }
+
+  useEffect(()=>{
+    stateRef.current={board,turn,enPassant,rights,lastMove,history};
+  },[board,turn,enPassant,rights,lastMove,history]);
+
+  useEffect(()=>{
+    const params=new URLSearchParams(window.location.search);
+    const room=(params.get("room")||"").toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,6);
+    if (room.length===6) {
+      setJoinCode(room);
+      joinOnlineRoom(room);
+    }
+    return ()=>disconnectOnline();
+    // Run once on page load so shared invite links join automatically.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[]);
 
   useEffect(()=>{
     if (!computerTurn) return;
@@ -492,7 +757,7 @@ export default function ChessPage() {
         <header className="chess-hero">
           <p className="section-kicker">PLAYABLE BOARD GAME</p>
           <h1>Chess</h1>
-          <p>Play against the computer or a friend with legal move highlighting and mobile tap controls.</p>
+          <p>Play against the computer, a friend on the same device, or challenge someone anywhere in the world with an online room link.</p>
         </header>
 
         <section className="chess-shell">
@@ -511,7 +776,54 @@ export default function ChessPage() {
               >
                 <Users className="h-4 w-4" /> 2 Players
               </button>
+              <button
+                className={mode==="online" ? "active" : ""}
+                onClick={()=>{ setMode("online"); setSelected(null); }}
+              >
+                <Users className="h-4 w-4" /> Online 2 Players
+              </button>
             </div>
+
+            {mode==="online" && (
+              <div className="chess-help" style={{marginTop:"14px"}}>
+                <div className="grid gap-3 md:grid-cols-2">
+                  <div>
+                    <strong>Play online worldwide</strong>
+                    <p style={{marginTop:"6px"}}>{onlineStatus}</p>
+                    {roomCode && (
+                      <p style={{marginTop:"6px"}}>
+                        Room: <strong>{roomCode}</strong>
+                        {onlineRole && <> · You are {onlineRole==="host" ? "White" : "Black"}</>}
+                      </p>
+                    )}
+                  </div>
+                  <div className="grid gap-2">
+                    {!roomCode && (
+                      <>
+                        <button className="active" onClick={createOnlineRoom}>Create Online Room</button>
+                        <div className="flex gap-2">
+                          <input
+                            value={joinCode}
+                            onChange={e=>setJoinCode(e.target.value.toUpperCase())}
+                            onKeyDown={e=>{ if(e.key==="Enter") joinOnlineRoom(); }}
+                            placeholder="Room code"
+                            maxLength={6}
+                            className="min-w-0 flex-1 rounded-xl border border-white/15 bg-black/20 px-3 py-2 text-sm font-bold uppercase text-white outline-none"
+                          />
+                          <button onClick={()=>joinOnlineRoom()}>Join Room</button>
+                        </div>
+                      </>
+                    )}
+                    {roomCode && (
+                      <>
+                        <button className="active" onClick={copyInvite}>{copied ? "Invite Link Copied" : "Copy Invite Link"}</button>
+                        <button onClick={()=>{ disconnectOnline(); setMode("online"); }}>Leave Online Room</button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
 
             {mode==="computer" && (
               <>
@@ -634,7 +946,7 @@ export default function ChessPage() {
           </div>
 
           <div className="chess-help">
-            <strong>Computer levels:</strong> Easy makes random legal moves, Medium evaluates the next position, and Hard looks farther ahead. Castling, en passant, check, checkmate, stalemate, and automatic queen promotion are supported.
+            <strong>Game modes:</strong> Play against the computer, use local 2-player mode, or create an online room and share the invite link with a friend anywhere in the world. Castling, en passant, check, checkmate, stalemate, and automatic queen promotion are supported.
           </div>
         </section>
       </div>
