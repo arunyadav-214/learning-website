@@ -2072,3 +2072,44 @@ body {
     transform: translateY(-1px) scale(1.02);
   }
 }
+
+
+/* Chess piece visibility on black squares */
+.chess-page .chess-piece.black {
+  color:#1f2329 !important;
+  -webkit-text-stroke:1px #e6d49b;
+  text-shadow:
+    0 1px 0 #5f6670,
+    0 2px 0 #444a52,
+    0 3px 0 #2e3339,
+    0 4px 0 #181c20,
+    0 0 2px rgba(255,244,196,.95),
+    0 0 5px rgba(212,175,55,.55),
+    0 7px 6px rgba(0,0,0,.42) !important;
+  filter:
+    drop-shadow(0 0 2px rgba(255,244,196,.75))
+    drop-shadow(0 3px 4px rgba(0,0,0,.45)) !important;
+}
+
+.chess-page .chess-square.dark .chess-piece.black {
+  -webkit-text-stroke:1.25px #f1df9f;
+  text-shadow:
+    0 0 2px #fff4c4,
+    0 0 5px rgba(212,175,55,.72),
+    0 2px 0 #555b65,
+    0 3px 0 #343941,
+    0 5px 6px rgba(0,0,0,.46) !important;
+  filter:
+    drop-shadow(0 0 3px rgba(255,244,196,.9))
+    drop-shadow(0 4px 4px rgba(0,0,0,.46)) !important;
+}
+
+.chess-page .chess-piece.white {
+  -webkit-text-stroke:1px #7b6840;
+  text-shadow:
+    0 1px 0 #fffbe9,
+    0 2px 0 #e8ddbd,
+    0 3px 0 #c9b985,
+    0 0 2px rgba(70,50,10,.3),
+    0 6px 6px rgba(0,0,0,.24) !important;
+}
