@@ -2128,11 +2128,11 @@ body {
 }
 
 .chess-page .chess-square.light {
-  background:linear-gradient(145deg,#f8f8f8 0%,#e8e8e8 55%,#d8d8d8 100%) !important;
+  background:linear-gradient(145deg,#ffffff 0%,#f7f7f7 58%,#e8e8e8 100%) !important;
 }
 
 .chess-page .chess-square.dark {
-  background:linear-gradient(145deg,#a8a8a8 0%,#8e8e8e 55%,#747474 100%) !important;
+  background:linear-gradient(145deg,#2a2a2a 0%,#141414 58%,#050505 100%) !important;
 }
 
 /* Pure milky-white 3D pieces */
