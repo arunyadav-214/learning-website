@@ -33,6 +33,8 @@ type OnlineSnapshot = {
   rights: Rights;
   lastMove: Move | null;
   history: HistoryEntry[];
+  whiteName?: string;
+  blackName?: string;
 };
 
 const ONLINE_PREFIX = "arun-chess-global-v1";
@@ -447,6 +449,9 @@ export default function ChessPage() {
   const [roomCode,setRoomCode]=useState("");
   const [joinCode,setJoinCode]=useState("");
   const [hostRoomCode,setHostRoomCode]=useState("");
+  const [playerName,setPlayerName]=useState("");
+  const [whiteName,setWhiteName]=useState("");
+  const [blackName,setBlackName]=useState("");
   const [onlineStatus,setOnlineStatus]=useState("Offline");
   const [opponentConnected,setOpponentConnected]=useState(false);
   const onlineClientsRef=useRef<any[]>([]);
@@ -494,6 +499,8 @@ export default function ChessPage() {
     setRights(snapshot.rights);
     setLastMove(snapshot.lastMove);
     setHistory(snapshot.history);
+    setWhiteName(snapshot.whiteName || "");
+    setBlackName(snapshot.blackName || "");
     setSelected(null);
     stateRef.current=snapshot;
   }
@@ -567,7 +574,7 @@ export default function ChessPage() {
           readyCount++;
           onlineConnectedRef.current=true;
           setOnlineStatus(role==="host" ? "Room ready · restoring saved game…" : "Connected · restoring room…");
-          if (role==="guest") publishOnline({type:"join"},true,false);
+          if (role==="guest") publishOnline({type:"join",name:playerName.trim() || "Player 2"},true,false);
 
           if (role==="host" && readyCount===1) {
             window.setTimeout(()=>{
@@ -591,10 +598,16 @@ export default function ChessPage() {
         if (!data) return;
 
         if (data.type==="join" && role==="host") {
+          const guestName=(data.name || "Player 2").toString().slice(0,24);
+          const hostName=playerName.trim() || stateRef.current.whiteName || "Player 1";
+          const namedSnapshot={...stateRef.current,whiteName:hostName,blackName:guestName};
+          setWhiteName(hostName);
+          setBlackName(guestName);
+          stateRef.current=namedSnapshot;
           opponentConnectedRef.current=true;
           setOpponentConnected(true);
-          setOnlineStatus("Player 2 joined · you are White");
-          publishOnline({type:"state",snapshot:stateRef.current},true,true);
+          setOnlineStatus(`${guestName} joined · you are White`);
+          publishOnline({type:"state",snapshot:namedSnapshot},true,true);
           return;
         }
 
@@ -640,6 +653,8 @@ export default function ChessPage() {
       rights:{wk:true,wq:true,bk:true,bq:true},
       lastMove:null,
       history:[],
+      whiteName:onlineRole==="host" ? (playerName.trim() || whiteName || "Player 1") : whiteName,
+      blackName:onlineRole==="guest" ? (playerName.trim() || blackName || "Player 2") : blackName,
     };
     applyOnlineSnapshot(fresh);
     connectOnline(room,"host").catch(()=>setOnlineStatus("Could not connect to a global relay."));
@@ -663,6 +678,8 @@ export default function ChessPage() {
       rights:{wk:true,wq:true,bk:true,bq:true},
       lastMove:null,
       history:[],
+      whiteName:onlineRole==="host" ? (playerName.trim() || whiteName || "Player 1") : whiteName,
+      blackName:onlineRole==="guest" ? (playerName.trim() || blackName || "Player 2") : blackName,
     };
     applyOnlineSnapshot(fresh);
     setThinking(false);
@@ -695,6 +712,8 @@ export default function ChessPage() {
       rights:rights2,
       lastMove:move,
       history:history2,
+      whiteName:whiteName || (onlineRole==="host" ? (playerName.trim() || "Player 1") : stateRef.current.whiteName),
+      blackName:blackName || (onlineRole==="guest" ? (playerName.trim() || "Player 2") : stateRef.current.blackName),
     };
     stateRef.current=snapshot;
     if (mode==="online") publishOnline({type:"move",snapshot},true,true);
@@ -812,6 +831,12 @@ export default function ChessPage() {
                             ? "Give this code to Player 2."
                             : "You joined this room."}
                         </p>
+                        {(whiteName || blackName) && (
+                          <div style={{marginTop:"8px",fontWeight:800}}>
+                            <div>White: {whiteName || "Player 1"}</div>
+                            <div>Black: {blackName || "Player 2"}</div>
+                          </div>
+                        )}
                         {opponentConnected && (
                           <p style={{marginTop:"6px",fontWeight:800}}>
                             Connected ✓ · You are {onlineRole==="host" ? "White" : "Black"}
@@ -824,6 +849,19 @@ export default function ChessPage() {
                   <div className="grid gap-3">
                     {!roomCode && (
                       <>
+                        <div>
+                          <label style={{display:"block",marginBottom:"6px",fontWeight:800}}>
+                            Your player name
+                          </label>
+                          <input
+                            value={playerName}
+                            onChange={e=>setPlayerName(e.target.value.slice(0,24))}
+                            placeholder="Your name"
+                            maxLength={24}
+                            className="w-full rounded-xl border border-white/15 bg-black/20 px-3 py-2 text-sm font-bold text-white outline-none"
+                          />
+                        </div>
+
                         <div>
                           <label style={{display:"block",marginBottom:"6px",fontWeight:800}}>
                             Choose room code
