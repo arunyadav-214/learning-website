@@ -2113,3 +2113,74 @@ body {
     0 0 2px rgba(70,50,10,.3),
     0 6px 6px rgba(0,0,0,.24) !important;
 }
+
+
+/* Chess reference-image visual match */
+.chess-page .chess-board {
+  border:5px solid #8f2019 !important;
+  border-bottom-width:12px !important;
+  border-right-width:9px !important;
+  border-radius:14px !important;
+  box-shadow:
+    0 20px 0 #7b1712,
+    0 30px 30px rgba(70,20,10,.24),
+    0 8px 14px rgba(0,0,0,.16) !important;
+}
+
+.chess-page .chess-square.light {
+  background:linear-gradient(145deg,#f8f8f8 0%,#e8e8e8 55%,#d8d8d8 100%) !important;
+}
+
+.chess-page .chess-square.dark {
+  background:linear-gradient(145deg,#a8a8a8 0%,#8e8e8e 55%,#747474 100%) !important;
+}
+
+/* Pure milky-white 3D pieces */
+.chess-page .chess-piece.white {
+  color:#fffdf7 !important;
+  -webkit-text-stroke:1px #d8d2c2 !important;
+  text-shadow:
+    0 1px 0 #ffffff,
+    0 2px 0 #f4f1e8,
+    0 3px 0 #ded9cb,
+    0 4px 0 #c9c2b1,
+    0 0 2px rgba(255,255,255,.95),
+    0 7px 6px rgba(0,0,0,.24) !important;
+  filter:
+    drop-shadow(0 2px 1px rgba(255,255,255,.9))
+    drop-shadow(0 6px 4px rgba(0,0,0,.30)) !important;
+}
+
+/* Dark 3D pieces with gold edge, matching the reference */
+.chess-page .chess-piece.black {
+  color:#171b22 !important;
+  -webkit-text-stroke:1.15px #e0bf4a !important;
+  text-shadow:
+    0 1px 0 #525964,
+    0 2px 0 #3b414a,
+    0 3px 0 #252a30,
+    0 4px 0 #121519,
+    0 0 2px rgba(255,231,137,.95),
+    0 0 5px rgba(212,175,55,.72),
+    0 7px 6px rgba(0,0,0,.42) !important;
+  filter:
+    drop-shadow(0 0 2px rgba(255,230,130,.72))
+    drop-shadow(0 5px 4px rgba(0,0,0,.42)) !important;
+}
+
+.chess-page .chess-square:hover .chess-piece,
+.chess-page .chess-square.selected .chess-piece {
+  transform:translateY(-5px) scale(1.08) !important;
+}
+
+.chess-page .chess-square.selected {
+  outline:2px solid #202020 !important;
+  outline-offset:-2px !important;
+}
+
+.chess-page .chess-move-dot {
+  background:#9ca0a6 !important;
+  box-shadow:
+    inset 0 2px 3px rgba(255,255,255,.35),
+    0 3px 5px rgba(0,0,0,.18) !important;
+}
