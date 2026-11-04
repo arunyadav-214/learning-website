@@ -653,8 +653,8 @@ export default function ChessPage() {
       rights:{wk:true,wq:true,bk:true,bq:true},
       lastMove:null,
       history:[],
-      whiteName:onlineRole==="host" ? (playerName.trim() || whiteName || "Player 1") : whiteName,
-      blackName:onlineRole==="guest" ? (playerName.trim() || blackName || "Player 2") : blackName,
+      whiteName:playerName.trim() || whiteName || "Player 1",
+      blackName:blackName,
     };
     applyOnlineSnapshot(fresh);
     connectOnline(room,"host").catch(()=>setOnlineStatus("Could not connect to a global relay."));
@@ -736,8 +736,8 @@ export default function ChessPage() {
   }
 
   useEffect(()=>{
-    stateRef.current={board,turn,enPassant,rights,lastMove,history};
-  },[board,turn,enPassant,rights,lastMove,history]);
+    stateRef.current={board,turn,enPassant,rights,lastMove,history,whiteName,blackName};
+  },[board,turn,enPassant,rights,lastMove,history,whiteName,blackName]);
 
   useEffect(()=>()=>disconnectOnline(),[]);
 
