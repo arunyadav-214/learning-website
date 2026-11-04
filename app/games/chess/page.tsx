@@ -446,6 +446,7 @@ export default function ChessPage() {
   const [onlineRole,setOnlineRole]=useState<OnlineRole>(null);
   const [roomCode,setRoomCode]=useState("");
   const [joinCode,setJoinCode]=useState("");
+  const [hostRoomCode,setHostRoomCode]=useState("");
   const [onlineStatus,setOnlineStatus]=useState("Offline");
   const [opponentConnected,setOpponentConnected]=useState(false);
   const onlineClientsRef=useRef<any[]>([]);
@@ -615,7 +616,13 @@ export default function ChessPage() {
   }
 
   function createOnlineRoom() {
-    const room=makeRoomCode();
+    const custom=hostRoomCode.trim().toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,12);
+    const room=custom || makeRoomCode();
+    if (custom && custom.length<3) {
+      setOnlineStatus("Choose at least 3 letters or numbers for your room code.");
+      return;
+    }
+    setHostRoomCode(room);
     const fresh:OnlineSnapshot={
       board:startBoard(),
       turn:"w",
@@ -629,9 +636,9 @@ export default function ChessPage() {
   }
 
   function joinOnlineRoom(code=joinCode) {
-    const room=code.trim().toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,6);
-    if (room.length!==6) {
-      setOnlineStatus("Enter a valid 6-character room code.");
+    const room=code.trim().toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,12);
+    if (room.length<3 || room.length>12) {
+      setOnlineStatus("Enter a valid 3–12 character room code.");
       return;
     }
     setJoinCode(room);
@@ -807,6 +814,22 @@ export default function ChessPage() {
                   <div className="grid gap-3">
                     {!roomCode && (
                       <>
+                        <div>
+                          <label style={{display:"block",marginBottom:"6px",fontWeight:800}}>
+                            Choose room code
+                          </label>
+                          <input
+                            value={hostRoomCode}
+                            onChange={e=>setHostRoomCode(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,12))}
+                            onKeyDown={e=>{ if(e.key==="Enter") createOnlineRoom(); }}
+                            placeholder="MYROOM"
+                            maxLength={12}
+                            className="w-full rounded-xl border border-white/15 bg-black/20 px-3 py-2 text-sm font-bold uppercase tracking-[0.14em] text-white outline-none"
+                          />
+                          <p style={{marginTop:"6px",fontSize:".78rem",opacity:.75}}>
+                            Use 3–12 letters or numbers, or leave blank for a random code.
+                          </p>
+                        </div>
                         <button className="active" onClick={createOnlineRoom}>
                           Host Game
                         </button>
@@ -820,8 +843,8 @@ export default function ChessPage() {
                               value={joinCode}
                               onChange={e=>setJoinCode(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g,""))}
                               onKeyDown={e=>{ if(e.key==="Enter") joinOnlineRoom(); }}
-                              placeholder="ABC123"
-                              maxLength={6}
+                              placeholder="MYROOM"
+                              maxLength={12}
                               className="min-w-0 flex-1 rounded-xl border border-white/15 bg-black/20 px-3 py-2 text-sm font-bold uppercase tracking-[0.18em] text-white outline-none"
                             />
                             <button onClick={()=>joinOnlineRoom()}>Join Game</button>
