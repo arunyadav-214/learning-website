@@ -91,7 +91,9 @@ function loadMqtt() {
 }
 
 const glyphs: Record<Color, Record<Kind, string>> = {
-  w: { k:"♔", q:"♕", r:"♖", b:"♗", n:"♘", p:"♙" },
+  // Use the filled chess glyph set for both sides; CSS supplies the side color.
+  // This makes the White pieces solid milky-white instead of hollow outlines.
+  w: { k:"♚", q:"♛", r:"♜", b:"♝", n:"♞", p:"♟" },
   b: { k:"♚", q:"♛", r:"♜", b:"♝", n:"♞", p:"♟" },
 };
 
