@@ -2184,3 +2184,36 @@ body {
     inset 0 2px 3px rgba(255,255,255,.35),
     0 3px 5px rgba(0,0,0,.18) !important;
 }
+
+
+/* Chess exact milky-white piece match */
+.chess-page .chess-piece.white {
+  color:#ffffff !important;
+  -webkit-text-stroke:1px #d9d9d9 !important;
+  text-shadow:
+    0 1px 0 #ffffff,
+    0 2px 0 #f2f2f2,
+    0 3px 0 #dddddd,
+    0 4px 0 #c9c9c9,
+    0 5px 0 #b8b8b8,
+    0 7px 7px rgba(0,0,0,.34) !important;
+  filter:
+    drop-shadow(0 1px 0 rgba(255,255,255,.98))
+    drop-shadow(0 5px 4px rgba(0,0,0,.34)) !important;
+}
+
+.chess-page .chess-square.dark .chess-piece.white,
+.chess-page .chess-square.light .chess-piece.white {
+  color:#ffffff !important;
+  -webkit-text-stroke:1px #d7d7d7 !important;
+  text-shadow:
+    0 1px 0 #ffffff,
+    0 2px 0 #f4f4f4,
+    0 3px 0 #dfdfdf,
+    0 4px 0 #cccccc,
+    0 5px 0 #bcbcbc,
+    0 7px 7px rgba(0,0,0,.36) !important;
+  filter:
+    drop-shadow(0 1px 1px rgba(255,255,255,.9))
+    drop-shadow(0 5px 4px rgba(0,0,0,.36)) !important;
+}
