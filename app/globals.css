@@ -2228,3 +2228,42 @@ body {
     0 0 0 2px rgba(34,197,94,.16),
     0 3px 7px rgba(21,128,61,.35) !important;
 }
+
+
+/* Chess board player labels */
+.chess-page .chess-board-player {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:1rem;
+  margin:.55rem 0;
+  padding:.7rem .9rem;
+  border-radius:.85rem;
+  font-weight:900;
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+.chess-page .chess-board-player span {
+  font-size:.72rem;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  opacity:.78;
+}
+
+.chess-page .chess-board-player-black {
+  background:#181818;
+  color:#ffffff;
+  border:1px solid #3a3a3a;
+}
+
+.chess-page .chess-board-player-white {
+  background:#ffffff;
+  color:#181818;
+  border:1px solid #d6d6d6;
+}
+
+.chess-page .chess-board-player strong {
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
