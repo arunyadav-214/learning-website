@@ -1,3 +1,4 @@
+import profilePhoto from "./assets/arun-profile.jpg";
 import { ArrowRight, GraduationCap, MapPin, Sparkles, Wrench } from "lucide-react";
 import PortfolioNav from "./PortfolioNav";
 
@@ -93,7 +94,7 @@ export default function Home() {
               <div className="overflow-hidden rounded-[2rem] border border-black/10 bg-[#faf9f5] p-2.5 shadow-[0_24px_70px_rgba(24,24,24,.13)] sm:rounded-[2.4rem] sm:p-3">
                 <div className="overflow-hidden rounded-[1.55rem] sm:rounded-[1.95rem]">
                   <img
-                    src="/arun-profile-v2.jpg?v=1"
+                    src={profilePhoto.src}
                     alt="Professional portrait of Arun K. Yadav"
                     width="720"
                     height="714"
