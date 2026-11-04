@@ -471,6 +471,10 @@ export default function ChessPage() {
   const gameOver=moves.length===0;
   const computerTurn=mode==="computer" && turn===computerColor && !gameOver;
   const onlineColor:Color|null=onlineRole==="host" ? "w" : onlineRole==="guest" ? "b" : null;
+  const boardFlipped=mode==="online" && onlineRole==="guest";
+  const displaySquares=boardFlipped
+    ? Array.from({length:64},(_,i)=>63-i)
+    : Array.from({length:64},(_,i)=>i);
   const onlineTurnBlocked=mode==="online" && (!onlineConnectedRef.current || !opponentConnectedRef.current || onlineColor!==turn);
 
   const status=gameOver
@@ -907,7 +911,8 @@ export default function ChessPage() {
 
           <div className="chess-game-layout">
             <div className="chess-board" role="grid" aria-label="Chess board">
-            {board.map((piece,i)=>{
+            {displaySquares.map(i=>{
+              const piece=board[i];
               const {r,c}=rc(i);
               const light=(r+c)%2===0;
               const isSelected=selected===i;
@@ -930,8 +935,8 @@ export default function ChessPage() {
                   onClick={()=>choose(i)}
                   aria-label={piece ? `${piece.color==="w"?"White":"Black"} piece on ${file}${rank}` : `Empty ${file}${rank}`}
                 >
-                  {c===0 && <span className="chess-rank">{rank}</span>}
-                  {r===7 && <span className="chess-file">{file}</span>}
+                  {(boardFlipped ? c===7 : c===0) && <span className="chess-rank">{rank}</span>}
+                  {(boardFlipped ? r===0 : r===7) && <span className="chess-file">{file}</span>}
                   {piece && (
                     <span className={`chess-piece ${piece.color==="w"?"white":"black"}`}>
                       {glyphs[piece.color][piece.kind]}
