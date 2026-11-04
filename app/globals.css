@@ -1943,3 +1943,43 @@ body {
 .chess-page .chess-difficulty-row button:not(.active):hover {
   background:#a9261e !important;
 }
+
+
+/* Chess online room red panel */
+.chess-page .chess-help {
+  background:#a9261e !important;
+  border:1px solid #7f1d18 !important;
+  color:#ffffff !important;
+}
+
+.chess-page .chess-help strong {
+  color:#ffffff !important;
+}
+
+.chess-page .chess-help p,
+.chess-page .chess-help label,
+.chess-page .chess-help span {
+  color:#f6cf55 !important;
+}
+
+.chess-page .chess-help input {
+  background:#fffdf6 !important;
+  color:#2a2207 !important;
+  border:1px solid #e2c766 !important;
+}
+
+.chess-page .chess-help button.active {
+  background:#d4af37 !important;
+  color:#171308 !important;
+  border-color:#f4da75 !important;
+}
+
+.chess-page .chess-help button:not(.active) {
+  background:#c83025 !important;
+  color:#ffffff !important;
+  border-color:#8f2019 !important;
+}
+
+.chess-page .chess-help button:not(.active):hover {
+  background:#b12920 !important;
+}
