@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Bot, RotateCcw, Users } from "lucide-react";
+import { Bot, Clock3, Redo2, RotateCcw, Undo2, Users } from "lucide-react";
 
 type Color = "w" | "b";
 type Kind = "p" | "r" | "n" | "b" | "q" | "k";
@@ -26,7 +26,7 @@ type HistoryEntry = {
 };
 
 
-type OnlineSnapshot = {
+type GamePosition = {
   board: Board;
   turn: Color;
   enPassant: number | null;
@@ -35,6 +35,16 @@ type OnlineSnapshot = {
   history: HistoryEntry[];
   whiteName?: string;
   blackName?: string;
+  timerMinutes?: number;
+  whiteTime?: number;
+  blackTime?: number;
+  timerUpdatedAt?: number | null;
+  timerStarted?: boolean;
+};
+
+type OnlineSnapshot = GamePosition & {
+  undoStack?: GamePosition[];
+  redoStack?: GamePosition[];
 };
 
 const ONLINE_PREFIX = "arun-chess-global-v1";
@@ -454,6 +464,14 @@ export default function ChessPage() {
   const [blackName,setBlackName]=useState("");
   const [onlineStatus,setOnlineStatus]=useState("Offline");
   const [opponentConnected,setOpponentConnected]=useState(false);
+  const [undoStack,setUndoStack]=useState<GamePosition[]>([]);
+  const [redoStack,setRedoStack]=useState<GamePosition[]>([]);
+  const [timerMinutes,setTimerMinutes]=useState(0);
+  const [whiteTime,setWhiteTime]=useState(0);
+  const [blackTime,setBlackTime]=useState(0);
+  const [timerUpdatedAt,setTimerUpdatedAt]=useState<number|null>(null);
+  const [timerStarted,setTimerStarted]=useState(false);
+  const [clockNow,setClockNow]=useState(()=>Date.now());
   const onlineClientsRef=useRef<any[]>([]);
   const seenMessagesRef=useRef(new Set<string>());
   const onlineRoomRef=useRef("");
@@ -467,6 +485,13 @@ export default function ChessPage() {
     rights:{wk:true,wq:true,bk:true,bq:true},
     lastMove:null,
     history:[],
+    timerMinutes:0,
+    whiteTime:0,
+    blackTime:0,
+    timerUpdatedAt:null,
+    timerStarted:false,
+    undoStack:[],
+    redoStack:[],
   });
 
   const computerColor:Color=humanColor==="w" ? "b" : "w";
@@ -482,7 +507,33 @@ export default function ChessPage() {
     : Array.from({length:64},(_,i)=>i);
   const onlineTurnBlocked=mode==="online" && (!onlineConnectedRef.current || !opponentConnectedRef.current || onlineColor!==turn);
 
-  const status=gameOver
+  function liveClockValues(now=Date.now()) {
+    let w=whiteTime;
+    let b=blackTime;
+    if (timerMinutes>0 && timerStarted && timerUpdatedAt) {
+      const elapsed=Math.max(0,Math.floor((now-timerUpdatedAt)/1000));
+      if (turn==="w") w=Math.max(0,w-elapsed);
+      else b=Math.max(0,b-elapsed);
+    }
+    return {w,b};
+  }
+
+  const liveClock=liveClockValues(clockNow);
+  const timedOut:Color|null=timerMinutes>0
+    ? liveClock.w<=0 ? "w" : liveClock.b<=0 ? "b" : null
+    : null;
+  const matchOver=gameOver || timedOut!==null;
+
+  function formatClock(total:number) {
+    const safe=Math.max(0,Math.floor(total));
+    const m=Math.floor(safe/60);
+    const s=safe%60;
+    return `${m}:${String(s).padStart(2,"0")}`;
+  }
+
+  const status=timedOut
+    ? `${timedOut==="w" ? "Black" : "White"} wins on time`
+    : gameOver
     ? inCheck
       ? `${turn==="w" ? "Black" : "White"} wins by checkmate`
       : "Draw by stalemate"
@@ -492,17 +543,88 @@ export default function ChessPage() {
         ? `${turn==="w" ? "White" : "Black"} is in check`
         : `${turn==="w" ? "White" : "Black"} to move`;
 
+  function normalizePosition(position:GamePosition):GamePosition {
+    const now=Date.now();
+    const minutes=position.timerMinutes ?? 0;
+    let w=position.whiteTime ?? minutes*60;
+    let b=position.blackTime ?? minutes*60;
+    if (minutes>0 && position.timerStarted && position.timerUpdatedAt) {
+      const elapsed=Math.max(0,Math.floor((now-position.timerUpdatedAt)/1000));
+      if (position.turn==="w") w=Math.max(0,w-elapsed);
+      else b=Math.max(0,b-elapsed);
+    }
+    return {...position,whiteTime:w,blackTime:b,timerUpdatedAt:minutes>0 && position.timerStarted ? now : null};
+  }
+
+  function positionFromState():GamePosition {
+    const clocks=liveClockValues();
+    return {
+      board,
+      turn,
+      enPassant,
+      rights,
+      lastMove,
+      history,
+      whiteName,
+      blackName,
+      timerMinutes,
+      whiteTime:clocks.w,
+      blackTime:clocks.b,
+      timerUpdatedAt:timerMinutes>0 && timerStarted ? Date.now() : null,
+      timerStarted,
+    };
+  }
+
   function applyOnlineSnapshot(snapshot:OnlineSnapshot) {
-    setBoard(snapshot.board);
-    setTurn(snapshot.turn);
-    setEnPassant(snapshot.enPassant);
-    setRights(snapshot.rights);
-    setLastMove(snapshot.lastMove);
-    setHistory(snapshot.history);
-    setWhiteName(snapshot.whiteName || "");
-    setBlackName(snapshot.blackName || "");
+    const normalized=normalizePosition(snapshot);
+    setBoard(normalized.board);
+    setTurn(normalized.turn);
+    setEnPassant(normalized.enPassant);
+    setRights(normalized.rights);
+    setLastMove(normalized.lastMove);
+    setHistory(normalized.history);
+    setWhiteName(normalized.whiteName || "");
+    setBlackName(normalized.blackName || "");
+    setTimerMinutes(normalized.timerMinutes ?? 0);
+    setWhiteTime(normalized.whiteTime ?? 0);
+    setBlackTime(normalized.blackTime ?? 0);
+    setTimerUpdatedAt(normalized.timerUpdatedAt ?? null);
+    setTimerStarted(Boolean(normalized.timerStarted));
+    setUndoStack((snapshot.undoStack || []).slice(-3));
+    setRedoStack((snapshot.redoStack || []).slice(-3));
     setSelected(null);
-    stateRef.current=snapshot;
+    stateRef.current={...normalized,undoStack:(snapshot.undoStack || []).slice(-3),redoStack:(snapshot.redoStack || []).slice(-3)};
+  }
+
+  function configureTimer(minutes:number) {
+    if (history.length>0 || (mode==="online" && !!roomCode)) return;
+    setTimerMinutes(minutes);
+    setWhiteTime(minutes*60);
+    setBlackTime(minutes*60);
+    setTimerUpdatedAt(null);
+    setTimerStarted(false);
+  }
+
+  function undoMove() {
+    if (!undoStack.length || thinking) return;
+    const current=positionFromState();
+    const previous=undoStack[undoStack.length-1];
+    const nextUndo=undoStack.slice(0,-1);
+    const nextRedo=[...redoStack,current].slice(-3);
+    const snapshot:OnlineSnapshot={...previous,undoStack:nextUndo,redoStack:nextRedo};
+    applyOnlineSnapshot(snapshot);
+    if (mode==="online") publishOnline({type:"state",snapshot},true,true);
+  }
+
+  function redoMove() {
+    if (!redoStack.length || thinking) return;
+    const current=positionFromState();
+    const next=redoStack[redoStack.length-1];
+    const nextRedo=redoStack.slice(0,-1);
+    const nextUndo=[...undoStack,current].slice(-3);
+    const snapshot:OnlineSnapshot={...next,undoStack:nextUndo,redoStack:nextRedo};
+    applyOnlineSnapshot(snapshot);
+    if (mode==="online") publishOnline({type:"state",snapshot},true,true);
   }
 
   function publishOnline(payload:any, important=true, persist=false) {
@@ -655,6 +777,13 @@ export default function ChessPage() {
       history:[],
       whiteName:playerName.trim() || whiteName || "Player 1",
       blackName:blackName,
+      timerMinutes,
+      whiteTime:timerMinutes*60,
+      blackTime:timerMinutes*60,
+      timerUpdatedAt:null,
+      timerStarted:false,
+      undoStack:[],
+      redoStack:[],
     };
     applyOnlineSnapshot(fresh);
     connectOnline(room,"host").catch(()=>setOnlineStatus("Could not connect to a global relay."));
@@ -680,6 +809,13 @@ export default function ChessPage() {
       history:[],
       whiteName:onlineRole==="host" ? (playerName.trim() || whiteName || "Player 1") : whiteName,
       blackName:onlineRole==="guest" ? (playerName.trim() || blackName || "Player 2") : blackName,
+      timerMinutes,
+      whiteTime:timerMinutes*60,
+      blackTime:timerMinutes*60,
+      timerUpdatedAt:null,
+      timerStarted:false,
+      undoStack:[],
+      redoStack:[],
     };
     applyOnlineSnapshot(fresh);
     setThinking(false);
@@ -689,11 +825,15 @@ export default function ChessPage() {
   }
 
   function commitMove(move:Move) {
+    const before=positionFromState();
+    const nextUndo=[...undoStack,before].slice(-3);
     const notation=moveNotation(board,move);
     const moveNumber=Math.floor(history.length/2)+1;
     const board2=applyMove(board,move);
     const rights2=nextRights(board,move,rights);
     const ep2=nextEnPassant(board,move);
+    const clocks=liveClockValues();
+    const now=Date.now();
 
     setBoard(board2);
     setRights(rights2);
@@ -704,6 +844,14 @@ export default function ChessPage() {
     setHistory(history2);
     setSelected(null);
     setTurn(turn2);
+    setUndoStack(nextUndo);
+    setRedoStack([]);
+    setWhiteTime(clocks.w);
+    setBlackTime(clocks.b);
+    if (timerMinutes>0) {
+      setTimerStarted(true);
+      setTimerUpdatedAt(now);
+    }
 
     const snapshot:OnlineSnapshot={
       board:board2,
@@ -714,13 +862,20 @@ export default function ChessPage() {
       history:history2,
       whiteName:whiteName || (onlineRole==="host" ? (playerName.trim() || "Player 1") : stateRef.current.whiteName),
       blackName:blackName || (onlineRole==="guest" ? (playerName.trim() || "Player 2") : stateRef.current.blackName),
+      timerMinutes,
+      whiteTime:clocks.w,
+      blackTime:clocks.b,
+      timerUpdatedAt:timerMinutes>0 ? now : null,
+      timerStarted:timerMinutes>0,
+      undoStack:nextUndo,
+      redoStack:[],
     };
     stateRef.current=snapshot;
     if (mode==="online") publishOnline({type:"move",snapshot},true,true);
   }
 
   function choose(square:number) {
-    if (gameOver || thinking || computerTurn || onlineTurnBlocked) return;
+    if (matchOver || thinking || computerTurn || onlineTurnBlocked) return;
     const piece=board[square];
 
     if (piece?.color===turn) {
@@ -736,8 +891,19 @@ export default function ChessPage() {
   }
 
   useEffect(()=>{
-    stateRef.current={board,turn,enPassant,rights,lastMove,history,whiteName,blackName};
-  },[board,turn,enPassant,rights,lastMove,history,whiteName,blackName]);
+    const clocks=liveClockValues();
+    stateRef.current={
+      board,turn,enPassant,rights,lastMove,history,whiteName,blackName,
+      timerMinutes,whiteTime:clocks.w,blackTime:clocks.b,timerUpdatedAt,timerStarted,
+      undoStack,redoStack
+    };
+  },[board,turn,enPassant,rights,lastMove,history,whiteName,blackName,timerMinutes,whiteTime,blackTime,timerUpdatedAt,timerStarted,undoStack,redoStack]);
+
+  useEffect(()=>{
+    if (timerMinutes<=0 || !timerStarted || matchOver) return;
+    const id=window.setInterval(()=>setClockNow(Date.now()),250);
+    return ()=>window.clearInterval(id);
+  },[timerMinutes,timerStarted,matchOver,turn]);
 
   useEffect(()=>()=>disconnectOnline(),[]);
 
@@ -758,6 +924,10 @@ export default function ChessPage() {
       const rights2=nextRights(board,move,rights);
       const ep2=nextEnPassant(board,move);
 
+      const before=positionFromState();
+      const nextUndo=[...undoStack,before].slice(-3);
+      const clocks=liveClockValues();
+      const now=Date.now();
       setBoard(board2);
       setRights(rights2);
       setEnPassant(ep2);
@@ -765,6 +935,14 @@ export default function ChessPage() {
       setHistory(prev=>[...prev,{number:moveNumber,color:computerColor,notation}]);
       setSelected(null);
       setTurn(other(computerColor));
+      setUndoStack(nextUndo);
+      setRedoStack([]);
+      setWhiteTime(clocks.w);
+      setBlackTime(clocks.b);
+      if (timerMinutes>0) {
+        setTimerStarted(true);
+        setTimerUpdatedAt(now);
+      }
       setThinking(false);
     },550);
 
@@ -807,6 +985,21 @@ export default function ChessPage() {
               >
                 <Users className="h-4 w-4" /> Online 2 Players
               </button>
+            </div>
+
+            <div className="chess-option-row">
+              <span><Clock3 className="h-4 w-4" /> Timer</span>
+              {[0,5,10,15].map(minutes=>(
+                <button
+                  key={minutes}
+                  className={timerMinutes===minutes ? "active" : ""}
+                  disabled={history.length>0 || (mode==="online" && !!roomCode)}
+                  onClick={()=>configureTimer(minutes)}
+                  title={history.length>0 ? "Start a new game to change the timer." : ""}
+                >
+                  {minutes===0 ? "Off" : `${minutes} min`}
+                </button>
+              ))}
             </div>
 
             {mode==="online" && (
@@ -950,7 +1143,27 @@ export default function ChessPage() {
               <span>Status</span>
               <strong>{status}</strong>
             </div>
-            <button onClick={()=>reset()}><RotateCcw className="h-4 w-4" /> New Game</button>
+
+            {timerMinutes>0 && (
+              <div className="flex flex-wrap items-center gap-2" aria-label="Chess clocks">
+                <div className={`rounded-xl px-3 py-2 font-black ${turn==="w" && timerStarted && !matchOver ? "bg-white text-black" : "bg-black/15 text-white"}`}>
+                  ♔ {whiteName || "White"} · {formatClock(liveClock.w)}
+                </div>
+                <div className={`rounded-xl px-3 py-2 font-black ${turn==="b" && timerStarted && !matchOver ? "bg-white text-black" : "bg-black/15 text-white"}`}>
+                  ♚ {blackName || "Black"} · {formatClock(liveClock.b)}
+                </div>
+              </div>
+            )}
+
+            <div className="flex flex-wrap gap-2">
+              <button onClick={undoMove} disabled={!undoStack.length || thinking} title="Undo up to 3 moves">
+                <Undo2 className="h-4 w-4" /> Undo
+              </button>
+              <button onClick={redoMove} disabled={!redoStack.length || thinking} title="Redo an undone move">
+                <Redo2 className="h-4 w-4" /> Redo
+              </button>
+              <button onClick={()=>reset()}><RotateCcw className="h-4 w-4" /> New Game</button>
+            </div>
           </div>
 
           <div className="chess-game-layout">
@@ -991,9 +1204,9 @@ export default function ChessPage() {
               );
             })}
 
-            {gameOver && (
+            {matchOver && (
               <div className="chess-overlay">
-                <h2>{inCheck ? "Checkmate" : "Stalemate"}</h2>
+                <h2>{timedOut ? "Time" : inCheck ? "Checkmate" : "Stalemate"}</h2>
                 <p>{status}</p>
                 <button onClick={()=>reset()}>Play Again</button>
               </div>
@@ -1033,7 +1246,7 @@ export default function ChessPage() {
           </div>
 
           <div className="chess-help">
-            <strong>Game modes:</strong> Play against the computer, use local 2-player mode, or host an online room and give the room code to a friend anywhere in the world. Castling, en passant, check, checkmate, stalemate, and automatic queen promotion are supported.
+            <strong>Game modes:</strong> Play against the computer, use local 2-player mode, or host an online room and give the room code to a friend anywhere in the world. Castling, en passant, check, checkmate, stalemate, automatic queen promotion, optional chess clocks, and up to three-step Undo/Redo are supported.
           </div>
         </section>
       </div>
