@@ -1495,10 +1495,7 @@ body {
 .chess-page {
   min-height:100vh;
   padding:2rem 1rem 4rem;
-  background:
-    radial-gradient(circle at 12% 10%, rgba(255,250,220,.62), transparent 24rem),
-    radial-gradient(circle at 88% 18%, rgba(255,215,64,.32), transparent 30rem),
-    linear-gradient(145deg,#fff8d8 0%,#f3d77b 44%,#b88a12 100%);
+  background:#ffffff;
 }
 .chess-wrap { width:min(980px,100%); margin:0 auto; }
 .chess-topbar {
@@ -1519,10 +1516,9 @@ body {
 .chess-shell {
   padding:1rem;
   border-radius:1.5rem;
-  border:1px solid rgba(255,248,232,.18);
-  background:linear-gradient(180deg,rgba(255,248,232,.12),rgba(20,54,41,.9));
-  box-shadow:0 24px 70px rgba(5,20,14,.28);
-  backdrop-filter:blur(10px);
+  border:1px solid rgba(180,138,18,.22);
+  background:#ffffff;
+  box-shadow:0 18px 50px rgba(90,64,0,.10);
 }
 .chess-status {
   width:min(680px,100%);
@@ -1873,4 +1869,38 @@ body {
     padding:.5rem;
     font-size:.74rem;
   }
+}
+
+
+/* Chess white + gold theme */
+.chess-page .chess-topbar,
+.chess-page .chess-hero,
+.chess-page .chess-help,
+.chess-page .chess-status,
+.chess-page .chess-history,
+.chess-page .chess-controls,
+.chess-page .chess-panel {
+  color:#2a2207;
+}
+
+.chess-page .chess-hero p,
+.chess-page .chess-help,
+.chess-page .chess-topbar {
+  color:#6f5a12;
+}
+
+.chess-page button {
+  border-color:rgba(180,138,18,.32);
+}
+
+.chess-page button.active,
+.chess-page button:hover {
+  background:#d4af37;
+  color:#171308;
+}
+
+.chess-page input {
+  border-color:rgba(180,138,18,.30) !important;
+  background:#fffdf6 !important;
+  color:#2a2207 !important;
 }
