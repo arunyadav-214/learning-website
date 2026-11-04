@@ -1904,3 +1904,42 @@ body {
   background:#fffdf6 !important;
   color:#2a2207 !important;
 }
+
+
+/* Chess red panel overrides */
+.chess-page .chess-options,
+.chess-page .chess-status,
+.chess-page .chess-history-panel {
+  background:#c83025 !important;
+  border-color:#a9261e !important;
+  color:#ffffff !important;
+}
+
+.chess-page .chess-option-row > span,
+.chess-page .chess-status span,
+.chess-page .chess-history-header span,
+.chess-page .chess-history-number,
+.chess-page .chess-history-empty {
+  color:#ffe8e5 !important;
+}
+
+.chess-page .chess-status strong,
+.chess-page .chess-history-header h2 {
+  color:#ffffff !important;
+}
+
+.chess-page .chess-history-empty {
+  background:#a9261e !important;
+}
+
+.chess-page .chess-option-row button:not(.active),
+.chess-page .chess-difficulty-row button:not(.active) {
+  background:#8f2019 !important;
+  border-color:#6f1712 !important;
+  color:#ffffff !important;
+}
+
+.chess-page .chess-option-row button:not(.active):hover,
+.chess-page .chess-difficulty-row button:not(.active):hover {
+  background:#a9261e !important;
+}
