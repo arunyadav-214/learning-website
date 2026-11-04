@@ -447,12 +447,13 @@ export default function ChessPage() {
   const [roomCode,setRoomCode]=useState("");
   const [joinCode,setJoinCode]=useState("");
   const [onlineStatus,setOnlineStatus]=useState("Offline");
-  const [copied,setCopied]=useState(false);
+  const [opponentConnected,setOpponentConnected]=useState(false);
   const onlineClientsRef=useRef<any[]>([]);
   const seenMessagesRef=useRef(new Set<string>());
   const onlineRoomRef=useRef("");
   const onlineRoleRef=useRef<OnlineRole>(null);
   const onlineConnectedRef=useRef(false);
+  const opponentConnectedRef=useRef(false);
   const stateRef=useRef<OnlineSnapshot>({
     board:startBoard(),
     turn:"w",
@@ -469,7 +470,7 @@ export default function ChessPage() {
   const gameOver=moves.length===0;
   const computerTurn=mode==="computer" && turn===computerColor && !gameOver;
   const onlineColor:Color|null=onlineRole==="host" ? "w" : onlineRole==="guest" ? "b" : null;
-  const onlineTurnBlocked=mode==="online" && (!onlineConnectedRef.current || onlineColor!==turn);
+  const onlineTurnBlocked=mode==="online" && (!onlineConnectedRef.current || !opponentConnectedRef.current || onlineColor!==turn);
 
   const status=gameOver
     ? inCheck
@@ -511,6 +512,8 @@ export default function ChessPage() {
     onlineClientsRef.current.forEach(client=>{ try { client.end(true); } catch {} });
     onlineClientsRef.current=[];
     onlineConnectedRef.current=false;
+    opponentConnectedRef.current=false;
+    setOpponentConnected(false);
     onlineRoomRef.current="";
     onlineRoleRef.current=null;
     setOnlineRole(null);
@@ -525,7 +528,9 @@ export default function ChessPage() {
     onlineRoleRef.current=role;
     onlineRoomRef.current=room;
     setRoomCode(room);
-    setOnlineStatus("Connecting to global relay…");
+    setOpponentConnected(false);
+    opponentConnectedRef.current=false;
+    setOnlineStatus(role==="host" ? "Creating room…" : "Joining room…");
 
     const mqtt=await loadMqtt();
     const brokers=[
@@ -552,7 +557,7 @@ export default function ChessPage() {
         client.subscribe(topic,{qos:1},()=>{
           readyCount++;
           onlineConnectedRef.current=true;
-          setOnlineStatus(role==="host" ? "Room ready · waiting for opponent" : "Connected · joining room");
+          setOnlineStatus(role==="host" ? "Room created · waiting for Player 2" : "Connected to relay · finding host");
           if (role==="guest") publishOnline({type:"join"},true);
           if (role==="host" && readyCount===1) {
             publishOnline({type:"state",snapshot:stateRef.current},true);
@@ -571,19 +576,25 @@ export default function ChessPage() {
         if (!data) return;
 
         if (data.type==="join" && role==="host") {
-          setOnlineStatus("Opponent connected · you are White");
+          opponentConnectedRef.current=true;
+          setOpponentConnected(true);
+          setOnlineStatus("Player 2 joined · you are White");
           publishOnline({type:"state",snapshot:stateRef.current},true);
           return;
         }
 
         if (data.type==="state" && data.snapshot) {
           applyOnlineSnapshot(data.snapshot);
-          setOnlineStatus(role==="host" ? "Opponent connected · you are White" : "Connected · you are Black");
+          opponentConnectedRef.current=true;
+          setOpponentConnected(true);
+          setOnlineStatus(role==="host" ? "Player 2 joined · you are White" : "Joined successfully · you are Black");
           return;
         }
 
         if (data.type==="move" && data.snapshot) {
           applyOnlineSnapshot(data.snapshot);
+          opponentConnectedRef.current=true;
+          setOpponentConnected(true);
           setOnlineStatus(role==="host" ? "Online · you are White" : "Online · you are Black");
           return;
         }
@@ -625,18 +636,6 @@ export default function ChessPage() {
     }
     setJoinCode(room);
     connectOnline(room,"guest").catch(()=>setOnlineStatus("Could not connect to that room."));
-  }
-
-  async function copyInvite() {
-    if (!roomCode) return;
-    const url=`${window.location.origin}/games/chess?room=${roomCode}`;
-    try {
-      await navigator.clipboard.writeText(url);
-      setCopied(true);
-      window.setTimeout(()=>setCopied(false),1800);
-    } catch {
-      window.prompt("Copy this invite link:",url);
-    }
   }
 
   function reset(nextHuman=humanColor,nextMode=mode) {
@@ -704,17 +703,7 @@ export default function ChessPage() {
     stateRef.current={board,turn,enPassant,rights,lastMove,history};
   },[board,turn,enPassant,rights,lastMove,history]);
 
-  useEffect(()=>{
-    const params=new URLSearchParams(window.location.search);
-    const room=(params.get("room")||"").toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,6);
-    if (room.length===6) {
-      setJoinCode(room);
-      joinOnlineRoom(room);
-    }
-    return ()=>disconnectOnline();
-    // Run once on page load so shared invite links join automatically.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[]);
+  useEffect(()=>()=>disconnectOnline(),[]);
 
   useEffect(()=>{
     if (!computerTurn) return;
@@ -757,7 +746,7 @@ export default function ChessPage() {
         <header className="chess-hero">
           <p className="section-kicker">PLAYABLE BOARD GAME</p>
           <h1>Chess</h1>
-          <p>Play against the computer, a friend on the same device, or challenge someone anywhere in the world with an online room link.</p>
+          <p>Play against the computer, a friend on the same device, or challenge someone anywhere in the world using a room code.</p>
         </header>
 
         <section className="chess-shell">
@@ -786,39 +775,65 @@ export default function ChessPage() {
 
             {mode==="online" && (
               <div className="chess-help" style={{marginTop:"14px"}}>
-                <div className="grid gap-3 md:grid-cols-2">
+                <div className="grid gap-4 md:grid-cols-2">
                   <div>
-                    <strong>Play online worldwide</strong>
+                    <strong>Online 2 Players</strong>
                     <p style={{marginTop:"6px"}}>{onlineStatus}</p>
                     {roomCode && (
-                      <p style={{marginTop:"6px"}}>
-                        Room: <strong>{roomCode}</strong>
-                        {onlineRole && <> · You are {onlineRole==="host" ? "White" : "Black"}</>}
-                      </p>
+                      <div style={{marginTop:"10px"}}>
+                        <span style={{opacity:.75}}>Room code</span>
+                        <div style={{
+                          marginTop:"6px",
+                          fontSize:"1.65rem",
+                          fontWeight:900,
+                          letterSpacing:".22em"
+                        }}>
+                          {roomCode}
+                        </div>
+                        <p style={{marginTop:"6px"}}>
+                          {onlineRole==="host"
+                            ? "Give this code to Player 2."
+                            : "You joined this room."}
+                        </p>
+                        {opponentConnected && (
+                          <p style={{marginTop:"6px",fontWeight:800}}>
+                            Connected ✓ · You are {onlineRole==="host" ? "White" : "Black"}
+                          </p>
+                        )}
+                      </div>
                     )}
                   </div>
-                  <div className="grid gap-2">
+
+                  <div className="grid gap-3">
                     {!roomCode && (
                       <>
-                        <button className="active" onClick={createOnlineRoom}>Create Online Room</button>
-                        <div className="flex gap-2">
-                          <input
-                            value={joinCode}
-                            onChange={e=>setJoinCode(e.target.value.toUpperCase())}
-                            onKeyDown={e=>{ if(e.key==="Enter") joinOnlineRoom(); }}
-                            placeholder="Room code"
-                            maxLength={6}
-                            className="min-w-0 flex-1 rounded-xl border border-white/15 bg-black/20 px-3 py-2 text-sm font-bold uppercase text-white outline-none"
-                          />
-                          <button onClick={()=>joinOnlineRoom()}>Join Room</button>
+                        <button className="active" onClick={createOnlineRoom}>
+                          Host Game
+                        </button>
+
+                        <div>
+                          <label style={{display:"block",marginBottom:"6px",fontWeight:800}}>
+                            Join with room code
+                          </label>
+                          <div className="flex gap-2">
+                            <input
+                              value={joinCode}
+                              onChange={e=>setJoinCode(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g,""))}
+                              onKeyDown={e=>{ if(e.key==="Enter") joinOnlineRoom(); }}
+                              placeholder="ABC123"
+                              maxLength={6}
+                              className="min-w-0 flex-1 rounded-xl border border-white/15 bg-black/20 px-3 py-2 text-sm font-bold uppercase tracking-[0.18em] text-white outline-none"
+                            />
+                            <button onClick={()=>joinOnlineRoom()}>Join Game</button>
+                          </div>
                         </div>
                       </>
                     )}
+
                     {roomCode && (
-                      <>
-                        <button className="active" onClick={copyInvite}>{copied ? "Invite Link Copied" : "Copy Invite Link"}</button>
-                        <button onClick={()=>{ disconnectOnline(); setMode("online"); }}>Leave Online Room</button>
-                      </>
+                      <button onClick={()=>{ disconnectOnline(); setMode("online"); }}>
+                        Leave Room
+                      </button>
                     )}
                   </div>
                 </div>
@@ -946,7 +961,7 @@ export default function ChessPage() {
           </div>
 
           <div className="chess-help">
-            <strong>Game modes:</strong> Play against the computer, use local 2-player mode, or create an online room and share the invite link with a friend anywhere in the world. Castling, en passant, check, checkmate, stalemate, and automatic queen promotion are supported.
+            <strong>Game modes:</strong> Play against the computer, use local 2-player mode, or host an online room and give the room code to a friend anywhere in the world. Castling, en passant, check, checkmate, stalemate, and automatic queen promotion are supported.
           </div>
         </section>
       </div>
