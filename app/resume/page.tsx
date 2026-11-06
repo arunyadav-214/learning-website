@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import {
   ArrowLeft,
   ArrowUpRight,
@@ -18,6 +21,54 @@ const skillGroups = [
 ] as const;
 
 export default function ResumePage() {
+  const [password, setPassword] = useState("");
+  const [unlocked, setUnlocked] = useState(false);
+  const [error, setError] = useState("");
+
+  function handleUnlock(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (password === "Radha@321") {
+      setUnlocked(true);
+      setError("");
+      return;
+    }
+    setError("Incorrect password. Please try again.");
+  }
+
+  if (!unlocked) {
+    return (
+      <main className="min-h-screen bg-background text-foreground">
+        <div className="mx-auto flex min-h-screen max-w-xl items-center px-5 py-10 sm:px-8">
+          <section className="w-full rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-900 via-slate-900 to-violet-950/70 p-7 shadow-2xl sm:p-10">
+            <p className="section-kicker">PRIVATE RESUME</p>
+            <h1 className="mt-4 text-4xl font-black tracking-[-0.05em] sm:text-5xl">Resume access</h1>
+            <p className="mt-4 leading-7 text-slate-300">Enter the password to view Arun K. Yadav&apos;s resume section.</p>
+
+            <form onSubmit={handleUnlock} className="mt-8">
+              <label htmlFor="resume-password" className="text-sm font-black text-white">Password</label>
+              <input
+                id="resume-password"
+                type="password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                autoComplete="current-password"
+                placeholder="Enter password"
+                className="mt-3 w-full rounded-xl border border-white/15 bg-slate-950/70 px-4 py-3 text-white outline-none transition focus:border-cyan-300/70"
+              />
+              <p className="mt-3 text-sm italic text-slate-400">You must be a special person to Arun to access this area.</p>
+              {error ? <p className="mt-3 text-sm font-semibold text-red-300">{error}</p> : null}
+              <button type="submit" className="primary-button mt-6 w-full justify-center">Unlock resume</button>
+            </form>
+
+            <a href="/" className="mt-6 inline-flex items-center gap-2 text-sm font-black text-cyan-300">
+              <ArrowLeft className="h-4 w-4" /> Return to home page
+            </a>
+          </section>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="min-h-screen bg-background text-foreground">
       <div className="mx-auto max-w-5xl px-5 py-10 sm:px-8 lg:py-16">
