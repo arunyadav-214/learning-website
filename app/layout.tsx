@@ -3,6 +3,8 @@ import "./globals.css";
 import "./premium-theme.css";
 import ReturnHome from "./ReturnHome";
 import ArunBot from "./ArunBot";
+import SiteAnalytics from "./SiteAnalytics";
+import CloudflareWebAnalytics from "./CloudflareWebAnalytics";
 
 export const metadata: Metadata = {
   title: "Arun Learning Hub | Learn. Build. Grow.",
@@ -24,7 +26,9 @@ export default function RootLayout({
       <body>
         {children}
         <ReturnHome />
+        <SiteAnalytics />
         <ArunBot />
+        <CloudflareWebAnalytics />
       </body>
     </html>
   );
