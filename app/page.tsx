@@ -220,7 +220,7 @@ export default function Home() {
                     className="secondary-button justify-center gap-2 px-3 py-2.5 text-sm"
                     aria-label={name}
                   >
-                    <img src={icon} alt="" aria-hidden="true" className="h-4 w-4 object-contain" />
+                    <img src={icon} alt="" aria-hidden="true" className="h-6 w-6 shrink-0 object-contain" />
                     {name}
                   </a>
                 ))}
