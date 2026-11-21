@@ -23,7 +23,7 @@ export default function ArunBot() {
     {
       role: "assistant",
       content:
-        "Hi! I’m Arun AI. Ask me about Arun’s projects, skills, research, academic work, games, or where to find something on this site.",
+        "Hi! I’m Arun Assistant. Ask me about Arun’s projects, skills, research, academic work, games, or where to find something on this site.",
     },
   ]);
   const endRef = useRef<HTMLDivElement | null>(null);
@@ -86,7 +86,7 @@ export default function ArunBot() {
                 <Bot className="h-5 w-5" />
               </div>
               <div>
-                <p className="font-black tracking-tight">Arun AI</p>
+                <p className="font-black tracking-tight">Arun Assistant</p>
                 <p className="text-xs text-white/60">Personal portfolio assistant</p>
               </div>
             </div>
@@ -94,7 +94,7 @@ export default function ArunBot() {
               type="button"
               onClick={() => setOpen(false)}
               className="grid h-9 w-9 place-items-center rounded-full border border-white/15 transition hover:bg-white/10"
-              aria-label="Close Arun AI"
+              aria-label="Close Arun Assistant"
             >
               <X className="h-4 w-4" />
             </button>
@@ -132,7 +132,7 @@ export default function ArunBot() {
             {sending ? (
               <div className="mr-16 flex items-center gap-2 rounded-2xl rounded-tl-md border border-black/8 bg-white px-4 py-3 text-sm text-black/55">
                 <Sparkles className="h-4 w-4 animate-pulse" />
-                Arun AI is thinking...
+                Arun Assistant is thinking...
               </div>
             ) : null}
             <div ref={endRef} />
@@ -163,7 +163,7 @@ export default function ArunBot() {
               </button>
             </div>
             <p className="mt-2 text-center text-[10px] text-black/40">
-              Arun AI answers questions about this portfolio.
+              Arun Assistant answers questions about this portfolio.
             </p>
           </form>
         </section>
@@ -173,10 +173,10 @@ export default function ArunBot() {
         type="button"
         onClick={() => setOpen((value) => !value)}
         className="ml-auto flex items-center gap-2 rounded-full bg-[#181818] px-4 py-3 font-black text-white shadow-2xl transition hover:-translate-y-0.5 hover:bg-[#c83025]"
-        aria-label="Open Arun AI"
+        aria-label="Open Arun Assistant"
       >
         <Bot className="h-5 w-5" />
-        <span className="text-sm">Ask Arun AI</span>
+        <span className="text-sm">Ask Arun Assistant</span>
       </button>
     </div>
   );
