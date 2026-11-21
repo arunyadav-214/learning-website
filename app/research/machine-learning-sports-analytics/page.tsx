@@ -10,7 +10,7 @@ export default function MachineLearningSportsAnalyticsPage() {
     <main className="min-h-screen bg-[#070b17] text-white">
       <div className="mx-auto max-w-6xl px-5 py-10 sm:px-8 lg:py-16">
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4 text-sm text-slate-400">
-          <a href="/#research-papers" className="font-bold text-white hover:text-cyan-300">
+          <a href="/research" className="font-bold text-white hover:text-cyan-300">
             ← Back to Research Papers
           </a>
           <span>Technical Writing Presentation • 23 slides</span>
@@ -25,6 +25,14 @@ export default function MachineLearningSportsAnalyticsPage() {
             A presentation exploring how machine learning is used in sports for performance prediction,
             injury prevention, strategy, player monitoring, scouting, video analysis, and fan engagement.
           </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <a href="/videos#machine-learning-sports" className="inline-flex items-center justify-center rounded-xl bg-cyan-300 px-5 py-3 font-black text-cyan-950 transition hover:bg-cyan-200">
+              Watch presentation demo
+            </a>
+            <a href="/research" className="inline-flex items-center justify-center rounded-xl border border-white/15 px-5 py-3 font-black text-white transition hover:bg-white/10">
+              Research library
+            </a>
+          </div>
           <div className="mt-8 flex flex-wrap gap-2 text-sm font-bold text-slate-200">
             <span className="rounded-full border border-white/10 bg-white/5 px-4 py-2">Arun Kumar Yadav</span>
           </div>
