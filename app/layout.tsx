@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "./premium-theme.css";
 import ReturnHome from "./ReturnHome";
+import ArunBot from "./ArunBot";
 
 export const metadata: Metadata = {
   title: "Arun Learning Hub | Learn. Build. Grow.",
@@ -23,6 +24,7 @@ export default function RootLayout({
       <body>
         {children}
         <ReturnHome />
+        <ArunBot />
       </body>
     </html>
   );
