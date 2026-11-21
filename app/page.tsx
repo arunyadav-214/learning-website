@@ -28,10 +28,10 @@ const journey = [
 ] as const;
 
 const socials = [
-  ["LinkedIn", "https://www.linkedin.com/in/arun-kumar-yadav-5a60373ab/"],
-  ["Instagram", "https://www.instagram.com/ay.run_"],
-  ["X", "https://x.com/aruny71582"],
-  ["TikTok", "https://www.tiktok.com/@arunyadav999"],
+  ["LinkedIn", "https://www.linkedin.com/in/arun-kumar-yadav-5a60373ab/", "/social/linkedin.svg"],
+  ["Instagram", "https://www.instagram.com/ay.run_", "/social/instagram.svg"],
+  ["X", "https://x.com/aruny71582", "/social/x.svg"],
+  ["TikTok", "https://www.tiktok.com/@arunyadav999", "/social/tiktok.svg"],
 ] as const;
 
 const focusItems = [
@@ -211,8 +211,16 @@ export default function Home() {
                 <h2 className="mt-2 text-xl font-black tracking-[-0.03em] sm:mt-3 sm:text-2xl">Connect with me online.</h2>
               </div>
               <div className="grid grid-cols-2 gap-2.5 sm:flex sm:flex-wrap sm:gap-3">
-                {socials.map(([name, href]) => (
-                  <a key={name} href={href} target="_blank" rel="noreferrer" className="secondary-button justify-center px-3 py-2.5 text-sm">
+                {socials.map(([name, href, icon]) => (
+                  <a
+                    key={name}
+                    href={href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="secondary-button justify-center gap-2 px-3 py-2.5 text-sm"
+                    aria-label={name}
+                  >
+                    <img src={icon} alt="" aria-hidden="true" className="h-4 w-4 object-contain" />
                     {name}
                   </a>
                 ))}
