@@ -1,34 +1,76 @@
 "use client";
 
-import { FormEvent, useMemo, useRef, useState } from "react";
-import { Bot, Send, Sparkles, X } from "lucide-react";
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import { Bot, RotateCcw, Send, Sparkles, X } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 type Message = {
   role: "user" | "assistant";
   content: string;
 };
 
+const welcome: Message = {
+  role: "assistant",
+  content:
+    "Hi! I’m Arun Assistant. I can explain Arun’s projects and skills, compare his work, help recruiters find relevant experience, answer questions about the portfolio, and guide you to the right page.",
+};
+
 const starterQuestions = [
-  "Who is Arun?",
-  "What projects has Arun built?",
-  "What are Arun's skills?",
-  "How can I view the resume?",
+  "Give me a recruiter-style summary of Arun.",
+  "Which project best shows Arun's engineering skills?",
+  "What programming and database skills does Arun have?",
+  "Show me Arun's research and certificates.",
 ];
 
+const storageKey = "arun-assistant-chat-v2";
+
+function pageLabel(pathname: string) {
+  if (pathname === "/") return "Home";
+  const part = pathname.split("/").filter(Boolean)[0] || "Home";
+  return part
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
 export default function ArunBot() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      role: "assistant",
-      content:
-        "Hi! I’m Arun Assistant. Ask me about Arun’s projects, skills, research, academic work, games, or where to find something on this site.",
-    },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([welcome]);
   const endRef = useRef<HTMLDivElement | null>(null);
 
+  useEffect(() => {
+    try {
+      const saved = window.sessionStorage.getItem(storageKey);
+      if (!saved) return;
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed) && parsed.length) setMessages(parsed.slice(-20));
+    } catch {
+      // Start with a clean chat if saved data cannot be read.
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      window.sessionStorage.setItem(storageKey, JSON.stringify(messages.slice(-20)));
+    } catch {
+      // Chat persistence is optional.
+    }
+  }, [messages]);
+
   const canSend = useMemo(() => input.trim().length > 0 && !sending, [input, sending]);
+
+  function clearChat() {
+    setMessages([welcome]);
+    setInput("");
+    try {
+      window.sessionStorage.removeItem(storageKey);
+    } catch {
+      // Ignore storage errors.
+    }
+  }
 
   async function ask(question: string) {
     const clean = question.trim();
@@ -45,7 +87,8 @@ export default function ArunBot() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           message: clean,
-          history: nextMessages.slice(-8),
+          currentPath: pathname,
+          history: nextMessages.slice(-12),
         }),
       });
 
@@ -62,7 +105,7 @@ export default function ArunBot() {
         {
           role: "assistant",
           content:
-            "I’m having trouble connecting right now. You can still explore Projects, Skills, Research, Academic Work, and Resume from the navigation.",
+            "I’m having trouble connecting right now. You can still explore /projects, /skills, /research, /academic-work, /games, and /resume.",
         },
       ]);
     } finally {
@@ -79,7 +122,7 @@ export default function ArunBot() {
   return (
     <div className="fixed bottom-5 right-5 z-[120] sm:bottom-6 sm:right-6">
       {open ? (
-        <section className="mb-3 flex h-[min(620px,78vh)] w-[min(390px,calc(100vw-2rem))] flex-col overflow-hidden rounded-[1.7rem] border border-black/10 bg-[#faf9f5] shadow-2xl">
+        <section className="mb-3 flex h-[min(650px,80vh)] w-[min(410px,calc(100vw-2rem))] flex-col overflow-hidden rounded-[1.7rem] border border-black/10 bg-[#faf9f5] shadow-2xl">
           <header className="flex items-center justify-between border-b border-black/10 bg-[#181818] px-4 py-3 text-white">
             <div className="flex items-center gap-3">
               <div className="grid h-10 w-10 place-items-center rounded-full bg-[#c83025]">
@@ -87,17 +130,30 @@ export default function ArunBot() {
               </div>
               <div>
                 <p className="font-black tracking-tight">Arun Assistant</p>
-                <p className="text-xs text-white/60">Personal portfolio assistant</p>
+                <p className="text-xs text-white/60">
+                  Portfolio assistant • {pageLabel(pathname)}
+                </p>
               </div>
             </div>
-            <button
-              type="button"
-              onClick={() => setOpen(false)}
-              className="grid h-9 w-9 place-items-center rounded-full border border-white/15 transition hover:bg-white/10"
-              aria-label="Close Arun Assistant"
-            >
-              <X className="h-4 w-4" />
-            </button>
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={clearChat}
+                className="grid h-9 w-9 place-items-center rounded-full border border-white/15 transition hover:bg-white/10"
+                aria-label="Start a new chat"
+                title="New chat"
+              >
+                <RotateCcw className="h-4 w-4" />
+              </button>
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                className="grid h-9 w-9 place-items-center rounded-full border border-white/15 transition hover:bg-white/10"
+                aria-label="Close Arun Assistant"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
           </header>
 
           <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
@@ -106,8 +162,8 @@ export default function ArunBot() {
                 key={`${message.role}-${index}`}
                 className={
                   message.role === "assistant"
-                    ? "mr-8 rounded-2xl rounded-tl-md border border-black/8 bg-white px-4 py-3 text-sm leading-6 text-[#292929]"
-                    : "ml-8 rounded-2xl rounded-tr-md bg-[#c83025] px-4 py-3 text-sm leading-6 text-white"
+                    ? "mr-7 whitespace-pre-wrap rounded-2xl rounded-tl-md border border-black/8 bg-white px-4 py-3 text-sm leading-6 text-[#292929]"
+                    : "ml-7 whitespace-pre-wrap rounded-2xl rounded-tr-md bg-[#c83025] px-4 py-3 text-sm leading-6 text-white"
                 }
               >
                 {message.content}
@@ -150,7 +206,8 @@ export default function ArunBot() {
                   }
                 }}
                 rows={1}
-                placeholder="Ask about Arun..."
+                maxLength={1200}
+                placeholder="Ask Arun Assistant..."
                 className="max-h-28 min-h-10 flex-1 resize-none bg-transparent px-2 py-2 text-sm text-[#181818] outline-none placeholder:text-black/40"
               />
               <button
@@ -163,7 +220,7 @@ export default function ArunBot() {
               </button>
             </div>
             <p className="mt-2 text-center text-[10px] text-black/40">
-              Arun Assistant answers questions about this portfolio.
+              Remembers this chat while you browse the portfolio.
             </p>
           </form>
         </section>
