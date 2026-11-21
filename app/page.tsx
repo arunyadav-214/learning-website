@@ -1,6 +1,7 @@
 import profilePhoto from "./assets/arun-profile.jpg";
 import { ArrowRight, GraduationCap, MapPin, Sparkles, Wrench } from "lucide-react";
 import PortfolioNav from "./PortfolioNav";
+import GitHubActivity from "./GitHubActivity";
 
 
 const journey = [
@@ -86,6 +87,9 @@ export default function Home() {
                   View projects <ArrowRight className="h-4 w-4" />
                 </a>
                 <a href="/resume" className="secondary-button justify-center">View resume</a>
+                <a href="/recruiter" className="secondary-button justify-center">
+                  Recruiter? Start here <ArrowRight className="h-4 w-4" />
+                </a>
               </div>
             </div>
 
@@ -114,6 +118,35 @@ export default function Home() {
             </div>
           </div>
 
+          <section className="pb-16 pt-2 sm:pb-20 sm:pt-6">
+            <div className="grid gap-5 lg:grid-cols-[.72fr_1.28fr] lg:items-start">
+              <div>
+                <p className="section-kicker">WORKING ON NOW</p>
+                <h2 className="mt-3 text-3xl font-black tracking-[-0.04em] sm:text-4xl">What I’m building next.</h2>
+                <p className="mt-4 max-w-xl leading-7 text-muted-foreground">
+                  A live snapshot of the work I’m actively improving instead of a static “about me” section.
+                </p>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-3">
+                <article className="rounded-2xl border border-black/10 bg-white/80 p-5">
+                  <span className="text-[10px] font-black uppercase tracking-[0.14em] text-[#c83025]">BUILDING</span>
+                  <h3 className="mt-2 font-black">InvoicePilot AI</h3>
+                  <p className="mt-2 text-sm leading-6 text-muted-foreground">AI-assisted invoice workflow with PayPal Sandbox integration.</p>
+                </article>
+                <article className="rounded-2xl border border-black/10 bg-white/80 p-5">
+                  <span className="text-[10px] font-black uppercase tracking-[0.14em] text-[#c83025]">IMPROVING</span>
+                  <h3 className="mt-2 font-black">Arun Assistant</h3>
+                  <p className="mt-2 text-sm leading-6 text-muted-foreground">Voice, recruiter questions, portfolio context, and smarter navigation.</p>
+                </article>
+                <article className="rounded-2xl border border-black/10 bg-white/80 p-5">
+                  <span className="text-[10px] font-black uppercase tracking-[0.14em] text-[#c83025]">NEXT</span>
+                  <h3 className="mt-2 font-black">Internship-ready work</h3>
+                  <p className="mt-2 text-sm leading-6 text-muted-foreground">Stronger case studies, demos, engineering evidence, and production-quality projects.</p>
+                </article>
+              </div>
+            </div>
+          </section>
+
           <section className="pb-16 pt-4 sm:pb-20 sm:pt-8">
             <div className="rounded-[1.7rem] border border-black/10 bg-white/75 p-5 shadow-[0_14px_45px_rgba(24,24,24,.06)] backdrop-blur sm:rounded-[2rem] sm:p-8">
               <div className="grid gap-6 lg:grid-cols-[.72fr_1.28fr] lg:items-end">
@@ -136,6 +169,10 @@ export default function Home() {
                 ))}
               </div>
             </div>
+          </section>
+
+          <section className="pb-16 sm:pb-20">
+            <GitHubActivity />
           </section>
 
           <section id="journey" className="pb-16 pt-2 sm:pb-24 sm:pt-6">
