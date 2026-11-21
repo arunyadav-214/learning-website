@@ -1,28 +1,53 @@
 "use client";
 
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
-import { Bot, RotateCcw, Send, Sparkles, X } from "lucide-react";
+import { Bot, Mic, MicOff, RotateCcw, Send, Sparkles, Volume2, VolumeX, X } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { recordAssistantQuestion } from "./SiteAnalytics";
 
 type Message = {
   role: "user" | "assistant";
   content: string;
 };
 
+type RecognitionResultLike = {
+  0?: { transcript?: string };
+};
+
+type RecognitionEventLike = {
+  results: {
+    0?: RecognitionResultLike;
+  };
+};
+
+type RecognitionLike = {
+  lang: string;
+  interimResults: boolean;
+  continuous: boolean;
+  onresult: ((event: RecognitionEventLike) => void) | null;
+  onerror: (() => void) | null;
+  onend: (() => void) | null;
+  start: () => void;
+  stop: () => void;
+};
+
+type RecognitionConstructor = new () => RecognitionLike;
+
 const welcome: Message = {
   role: "assistant",
   content:
-    "Hi! I’m Arun Assistant. I can explain Arun’s projects and skills, compare his work, help recruiters find relevant experience, answer questions about the portfolio, and guide you to the right page.",
+    "Hi! I’m Arun Assistant. I can explain Arun’s projects and skills, compare his work, help recruiters evaluate relevant experience, answer questions about the portfolio, and guide you to the right page. You can type or use the microphone.",
 };
 
 const starterQuestions = [
-  "Give me a recruiter-style summary of Arun.",
+  "Why should we interview Arun?",
   "Which project best shows Arun's engineering skills?",
-  "What programming and database skills does Arun have?",
-  "Show me Arun's research and certificates.",
+  "Which projects prove Arun's software skills?",
+  "Compare Arun's software and engineering experience.",
+  "What database experience does Arun have?",
 ];
 
-const storageKey = "arun-assistant-chat-v2";
+const storageKey = "arun-assistant-chat-v3";
 
 function pageLabel(pathname: string) {
   if (pathname === "/") return "Home";
@@ -39,17 +64,34 @@ export default function ArunBot() {
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
   const [messages, setMessages] = useState<Message[]>([welcome]);
+  const [listening, setListening] = useState(false);
+  const [voiceSupported, setVoiceSupported] = useState(false);
+  const [voiceReplies, setVoiceReplies] = useState(false);
+  const [voiceNotice, setVoiceNotice] = useState("");
   const endRef = useRef<HTMLDivElement | null>(null);
+  const recognitionRef = useRef<RecognitionLike | null>(null);
 
   useEffect(() => {
     try {
       const saved = window.sessionStorage.getItem(storageKey);
-      if (!saved) return;
-      const parsed = JSON.parse(saved);
-      if (Array.isArray(parsed) && parsed.length) setMessages(parsed.slice(-20));
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length) setMessages(parsed.slice(-20));
+      }
     } catch {
       // Start with a clean chat if saved data cannot be read.
     }
+
+    const speechWindow = window as typeof window & {
+      SpeechRecognition?: RecognitionConstructor;
+      webkitSpeechRecognition?: RecognitionConstructor;
+    };
+    setVoiceSupported(Boolean(speechWindow.SpeechRecognition || speechWindow.webkitSpeechRecognition));
+
+    return () => {
+      recognitionRef.current?.stop();
+      window.speechSynthesis?.cancel();
+    };
   }, []);
 
   useEffect(() => {
@@ -62,9 +104,71 @@ export default function ArunBot() {
 
   const canSend = useMemo(() => input.trim().length > 0 && !sending, [input, sending]);
 
+  function speak(text: string) {
+    if (!voiceReplies || typeof window === "undefined" || !("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text.replace(/\/(projects|skills|research|academic-work|games|resume)\b/g, "$1 page"));
+    utterance.rate = 0.96;
+    utterance.pitch = 1;
+    window.speechSynthesis.speak(utterance);
+  }
+
+  function toggleVoiceReplies() {
+    setVoiceReplies((value) => {
+      const next = !value;
+      if (!next) window.speechSynthesis?.cancel();
+      return next;
+    });
+  }
+
+  function startListening() {
+    setVoiceNotice("");
+
+    if (!voiceSupported) {
+      setVoiceNotice("Voice input is not supported by this browser.");
+      return;
+    }
+
+    const speechWindow = window as typeof window & {
+      SpeechRecognition?: RecognitionConstructor;
+      webkitSpeechRecognition?: RecognitionConstructor;
+    };
+    const Recognition = speechWindow.SpeechRecognition || speechWindow.webkitSpeechRecognition;
+    if (!Recognition) return;
+
+    if (listening) {
+      recognitionRef.current?.stop();
+      return;
+    }
+
+    const recognition = new Recognition();
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+    recognition.continuous = false;
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0]?.[0]?.transcript?.trim() || "";
+      if (transcript) setInput(transcript);
+    };
+    recognition.onerror = () => {
+      setVoiceNotice("I couldn’t hear that clearly. Try the microphone again.");
+      setListening(false);
+    };
+    recognition.onend = () => {
+      setListening(false);
+      recognitionRef.current = null;
+    };
+
+    recognitionRef.current = recognition;
+    setListening(true);
+    recognition.start();
+  }
+
   function clearChat() {
     setMessages([welcome]);
     setInput("");
+    setVoiceNotice("");
+    window.speechSynthesis?.cancel();
     try {
       window.sessionStorage.removeItem(storageKey);
     } catch {
@@ -76,10 +180,13 @@ export default function ArunBot() {
     const clean = question.trim();
     if (!clean || sending) return;
 
+    recordAssistantQuestion(clean, pathname);
+
     const nextMessages = [...messages, { role: "user" as const, content: clean }];
     setMessages(nextMessages);
     setInput("");
     setSending(true);
+    setVoiceNotice("");
 
     try {
       const response = await fetch("/api/arun-bot", {
@@ -99,15 +206,12 @@ export default function ArunBot() {
           : "I’m sorry, I couldn’t answer that right now.";
 
       setMessages((current) => [...current, { role: "assistant", content: answer }]);
+      speak(answer);
     } catch {
-      setMessages((current) => [
-        ...current,
-        {
-          role: "assistant",
-          content:
-            "I’m having trouble connecting right now. You can still explore /projects, /skills, /research, /academic-work, /games, and /resume.",
-        },
-      ]);
+      const fallback =
+        "I’m having trouble connecting right now. You can still explore /projects, /skills, /research, /academic-work, /games, and /resume.";
+      setMessages((current) => [...current, { role: "assistant", content: fallback }]);
+      speak(fallback);
     } finally {
       setSending(false);
       requestAnimationFrame(() => endRef.current?.scrollIntoView({ behavior: "smooth" }));
@@ -122,7 +226,7 @@ export default function ArunBot() {
   return (
     <div className="fixed bottom-5 right-5 z-[120] sm:bottom-6 sm:right-6">
       {open ? (
-        <section className="mb-3 flex h-[min(650px,80vh)] w-[min(410px,calc(100vw-2rem))] flex-col overflow-hidden rounded-[1.7rem] border border-black/10 bg-[#faf9f5] shadow-2xl">
+        <section className="mb-3 flex h-[min(680px,82vh)] w-[min(420px,calc(100vw-2rem))] flex-col overflow-hidden rounded-[1.7rem] border border-black/10 bg-[#faf9f5] shadow-2xl">
           <header className="flex items-center justify-between border-b border-black/10 bg-[#181818] px-4 py-3 text-white">
             <div className="flex items-center gap-3">
               <div className="grid h-10 w-10 place-items-center rounded-full bg-[#c83025]">
@@ -138,6 +242,15 @@ export default function ArunBot() {
             <div className="flex items-center gap-1">
               <button
                 type="button"
+                onClick={toggleVoiceReplies}
+                className="grid h-9 w-9 place-items-center rounded-full border border-white/15 transition hover:bg-white/10"
+                aria-label={voiceReplies ? "Turn spoken replies off" : "Turn spoken replies on"}
+                title={voiceReplies ? "Spoken replies on" : "Spoken replies off"}
+              >
+                {voiceReplies ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+              </button>
+              <button
+                type="button"
                 onClick={clearChat}
                 className="grid h-9 w-9 place-items-center rounded-full border border-white/15 transition hover:bg-white/10"
                 aria-label="Start a new chat"
@@ -147,7 +260,11 @@ export default function ArunBot() {
               </button>
               <button
                 type="button"
-                onClick={() => setOpen(false)}
+                onClick={() => {
+                  setOpen(false);
+                  recognitionRef.current?.stop();
+                  window.speechSynthesis?.cancel();
+                }}
                 className="grid h-9 w-9 place-items-center rounded-full border border-white/15 transition hover:bg-white/10"
                 aria-label="Close Arun Assistant"
               >
@@ -195,7 +312,21 @@ export default function ArunBot() {
           </div>
 
           <form onSubmit={submit} className="border-t border-black/10 bg-white/80 p-3">
+            {voiceNotice ? <p className="mb-2 text-xs font-semibold text-[#c83025]">{voiceNotice}</p> : null}
             <div className="flex items-end gap-2 rounded-2xl border border-black/10 bg-white p-2 shadow-sm">
+              <button
+                type="button"
+                onClick={startListening}
+                className={
+                  listening
+                    ? "grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#c83025] text-white"
+                    : "grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-black/10 bg-[#faf9f5] text-[#181818] transition hover:border-[#c83025]/35 hover:text-[#c83025]"
+                }
+                aria-label={listening ? "Stop listening" : "Use microphone"}
+                title={voiceSupported ? "Voice input" : "Voice input unavailable"}
+              >
+                {listening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+              </button>
               <textarea
                 value={input}
                 onChange={(event) => setInput(event.target.value)}
@@ -207,7 +338,7 @@ export default function ArunBot() {
                 }}
                 rows={1}
                 maxLength={1200}
-                placeholder="Ask Arun Assistant..."
+                placeholder={listening ? "Listening..." : "Ask Arun Assistant..."}
                 className="max-h-28 min-h-10 flex-1 resize-none bg-transparent px-2 py-2 text-sm text-[#181818] outline-none placeholder:text-black/40"
               />
               <button
@@ -220,7 +351,7 @@ export default function ArunBot() {
               </button>
             </div>
             <p className="mt-2 text-center text-[10px] text-black/40">
-              Remembers this chat while you browse the portfolio.
+              Type or speak • remembers this chat while you browse
             </p>
           </form>
         </section>
