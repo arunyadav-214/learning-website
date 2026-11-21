@@ -3,7 +3,7 @@ export default function ParkingGarageProjectPage() {
     <main className="min-h-screen bg-[#070b17] text-white">
       <div className="mx-auto max-w-6xl px-5 py-10 sm:px-8 lg:py-16">
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4 text-sm text-slate-400">
-          <a href="/#projects" className="font-bold text-white hover:text-cyan-300">
+          <a href="/projects" className="font-bold text-white hover:text-cyan-300">
             ← Back to Projects
           </a>
           <span>PLC / Automation Project</span>
@@ -17,6 +17,14 @@ export default function ParkingGarageProjectPage() {
           <p className="mt-6 max-w-4xl text-lg leading-8 text-slate-300">
             A parking-garage automation project created in Do-more Designer and configured to run with the DM-SIM PLC simulator.
           </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <a href="/videos#parking-garage-plc" className="inline-flex items-center justify-center rounded-xl bg-emerald-300 px-5 py-3 font-black text-emerald-950 transition hover:bg-emerald-200">
+              Watch demo
+            </a>
+            <a href="/projects" className="inline-flex items-center justify-center rounded-xl border border-white/15 px-5 py-3 font-black text-white transition hover:bg-white/10">
+              All projects
+            </a>
+          </div>
           <div className="mt-8 flex flex-wrap gap-2 text-sm font-bold text-slate-200">
             <span className="rounded-full border border-white/10 bg-white/5 px-4 py-2">Do-more Designer</span>
             <span className="rounded-full border border-white/10 bg-white/5 px-4 py-2">DM-SIM</span>
@@ -57,6 +65,24 @@ export default function ParkingGarageProjectPage() {
               The project is configured for Do-more&apos;s simulator, allowing the ladder-logic program to be tested without a physical PLC.
             </p>
           </article>
+        </section>
+
+        <section className="mt-8 rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-6 sm:p-8">
+          <p className="text-xs font-black tracking-[0.16em] text-cyan-300">CASE STUDY</p>
+          <h2 className="mt-3 text-3xl font-black tracking-[-0.03em]">Problem → approach → result</h2>
+          <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {[
+              ["Problem", "Test parking-garage automation logic without depending on a physical PLC."],
+              ["Goal", "Build and organize the control logic in Do-more Designer for the DM-SIM controller."],
+              ["Approach", "Use ladder logic, simulator configuration, and the native Do-more project/workspace files."],
+              ["Result", "A packaged PLC project that can be opened and tested in the simulator environment."],
+            ].map(([title, copy]) => (
+              <article key={title} className="rounded-xl border border-white/10 bg-slate-950/50 p-4">
+                <p className="text-xs font-black uppercase tracking-[0.14em] text-emerald-300">{title}</p>
+                <p className="mt-3 text-sm leading-6 text-slate-300">{copy}</p>
+              </article>
+            ))}
+          </div>
         </section>
 
         <section className="mt-8 rounded-[1.75rem] border border-white/10 bg-white/[0.03] p-6 sm:p-8">
