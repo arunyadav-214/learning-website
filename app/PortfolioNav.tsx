@@ -1,6 +1,7 @@
 import HomeClocks from "./HomeClocks";
 
 const desktopLinks = [
+  ["Recruiter", "/recruiter"],
   ["Projects", "/projects"],
   ["Skills", "/skills"],
   ["Research", "/research"],
@@ -15,6 +16,7 @@ const desktopLinks = [
 
 const mobileLinks = [
   ["Home", "/"],
+  ["Recruiter", "/recruiter"],
   ["Projects", "/projects"],
   ["Skills", "/skills"],
   ["Research", "/research"],
